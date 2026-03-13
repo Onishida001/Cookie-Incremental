@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Incremental</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="game-container">
+      <section id="home-tab" class="tab-content active">
+        <div id="cookie-section">
+          <div class="score-board">
+            <h1 class="cookie-text">
+              <span id="cookie-count">0</span> Cookies
+            </h1>
+            <p class="cps-text">Cookies/s: <span id="cps">0</span></p>
+          </div>
+          <div class="cookie-container">
+            <div class="cookie-shine"></div>
+            <img
+              src="assets/images/cookie.png"
+              id="big-cookie"
+              draggable="false"
+            />
+          </div>
+          <img
+            src="assets/images/cookie-dourado.png"
+            id="golden-cookie"
+            draggable="false"
+          />
+        </div>
+
+        <div id="store-section">
+          <div id="store-header">
+            <h2 class="section-title">Store</h2>
+            <div class="buy-selector">
+              <button class="selector-btn active" data-amount="1">1x</button>
+              <button class="selector-btn" data-amount="10">10x</button>
+              <button class="selector-btn" data-amount="max">Max</button>
+            </div>
+          </div>
+          <div id="store-items"></div>
+        </div>
+      </section>
+
+      <section id="rebirth-tab" class="tab-content">
+        <div class="prestige-panel">
+          <h2 class="section-title">Rebirths</h2>
+          <div class="rebirth-card">
+            <p>
+              Global Multiplier:
+              <span id="multi-val" class="highlight">1.0</span>x
+            </p>
+            <p>
+              Heavenly Chips:
+              <span id="rebirth-points" class="highlight">0</span>
+            </p>
+          </div>
+          <button id="btn-rebirth" class="prestige-btn">
+            Rebirth (+<span id="pending-points">0</span> pts)
+          </button>
+          <h3 class="sub-title">Rebirth Upgrades</h3>
+          <div id="rebirth-upgrades-list"></div>
+        </div>
+      </section>
+
+      <section id="achievements-tab" class="tab-content">
+        <div class="stats-panel">
+          <h2 class="section-title">Achievements</h2>
+          <div id="achievements-list"></div>
+        </div>
+      </section>
+
+      <nav id="bottom-menu">
+        <button class="nav-btn active" data-target="home-tab">🍪 HOME</button>
+        <button class="nav-btn" data-target="rebirth-tab">✨ REBIRTH</button>
+        <button class="nav-btn" data-target="achievements-tab">
+          🏆 ACHIEVEMENTS
+        </button>
+      </nav>
+    </div>
+
+    <div id="achievement-toast">
+      <div class="toast-icon">🏆</div>
+      <div class="toast-text"><b id="ach-title">Title</b></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

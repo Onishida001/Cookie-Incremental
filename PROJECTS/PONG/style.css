@@ -1,0 +1,45 @@
+/* Container para manter o Canvas e o Menu relativos um ao outro */
+.container-jogo {
+  position: relative; /* Isso é essencial para o absolute funcionar direito */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* O painel do menu que fica por cima do jogo */
+.tela-sobreposicao {
+  position: absolute; /* Faz a div "flutuar" ignorando o resto da página */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Fundo preto meio transparente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10; /* Garante que fique acima do Canvas */
+}
+
+.tela-sobreposicao h1 {
+  color: white;
+  font-size: 80px;
+  margin-bottom: 40px;
+  letter-spacing: 10px;
+}
+
+#botaoStart {
+  background-color: white;
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px 40px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#botaoStart:hover {
+  background-color: #cccccc;
+  transform: scale(1.1);
+}

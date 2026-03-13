@@ -1,0 +1,329 @@
+:root {
+  --bg-dark: #000000;
+  --border-color: #543b2a;
+  --gold: #ffcc00;
+  --text-shadow: 2px 2px 0px #000;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Tahoma", sans-serif;
+  background: var(--bg-dark);
+  color: #fff;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Tabs */
+.tab-content {
+  display: none !important;
+  width: 100%;
+  height: calc(100vh - 70px);
+}
+.tab-content.active {
+  display: flex !important;
+}
+
+/* Home Layout */
+#home-tab.active {
+  flex-direction: row;
+}
+#cookie-section {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: url("https://orteil.dashnet.org/cookieclicker/img/bgBlue.jpg");
+  border-right: 4px solid var(--border-color);
+  position: relative;
+}
+
+/* Cookie & FX Layering */
+.cookie-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+#big-cookie {
+  width: 280px;
+  cursor: pointer;
+  transition: transform 0.1s;
+  z-index: 10;
+  position: relative;
+}
+#big-cookie:active {
+  transform: scale(0.92);
+}
+
+.item-count {
+  font-size: 1.8rem;
+  padding: 0 15px;
+  color: rgba(255, 255, 255, 0.2); /* Fica meio transparente como no original */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+}
+
+/* Efeito visual quando o Golden Cookie estiver ativo */
+#cookie-section {
+  transition: filter 0.5s ease;
+}
+
+#golden-cookie {
+  position: absolute;
+  width: 80px;
+  display: none;
+  z-index: 100;
+  cursor: pointer;
+  filter: drop-shadow(0 0 15px var(--gold));
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-image: url("assets/images/cookie.png");
+  background-size: cover;
+  pointer-events: none;
+  z-index: 50;
+  animation: partExplode 0.8s forwards;
+}
+
+.cps-text {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  text-shadow: var(--text-shadow);
+  text-align: center;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+
+.cookie-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  text-shadow: var(--text-shadow);
+  border-color: #000;
+  border-width: 5px;
+  border-style: ridge;
+  background: rgb(206, 189, 112);
+  border-radius: 10px;
+  -webkit-text-stroke: 2.2px rgba(0, 0, 0, 0.719);
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+
+.floating-text {
+  position: absolute;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: var(--text-shadow);
+  z-index: 110;
+  pointer-events: none;
+  animation: floatUp 0.8s forwards;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+.click-cursor {
+  position: absolute;
+  width: 35px;
+  z-index: 90;
+  pointer-events: none;
+  animation: clickSnap 0.4s forwards;
+}
+
+@keyframes partExplode {
+  100% {
+    transform: translate(var(--x), var(--y)) rotate(360deg);
+    opacity: 0;
+  }
+}
+@keyframes floatUp {
+  100% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+}
+@keyframes clickSnap {
+  0% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* Store & Selectors */
+#store-section {
+  flex: 1;
+  background: #1a1a1a;
+  border-left: 2px solid #000;
+  overflow-y: auto;
+}
+
+h2 {
+  margin: 20px;
+  text-shadow: var(--text-shadow);
+  text-align: center;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+
+.buy-selector {
+  display: flex;
+  gap: 2px;
+  padding: 5px;
+  background: #000;
+  margin: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+}
+.selector-btn {
+  flex: 1;
+  background: #333;
+  color: #888;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+.selector-btn.active {
+  background: #4caf50;
+  color: white;
+  box-shadow: inset 0 0 8px #000;
+}
+
+.store-item {
+  display: flex;
+  height: 64px;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+.store-item.disabled {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+.icone-loja {
+  width: 64px;
+  height: 64px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px;
+}
+
+/* Prestige & Stats Tabs */
+#achievements-tab {
+  background:
+    linear-gradient(rgba(181, 190, 51, 0.8), rgba(0, 0, 0, 0.8)),
+    url("https://orteil.dashnet.org/cookieclicker/img/bgCandy.jpg");
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+#rebirth-tab {
+  background:
+    linear-gradient(rgba(117, 127, 187, 0.8), rgba(0, 0, 0, 0.8)),
+    url("https://images.unsplash.com/photo-1454117096348-e4abbeba002c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.stats-panel {
+  background: rgba(196, 188, 76, 0.95);
+  padding: 30px;
+  border: 3px solid var(--border-color);
+  text-shadow: var(--text-shadow);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  border-width: 5px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-shadow: var(--text-shadow);
+  background: rgb(119, 117, 145);
+  border-radius: 10px;
+  border-width: 5px;
+}
+
+.prestige-panel {
+  background: rgba(153, 165, 206, 0.95);
+  padding: 30px;
+  border: 3px solid var(--border-color);
+  text-shadow: var(--text-shadow);
+  border-radius: 15px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+
+/* Bottom Menu */
+#bottom-menu {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  background: #000;
+  display: flex;
+  border-top: 4px solid var(--border-color);
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+.nav-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
+.nav-btn.active {
+  color: var(--gold);
+  background: #111;
+  border-bottom: 4px solid var(--gold);
+}
+
+.prestige-btn {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background: #4c53af;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  border-color: #000;
+  border-width: 3px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: "Monocraft", Helvetica, sans-serif;
+}
