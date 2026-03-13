@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Monocraft";
+  src: url("assets/fonts/Monocraft.ttc") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --bg-dark: #000000;
   --border-color: #543b2a;
@@ -9,6 +16,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Monocraft", "Tahoma", sans-serif;
 }
 body {
   font-family: "Tahoma", sans-serif;
