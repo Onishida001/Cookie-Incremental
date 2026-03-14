@@ -562,7 +562,7 @@ h2 {
   position: absolute;
   width: 20px;
   height: 20px;
-  background-image: url("assets/images/crystal.png");
+  background-image: url("assets/images/ores/crystal.png");
   background-size: cover;
   pointer-events: none;
   z-index: 99;

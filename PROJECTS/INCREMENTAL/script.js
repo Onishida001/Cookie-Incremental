@@ -129,9 +129,9 @@ const suffixes = [
 ];
 
 // --- MUSIC CONTROL ---
-const gameMusic = new Audio("assets/audios/diamonds.mp3");
+const gameMusic = new Audio("assets/audios/Crystal-Waves.mp3");
 gameMusic.loop = true; // Faz a música repetir para sempre
-gameMusic.volume = 0.5; // Volume inicial em 50%
+gameMusic.volume = 0.2; // Volume inicial em 20%
 let isMuted = false;
 
 // Função para ligar a música (precisa de um clique inicial do usuário)
@@ -883,7 +883,7 @@ function initStore() {
     div.className = "store-item";
     div.id = `item-${item.id}`;
     div.onclick = () => buyItem(i);
-    div.innerHTML = `<img src="${item.image}" class="icone-loja"><div><h3>${item.name}</h3><p>🍪 <span id="cost-${item.id}">0</span></p></div><div class="item-count" id="qtd-${item.id}">0</div>`;
+    div.innerHTML = `<img src="${item.image}" class="icone-loja"><div><h3>${item.name}</h3><p>🔮 <span id="cost-${item.id}">0</span></p></div><div class="item-count" id="qtd-${item.id}">0</div>`;
     container.appendChild(div);
   });
 }
