@@ -3,37 +3,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cookie Incremental</title>
+    <title>Crystal Incremental</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   </head>
   <body>
-    <div id="game-container">
+    <div id="auth-screen">
+      <div class="login-card">
+        <h2 class="section-title" id="login-title">Crystal Incremental</h2>
+        <div class="input-group">
+          <input type="text" id="auth-username" required autocorrect="off" />
+          <label>Username</label>
+        </div>
+        <div class="input-group">
+          <input type="password" id="auth-pass" required />
+          <label>Password</label>
+        </div>
+        <div class="auth-buttons">
+          <button class="prestige-btn login-main" id="login-btn" onclick="handleAuth('login')">
+            LOGIN
+          </button>
+          <button
+            class="prestige-btn login-sub" id= "register-btn"
+            onclick="handleAuth('register')"
+          >
+            REGISTER
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="game-container" style="display: none">
       <section id="home-tab" class="tab-content active">
         <div id="cookie-section">
           <div class="score-board">
             <h1 class="cookie-text">
-              <span id="cookie-count">0</span> Cookies
+              <span id="cookie-count">0</span> Crystals
             </h1>
-            <p class="cps-text">Cookies/s: <span id="cps">0</span></p>
+            <p class="cps-text">Per second/s: <span id="cps">0</span></p>
           </div>
           <div class="cookie-container">
             <div class="cookie-shine"></div>
             <img
-              src="assets/images/cookie.png"
+              src="assets/images/ores/crystal.png"
               id="big-cookie"
               draggable="false"
             />
           </div>
           <img
-            src="assets/images/cookie-dourado.png"
+            src="assets/images/ores/shiny-crystal.png"
             id="golden-cookie"
             draggable="false"
           />
         </div>
 
+        <div id="settings-icon" onclick="toggleSettings()">⚙️</div>
+
+        <div id="settings-modal" style="display: none;">
+         <div class="settings-content">
+                   <h2 class="section-title" id="title-settings">Settings</h2>
+                 <p>User: <span id="settings-username" style="color: var(--gold);">---</span></p>
+                <br>
+                <button id="mute-btn" class="prestige-btn" onclick="toggleMute()">🔊 MUTE MUSIC</button>
+               <button class="prestige-btn" style="background: #d32f2f;" onclick="logout()">LOGOUT / CHANGE ACCOUNT</button>
+              <button class="prestige-btn" onclick="toggleSettings()">CLOSE</button>
+          </div>
+        </div>
+
         <div id="store-section">
           <div id="store-header">
-            <h2 class="section-title">Store</h2>
+            <h2 class="section-title" id="title-store">Store</h2>
             <div class="buy-selector">
               <button class="selector-btn active" data-amount="1">1x</button>
               <button class="selector-btn" data-amount="10">10x</button>
@@ -46,44 +87,112 @@
 
       <section id="rebirth-tab" class="tab-content">
         <div class="prestige-panel">
-          <h2 class="section-title">Rebirths</h2>
+          <h2 class="section-title" id="title-rebirth">Rebirth</h2>
           <div class="rebirth-card">
             <p>
               Global Multiplier:
               <span id="multi-val" class="highlight">1.0</span>x
             </p>
             <p>
-              Heavenly Chips:
+              RP:
               <span id="rebirth-points" class="highlight">0</span>
             </p>
           </div>
           <button id="btn-rebirth" class="prestige-btn">
-            Rebirth (+<span id="pending-points">0</span> pts)
+            RP (+<span id="pending-points">0</span>)
           </button>
           <h3 class="sub-title">Rebirth Upgrades</h3>
           <div id="rebirth-upgrades-list"></div>
         </div>
       </section>
 
-      <section id="achievements-tab" class="tab-content">
-        <div class="stats-panel">
-          <h2 class="section-title">Achievements</h2>
-          <div id="achievements-list"></div>
+      <section id="modes-tab" class="tab-content">
+        <div id="modes-menu" class="prestige-panel">
+          <h2 class="section-title" id="title-modes">Game Modes</h2>
+          <div class="mode-card">
+            <h3>🎣 Fishing Mode</h3>
+            <p>Catch rare fish and earn Fish Coins!</p>
+            <button
+              id="unlock-fishing"
+              class="prestige-btn"
+              onclick="unlockMode('fishing')"
+            >
+              Unlock (100 RP)
+            </button>
+            <button
+              id="enter-fishing"
+              class="prestige-btn"
+              style="display: none"
+              onclick="showSubMode('fishing-area')"
+            >
+              Enter Lake
+            </button>
+          </div>
+        </div>
+        <div id="fishing-area" class="sub-mode-content" style="display: none">
+          <div
+            class="prestige-panel"
+            style="background: rgba(30, 58, 138, 0.9)"
+          >
+            <button class="selector-btn" onclick="showSubMode('modes-menu')">
+              ⬅ Back
+            </button>
+            <h2 class="section-title">Lake Incremental</h2>
+            <p>
+              Fish Coins:
+              <span id="fish-coins" class="highlight" style="color: #60a5fa"
+                >0</span
+              >
+            </p>
+            <div id="water-area" onclick="castLine()">
+              <p id="fishing-status">Click to fish!</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <nav id="bottom-menu">
-        <button class="nav-btn active" data-target="home-tab">🍪 HOME</button>
-        <button class="nav-btn" data-target="rebirth-tab">✨ REBIRTH</button>
-        <button class="nav-btn" data-target="achievements-tab">
-          🏆 ACHIEVEMENTS
-        </button>
-      </nav>
+      <section id="ranking-tab" class="tab-content">
+        <div class="stats-panel">
+          <h2 class="section-title" id="title-ranking">Top 100 Global</h2>
+          <div class="ranking-layout">
+            <div class="ranking-box">
+              <h3>🔮 Crystals</h3>
+              <div id="ranking-cookies" class="ranking-container"></div>
+            </div>
+            <div class="ranking-box">
+              <h3>✨ RP</h3>
+              <div id="ranking-rebirths" class="ranking-container"></div>
+            </div>
+      </section>
+
+      <section id="achievements-tab" class="tab-content">
+    <div class="stats-panel">
+        <h2 class="section-title" id="title-achievements">Achievements</h2>
+        
+        <div class="progress-container">
+            <div id="achievement-progress-bar"></div>
+            <div id="progress-text">0/0 Unlocked (0%)</div>
+        </div>
+
+        <div id="achievements-list"></div>
     </div>
+</section>
+
+      <nav id="bottom-menu">
+    <button class="nav-btn active" data-target="home-tab">🔮 HOME</button>
+    
+    <button class="nav-btn" data-target="rebirth-tab">✨ REBIRTH</button>
+    
+    <button class="nav-btn" data-target="modes-tab">🕹️ MODES</button>
+    
+    <button class="nav-btn" data-target="ranking-tab">🌎 TOP</button>
+    
+    <button class="nav-btn" data-target="achievements-tab">🏆 ACHIEVEMENTS</button>
+</nav>
 
     <div id="achievement-toast">
       <div class="toast-icon">🏆</div>
-      <div class="toast-text"><b id="ach-title">Title</b></div>
+      <div class="toast-text"><b id="ach-title">Achievement!</b></div>
     </div>
 
     <script src="script.js"></script>

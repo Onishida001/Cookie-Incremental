@@ -1,8 +1,7 @@
+/* 1. FONTES E CORES */
 @font-face {
   font-family: "Monocraft";
   src: url("assets/fonts/Monocraft.ttc") format("truetype");
-  font-weight: normal;
-  font-style: normal;
 }
 
 :root {
@@ -18,15 +17,131 @@
   box-sizing: border-box;
   font-family: "Monocraft", "Tahoma", sans-serif;
 }
+
 body {
-  font-family: "Tahoma", sans-serif;
   background: var(--bg-dark);
   color: #fff;
   user-select: none;
   overflow: hidden;
 }
 
-/* Tabs */
+/* 2. TELA DE LOGIN (ESTILO GLASS) */
+#auth-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* Substitua pelo caminho do seu GIF */
+  /* O linear-gradient serve como uma "película" escura para dar contraste */
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("assets/gifs/background.gif");
+
+  background-size: cover; /* Faz o GIF cobrir a tela toda */
+  background-position: center; /* Centraliza o GIF */
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#login-title {
+  font-size: 1.75rem;
+  margin-bottom: 20px;
+  text-shadow: var(--text-shadow);
+  background: linear-gradient(to right, #bb80dd, rgb(76, 33, 126));
+  border-radius: 10px;
+  border-width: 5px;
+}
+
+#login-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: linear-gradient(to right, #b4ddaa, #a6ee91);
+  color: white;
+  border: 3px solid #809e80; /* #809e80 */
+  cursor: pointer;
+  border-width: 3px;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+#register-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: linear-gradient(to right, #aabcdd, #2c335a);
+  color: white;
+  border: 3px solid #80829e;
+  cursor: pointer;
+  border-width: 3px;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.login-card {
+  background: rgba(0, 0, 0, 0.7); /* Fundo preto semi-transparente */
+  backdrop-filter: blur(8px); /* Desfoca o GIF apenas atrás do card */
+  -webkit-backdrop-filter: blur(8px);
+
+  padding: 40px;
+  border-radius: 20px;
+  border: 3px solid var(--border-color);
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  border: 3px solid #6e00fe;
+}
+
+.login-card h2 {
+  /* 1. MOVER MAIS PARA CIMA: Aumenta o espaço entre o título e o Username */
+  margin-bottom: 30px; /* Espaço embaixo do título */
+  margin-top: -10px; /* "Puxa" o título levemente para cima */
+
+  /* Estilo do título Crystal Incremental (com base na image_9.png) */
+  background-color: #7b42f5; /* Roxo para o bloco do título */
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.input-group {
+  position: relative;
+  margin: 25px 0;
+}
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid #555;
+  color: white;
+  outline: none;
+}
+.input-group label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  color: #888;
+  transition: 0.3s;
+  pointer-events: none;
+}
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+  top: -20px;
+  font-size: 0.8rem;
+  color: var(--gold);
+}
+
+/* 3. ESTRUTURA DE ABAS */
 .tab-content {
   display: none !important;
   width: 100%;
@@ -36,28 +151,52 @@ body {
   display: flex !important;
 }
 
-/* Home Layout */
-#home-tab.active {
-  flex-direction: row;
-}
+/* 4. HOME TAB (SEU VISUAL ORIGINAL) */
 #cookie-section {
   flex: 1.5;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: url("https://orteil.dashnet.org/cookieclicker/img/bgBlue.jpg");
+  /* Usando o mesmo GIF do Login */
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url("assets/gifs/background.gif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border-right: 4px solid var(--border-color);
   position: relative;
+  transition: filter 0.5s ease;
 }
 
-/* Cookie & FX Layering */
+.score-board {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cookie-text {
+  background: linear-gradient(
+    to right,
+    #8c57c9,
+    #5d27a3
+  ); /* Roxo acinzentado da imagem */
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 5px ridge #ffffff;
+  color: #dcd7e0;
+  text-shadow: none;
+  -webkit-text-stroke: 5px rgba(234, 232, 238, 0.7);
+}
+
 .cookie-container {
   position: relative;
+  margin-top: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
 }
+
 #big-cookie {
   width: 280px;
   cursor: pointer;
@@ -80,7 +219,6 @@ body {
   min-width: 60px;
 }
 
-/* Efeito visual quando o Golden Cookie estiver ativo */
 #cookie-section {
   transition: filter 0.5s ease;
 }
@@ -94,93 +232,51 @@ body {
   filter: drop-shadow(0 0 15px var(--gold));
   animation: pulse 2s infinite;
 }
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
 
-.particle {
+/* Ícone da Engrenagem */
+#settings-icon {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  background-image: url("assets/images/cookie.png");
-  background-size: cover;
-  pointer-events: none;
-  z-index: 50;
-  animation: partExplode 0.8s forwards;
+  top: 20px;
+  left: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 1000;
+  filter: drop-shadow(2px 2px 2px #000);
+  transition: transform 0.3s;
 }
 
-.cps-text {
-  margin-top: 10px;
-  font-size: 1.2rem;
-  text-shadow: var(--text-shadow);
-  text-align: center;
-  font-family: "Monocraft", Helvetica, sans-serif;
+#settings-icon:hover {
+  transform: rotate(90deg) scale(1.1);
 }
 
-.cookie-text {
+/* Modal de Settings */
+#settings-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-  text-shadow: var(--text-shadow);
-  border-color: #000;
-  border-width: 5px;
-  border-style: ridge;
-  background: rgb(206, 189, 112);
-  border-radius: 10px;
-  -webkit-text-stroke: 2.2px rgba(0, 0, 0, 0.719);
-  font-family: "Monocraft", Helvetica, sans-serif;
+  justify-content: center;
+  z-index: 10000;
 }
 
-.floating-text {
-  position: absolute;
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: var(--text-shadow);
-  z-index: 110;
-  pointer-events: none;
-  animation: floatUp 0.8s forwards;
-  font-family: "Monocraft", Helvetica, sans-serif;
-}
-.click-cursor {
-  position: absolute;
-  width: 35px;
-  z-index: 90;
-  pointer-events: none;
-  animation: clickSnap 0.4s forwards;
+.settings-content {
+  background: var(--glass-bg);
+  padding: 30px;
+  border-radius: 15px;
+  border: 3px solid var(--border-color);
+  text-align: center;
+  width: 300px;
 }
 
-@keyframes partExplode {
-  100% {
-    transform: translate(var(--x), var(--y)) rotate(360deg);
-    opacity: 0;
-  }
-}
-@keyframes floatUp {
-  100% {
-    transform: translateY(-120px);
-    opacity: 0;
-  }
-}
-@keyframes clickSnap {
-  0% {
-    transform: scale(1.3);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.7);
-    opacity: 0;
-  }
-}
+#title-settings {
+  background: #555;
+} /* Cor personalizada para o título das settings */
 
-/* Store & Selectors */
+/* 5. STORE (LOJA) */
 #store-section {
   flex: 1;
   background: #1a1a1a;
@@ -201,9 +297,10 @@ h2 {
   padding: 5px;
   background: #000;
   margin: 10px;
-  border-radius: 5px;
   border: 1px solid var(--border-color);
+  border-radius: 5px;
 }
+
 .selector-btn {
   flex: 1;
   background: #333;
@@ -211,9 +308,8 @@ h2 {
   border: none;
   padding: 8px;
   cursor: pointer;
-  font-weight: bold;
   transition: 0.2s;
-  font-family: "Monocraft", Helvetica, sans-serif;
+  font-weight: bold;
 }
 .selector-btn.active {
   background: #4caf50;
@@ -227,12 +323,12 @@ h2 {
   border-bottom: 1px solid #333;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.03);
-  font-family: "Monocraft", Helvetica, sans-serif;
 }
 .store-item.disabled {
   opacity: 0.4;
   filter: grayscale(1);
 }
+
 .icone-loja {
   width: 64px;
   height: 64px;
@@ -240,10 +336,23 @@ h2 {
   padding: 8px;
 }
 
-/* Prestige & Stats Tabs */
-#achievements-tab {
+.item-info {
+  flex: 1;
+  padding: 10px;
+}
+.item-count {
+  font-size: 1.8rem;
+  padding: 0 15px;
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+/* 6. MODES & REBIRTH (CORES QUE VOCÊ ESCOLHEU) */
+#modes-tab {
   background:
-    linear-gradient(rgba(181, 190, 51, 0.8), rgba(0, 0, 0, 0.8)),
+    linear-gradient(rgba(45, 20, 80, 0.8), rgba(0, 0, 0, 0.8)),
     url("https://orteil.dashnet.org/cookieclicker/img/bgCandy.jpg");
   flex-direction: column;
   align-items: center;
@@ -253,7 +362,7 @@ h2 {
 #rebirth-tab {
   background:
     linear-gradient(rgba(117, 127, 187, 0.8), rgba(0, 0, 0, 0.8)),
-    url("https://images.unsplash.com/photo-1454117096348-e4abbeba002c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    url("https://images.unsplash.com/photo-1454117096348-e4abbeba002c?auto=format&fit=crop&w=1470");
   flex-direction: column;
   align-items: center;
   padding: 20px;
@@ -271,7 +380,84 @@ h2 {
   width: 100%;
   max-width: 600px;
   text-align: center;
-  font-family: "Monocraft", Helvetica, sans-serif;
+}
+
+/* PROGRESS BAR */
+.progress-container {
+  width: 100%;
+  background: #222;
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  height: 25px;
+  position: relative;
+  overflow: hidden;
+}
+
+#achievement-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.5s ease;
+}
+
+#progress-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 3px;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 1px 1px #000;
+  -webkit-text-stroke: #9b9696 0.5px;
+}
+
+#achievements-list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(180px, 1fr)
+  ); /* Organiza em colunas automáticas */
+  gap: 15px;
+  width: 100%;
+  padding: 15px;
+
+  /* CONFIGURAÇÃO DO SCROLL */
+  max-height: 450px; /* Altura máxima antes de aparecer o scroll */
+  overflow-y: auto; /* Ativa o scroll vertical apenas se necessário */
+
+  /* Estilo da barra de rolagem (opcional para ficar mais bonito) */
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) #222;
+}
+
+/* ESTILO DA BARRA DE ROLAGEM PARA CHROME/EDGE */
+#achievements-list::-webkit-scrollbar {
+  width: 8px;
+}
+#achievements-list::-webkit-scrollbar-track {
+  background: #222;
+  border-radius: 10px;
+}
+#achievements-list::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 10px;
+}
+
+/* CARD DE CONQUISTA INDIVIDUAL */
+.achievement-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #444;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.achievement-card.unlocked {
+  background: rgba(255, 204, 0, 0.1);
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
 }
 
 .section-title {
@@ -283,19 +469,129 @@ h2 {
   border-width: 5px;
 }
 
+#title-store {
+  background: linear-gradient(
+    to right,
+    #90a18f,
+    #1bff06
+  ); /* Roxo acinzentado da imagem */
+}
+
+#title-ranking {
+  background: linear-gradient(to right, #ffcc00, #ff9900);
+}
+
+#title-modes {
+  background: linear-gradient(
+    to right,
+    #ececee,
+    #272796
+  ); /* Tom de azul dos Modos */
+}
+
+#title-rebirth {
+  background: linear-gradient(to right, #0000ff, #8e8eaf); /* Tom do Rebirth */
+}
+
+#title-achievements {
+  background: linear-gradient(
+    to right,
+    #c9c7ae,
+    #ddd55f
+  ); /* Tom das Conquistas */
+}
+
 .prestige-panel {
   background: rgba(153, 165, 206, 0.95);
   padding: 30px;
-  border: 3px solid var(--border-color);
-  text-shadow: var(--text-shadow);
+  border: 5px solid var(--border-color);
   border-radius: 15px;
   width: 100%;
   max-width: 600px;
   text-align: center;
-  font-family: "Monocraft", Helvetica, sans-serif;
 }
 
-/* Bottom Menu */
+/* 7. RANKING LADO A LADO */
+#ranking-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    url("https://orteil.dashnet.org/cookieclicker/img/bgCandy.jpg");
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.ranking-layout {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  margin: 20px 0;
+}
+.ranking-box {
+  flex: 1;
+}
+.ranking-container {
+  height: 300px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid var(--border-color);
+}
+.ranking-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #444;
+  font-size: 0.8rem;
+}
+
+/* 8. PARTICLES & FX */
+.floating-text {
+  position: absolute;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: var(--text-shadow);
+  z-index: 110;
+  pointer-events: none;
+  animation: floatUp 0.8s forwards;
+}
+
+.particle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-image: url("assets/images/crystal.png");
+  background-size: cover;
+  pointer-events: none;
+  z-index: 99;
+  animation: pExplode 0.8s forwards;
+}
+
+@keyframes floatUp {
+  100% {
+    transform: translateY(-120px);
+    opacity: 0;
+  }
+}
+@keyframes pExplode {
+  100% {
+    transform: translate(var(--x), var(--y)) rotate(360deg);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* 9. MENU INFERIOR */
 #bottom-menu {
   position: fixed;
   bottom: 0;
@@ -304,16 +600,14 @@ h2 {
   background: #000;
   display: flex;
   border-top: 4px solid var(--border-color);
-  font-family: "Monocraft", Helvetica, sans-serif;
 }
 .nav-btn {
   flex: 1;
   background: none;
   border: none;
   color: #888;
-  font-size: 1.2rem;
   cursor: pointer;
-  font-family: "Monocraft", Helvetica, sans-serif;
+  font-size: 0.8rem;
 }
 .nav-btn.active {
   color: var(--gold);
@@ -326,12 +620,10 @@ h2 {
   padding: 10px 15px;
   background: #4c53af;
   color: white;
-  border: none;
-  border-radius: 5px;
-  border-color: #000;
+  border: 3px solid #000;
+  cursor: pointer;
   border-width: 3px;
   font-size: 1.2rem;
   cursor: pointer;
   transition: background 0.3s;
-  font-family: "Monocraft", Helvetica, sans-serif;
 }
