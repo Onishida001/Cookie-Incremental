@@ -191,20 +191,20 @@ function formatNumbers(num) {
 
 const buildings = [
   {
-    id: "cursor",
-    name: "Cursor",
+    id: "pickaxe",
+    name: "Pickaxe",
     baseCost: 15,
     cps: 1,
     quantity: 0,
-    image: "assets/images/upgrades/cursor.png",
+    image: "assets/images/upgrades/pickaxe.png",
   },
   {
-    id: "grandma",
-    name: "Grandma",
+    id: "grandpa",
+    name: "Grandpa",
     baseCost: 100,
     cps: 5,
     quantity: 0,
-    image: "assets/images/upgrades/grandma.png",
+    image: "assets/images/upgrades/grandpa.png",
   },
   {
     id: "farm",
@@ -339,8 +339,20 @@ const achievements = [
 ];
 
 const rebirthUpgrades = [
-  { id: "cp", name: "Muscle Memory", cost: 2, level: 0 },
-  { id: "at", name: "Auto-Tapper", cost: 10, level: 0 },
+  {
+    id: "cp",
+    name: "Muscle Memory",
+    cost: 10,
+    level: 0,
+    desc: "Your Soul Remember How to Click.",
+  },
+  {
+    id: "at",
+    name: "Auto-Tapper",
+    cost: 10,
+    level: 0,
+    desc: "Auto Clicks = Easy Farm.",
+  },
 ];
 
 // --- AUTH ---
@@ -451,12 +463,22 @@ async function loadCloudData() {
 
     // 4. Carrega os Upgrades de Rebirth
     if (d.rebirthUpgrades) {
+      // 1. Primeiro carregamos os níveis e custos de cada upgrade
       d.rebirthUpgrades.forEach((su, i) => {
         if (rebirthUpgrades[i]) {
           rebirthUpgrades[i].level = su.level;
-          rebirthUpgrades[i].cost = Math.floor(2 * Math.pow(2.5, su.level));
+          // Aplicando o Nerf de 4x no carregamento também
+          rebirthUpgrades[i].cost = Math.floor(10 * Math.pow(4, su.level));
         }
       });
+
+      // 2. Calculamos o multiplicador UMA ÚNICA VEZ fora do loop
+      const multiplierValue = 1 + rebirthPoints * 0.1;
+      const multiElement = document.getElementById("multi-val");
+
+      if (multiElement) {
+        multiElement.innerText = multiplierValue.toFixed(2) + "x";
+      }
     }
 
     // 5. Carrega as Conquistas (Achievements)
@@ -602,6 +624,13 @@ function updateUI() {
     const qtdDisplay = document.getElementById(`qtd-${item.id}`);
     const div = document.getElementById(`item-${item.id}`);
 
+    const multiplierValue = 1 + rebirthPoints * 0.1;
+    const multiElement = document.getElementById("multi-val");
+    if (multiElement) {
+      // Agora ele passa pela sua função de formatação!
+      multiElement.innerText = formatNumbers(multiplierValue) + "";
+    }
+
     // The price of exactly 1 next unit
     let unitCost = item.baseCost * Math.pow(1.15, item.quantity);
 
@@ -679,7 +708,7 @@ function buyItem(idx) {
     item.quantity += count;
     recalculate();
     updateUI();
-    new Audio("assets/audios/buy.mp3").play().catch(() => {});
+    new Audio("assets/audios/sucess.mp3").play().catch(() => {});
     saveCloudData();
   }
 }
@@ -739,23 +768,29 @@ function castLine() {
 
 // --- REBIRTH ---
 function renderRebirthShop() {
-  const container = document.getElementById("rebirth-upgrades-list");
-  if (!container) return; // Segurança caso o elemento não exista
+  const shop = document.getElementById("rebirth-shop-container");
+  if (!shop) return;
+  shop.innerHTML = "";
 
-  container.innerHTML = "";
-  rebirthUpgrades.forEach((upg, i) => {
-    const div = document.createElement("div");
-    div.className = "rebirth-card";
+  // CORREÇÃO: 0 (Muscle Memory) -> 50 | 1 (Auto-Tapper) -> 10
+  const LIMITS = { 0: 50, 1: 10 };
 
-    // A mágica acontece aqui: formatNumbers(upg.cost)
-    div.innerHTML = `
-            <h3>${upg.name} (Lvl ${upg.level})</h3>
-            <p>${upg.desc}</p>
-            <button onclick="buyRebirthUpg(${i})" class="prestige-btn" ${rebirthPoints < upg.cost ? "disabled" : ""}>
-                Buy (${formatNumbers(upg.cost)})
-            </button>
-        `;
-    container.appendChild(div);
+  rebirthUpgrades.forEach((u, i) => {
+    const isMaxed = u.level >= LIMITS[i];
+    const price = Math.floor(10 * Math.pow(4, u.level));
+
+    // Pegamos a descrição do objeto. Se não existir, colocamos um texto padrão.
+    const description = u.desc || "Improve your crystal production!";
+
+    shop.innerHTML += `
+      <div class="rebirth-item ${isMaxed ? "maxed" : ""}">
+        <h3>${u.name} (Lvl: ${u.level}/${LIMITS[i]})</h3>
+        <p>${description}</p>
+        <button class="prestige-btn" onclick="buyRebirthUpg(${i})" ${isMaxed ? "disabled" : ""}>
+          ${isMaxed ? "MAX LEVEL" : "Upgrade: " + formatNumbers(price) + " Pts"}
+        </button>
+      </div>
+    `;
   });
 }
 
@@ -798,21 +833,49 @@ document.getElementById("btn-rebirth").onclick = async () => {
 
 function buyRebirthUpg(i) {
   const u = rebirthUpgrades[i];
-  if (rebirthPoints >= u.cost) {
-    rebirthPoints -= u.cost;
+
+  // --- LIMITES CORRIGIDOS ---
+  const LIMITS = {
+    0: 50, // Muscle Memory (Índice 0) agora vai até 50
+    1: 10, // Auto-Tapper (Índice 1) agora vai até 10
+  };
+
+  // 1. Verifica o limite
+  if (u.level >= LIMITS[i]) {
+    alert("This upgrade has reached its maximum level!");
+    return;
+  }
+
+  // 2. Cálculo do custo (Nerf 4x)
+  let upgradePrice = Math.floor(10 * Math.pow(4, u.level));
+
+  if (rebirthPoints >= upgradePrice) {
+    rebirthPoints -= upgradePrice;
     u.level++;
-    u.cost = Math.floor(u.cost * 2.5);
+
+    // 3. Atualiza o custo do objeto para o próximo nível
+    u.cost = Math.floor(10 * Math.pow(4, u.level));
+
+    // 4. Atualiza o Jogo
     recalculate();
     renderRebirthShop();
     updateUI();
     saveCloudData();
+  } else {
+    alert("You need more Rebirth Points!");
   }
 }
 
 // --- LOOPS ---
 document.getElementById("big-cookie").onmousedown = (e) => {
-  new Audio("assets/audios/click.mp3").play().catch(() => {});
-  let val = (1 + rebirthPoints * 0.1) * Math.pow(2, rebirthUpgrades[0].level);
+  new Audio("assets/audios/clicking.mp3").play().catch(() => {});
+
+  // Multiplicador do Rebirth * Poder do Muscle Memory (Índice 0)
+  let rebirthBonus = 1 + rebirthPoints * 0.1;
+  let muscleMemoryBonus = Math.pow(2, rebirthUpgrades[0].level);
+
+  let val = rebirthBonus * muscleMemoryBonus;
+
   cookies += val;
   totalCookies += val;
   spawnFX(e, val);

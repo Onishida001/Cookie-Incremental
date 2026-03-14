@@ -546,6 +546,18 @@ h2 {
   font-size: 0.8rem;
 }
 
+.rebirth-item.maxed {
+  opacity: 0.7;
+  border-color: #555;
+}
+
+.rebirth-item.maxed button {
+  background: #444 !important;
+  color: #888 !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 /* 8. PARTICLES & FX */
 .floating-text {
   position: absolute;
