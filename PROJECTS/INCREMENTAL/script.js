@@ -276,42 +276,42 @@ const achievements = [
   {
     id: "1k",
     title: "Apprentice",
-    hint: "Reach 1,000 total cookies",
+    hint: "Reach 1,000 total crystals",
     condition: () => totalCookies >= 1000,
     unlocked: false,
   },
   {
     id: "1m",
     title: "Millionaire",
-    hint: "Reach 1,000,000 total cookies",
+    hint: "Reach 1,000,000 total crystals",
     condition: () => totalCookies >= 1e6,
     unlocked: false,
   },
   {
     id: "1b",
     title: "Billionaire",
-    hint: "Reach 1,000,000,000 total cookies",
+    hint: "Reach 1,000,000,000 total crystals",
     condition: () => totalCookies >= 1e9,
     unlocked: false,
   },
   {
     id: "1t",
     title: "Trillionaire",
-    hint: "Reach 1,000,000,000,000 total cookies",
+    hint: "Reach 1,000,000,000,000 total crystals",
     condition: () => totalCookies >= 1e12,
     unlocked: false,
   },
   {
     id: "1Qd",
     title: "Quadrillionaire",
-    hint: "Reach 1,000,000,000,000,000 total cookies",
+    hint: "Reach 1,000,000,000,000,000 total crystals",
     condition: () => totalCookies >= 1e15,
     unlocked: false,
   },
   {
     id: "50c",
-    title: "Click Hero",
-    hint: "Buy 50 Cursors",
+    title: "Pickaxe Hero",
+    hint: "Buy 50 Pickaxes",
     condition: () => buildings[0].quantity >= 50,
     unlocked: false,
   },
@@ -336,6 +336,48 @@ const achievements = [
     condition: () => buildings[3].quantity >= 50,
     unlocked: false,
   },
+  {
+    id: "50ft",
+    title: "Factory Hero",
+    hint: "Buy 50 Factory",
+    condition: () => buildings[4].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50b",
+    title: "Bank Hero",
+    hint: "Buy 50 Banks",
+    condition: () => buildings[5].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50wt",
+    title: "Wizard Tower Hero",
+    hint: "Buy 50 Wizard Towers",
+    condition: () => buildings[6].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50he",
+    title: "Hydro Electric Hero",
+    hint: "Buy 50 Hydro Electric Plants",
+    condition: () => buildings[7].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50np",
+    title: "Nuclear Plant Hero",
+    hint: "Buy 50 Nuclear Plants",
+    condition: () => buildings[8].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50dc",
+    title: "Data Center Hero",
+    hint: "Buy 50 Data Centers",
+    condition: () => buildings[9].quantity >= 50,
+    unlocked: false,
+  },
 ];
 
 const rebirthUpgrades = [
@@ -344,7 +386,7 @@ const rebirthUpgrades = [
     name: "Muscle Memory",
     cost: 10,
     level: 0,
-    desc: "Your Soul Remember How to Click.",
+    desc: "Remember Your Soul How to Click.",
   },
   {
     id: "at",
@@ -473,7 +515,7 @@ async function loadCloudData() {
       });
 
       // 2. Calculamos o multiplicador UMA ÚNICA VEZ fora do loop
-      const multiplierValue = 1 + rebirthPoints * 0.1;
+      const multiplierValue = 1 + rebirthPoints * 0.01;
       const multiElement = document.getElementById("multi-val");
 
       if (multiElement) {
@@ -488,6 +530,33 @@ async function loadCloudData() {
         if (a) a.unlocked = sa.unlocked;
       });
     }
+
+    function showAchievement(title) {
+      const toast = document.getElementById("achievement-toast");
+      const achTitle = document.getElementById("ach-title");
+
+      if (toast && achTitle) {
+        achTitle.innerText = title;
+        toast.classList.add("show");
+
+        // Toca um som de sucesso (opcional)
+        // new Audio("assets/audios/achievement.mp3").play().catch(() => {});
+
+        // Esconde depois de 3 segundos
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+    }
+
+    // Exemplo de como chamar dentro do seu loop de conquistas:
+    achievements.forEach((ach) => {
+      if (!ach.unlocked && ach.condition()) {
+        ach.unlocked = true;
+        showAchievement(ach.title); // Chama a animação
+        saveCloudData();
+      }
+    });
 
     // 6. Atualiza toda a interface de uma vez
     recalculate();
@@ -598,7 +667,7 @@ function formatNumbers(num) {
 
 function recalculate() {
   cps = 0;
-  let multi = 1 + rebirthPoints * 0.1;
+  let multi = 1 + rebirthPoints * 0.01;
   buildings.forEach((b) => (cps += b.cps * b.quantity * multi));
 }
 
@@ -615,7 +684,7 @@ function updateUI() {
     formatNumbers(rebirthPoints);
   document.getElementById("multi-val").innerText = (
     1 +
-    rebirthPoints * 0.1
+    rebirthPoints * 0.01
   ).toFixed(1);
 
   // 2. Loop through buildings to update the Store
@@ -624,7 +693,7 @@ function updateUI() {
     const qtdDisplay = document.getElementById(`qtd-${item.id}`);
     const div = document.getElementById(`item-${item.id}`);
 
-    const multiplierValue = 1 + rebirthPoints * 0.1;
+    const multiplierValue = 1 + rebirthPoints * 0.01;
     const multiElement = document.getElementById("multi-val");
     if (multiElement) {
       // Agora ele passa pela sua função de formatação!
@@ -871,7 +940,7 @@ document.getElementById("big-cookie").onmousedown = (e) => {
   new Audio("assets/audios/clicking.mp3").play().catch(() => {});
 
   // Multiplicador do Rebirth * Poder do Muscle Memory (Índice 0)
-  let rebirthBonus = 1 + rebirthPoints * 0.1;
+  let rebirthBonus = 1 + rebirthPoints * 0.01;
   let muscleMemoryBonus = Math.pow(2, rebirthUpgrades[0].level);
 
   let val = rebirthBonus * muscleMemoryBonus;
@@ -905,7 +974,7 @@ window.addEventListener("keydown", (e) => {
 setInterval(() => {
   let inc = (cps * goldenMultiplier) / 10;
   if (rebirthUpgrades[1].level > 0)
-    inc += (rebirthUpgrades[1].level * (1 + rebirthPoints * 0.1)) / 10;
+    inc += (rebirthUpgrades[1].level * (1 + rebirthPoints * 0.01)) / 10;
   cookies += inc;
   totalCookies += inc;
   updateUI();

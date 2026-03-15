@@ -1,3 +1,5 @@
+/* style.css completo e corrigido */
+
 /* 1. FONTES E CORES */
 @font-face {
   font-family: "Monocraft";
@@ -6,9 +8,10 @@
 
 :root {
   --bg-dark: #000000;
-  --border-color: #543b2a;
+  --border-color: #55158a;
   --gold: #ffcc00;
   --text-shadow: 2px 2px 0px #000;
+  --glass-bg: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente padrão */
 }
 
 * {
@@ -22,7 +25,9 @@ body {
   background: var(--bg-dark);
   color: #fff;
   user-select: none;
-  overflow: hidden;
+  overflow: hidden; /* Impede barras de rolagem globais */
+  height: 100vh;
+  width: 100vw;
 }
 
 /* 2. TELA DE LOGIN (ESTILO GLASS) */
@@ -32,21 +37,55 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-
-  /* Substitua pelo caminho do seu GIF */
-  /* O linear-gradient serve como uma "película" escura para dar contraste */
   background:
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url("assets/gifs/background.gif");
-
-  background-size: cover; /* Faz o GIF cobrir a tela toda */
-  background-position: center; /* Centraliza o GIF */
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+}
+
+/* Configuração Global para garantir que o GIF cubra a tela toda */
+#rebirth-tab,
+#modes-tab,
+#ranking-tab,
+#achievements-tab {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o card horizontalmente */
+  justify-content: center; /* Centraliza o card verticalmente no GIF */
+  position: relative;
+}
+
+#rebirth-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+    url("assets/gifs/rebirthcave.gif");
+}
+
+#modes-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
+    url("assets/gifs/modes.gif");
+}
+
+#ranking-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("assets/gifs/topglobal.gif");
+}
+
+#achievements-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
+    url("assets/gifs/achievements.gif");
 }
 
 #login-title {
@@ -55,56 +94,45 @@ body {
   text-shadow: var(--text-shadow);
   background: linear-gradient(to right, #bb80dd, rgb(76, 33, 126));
   border-radius: 10px;
-  border-width: 5px;
 }
 
-#login-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background: linear-gradient(to right, #b4ddaa, #a6ee91);
-  color: white;
-  border: 3px solid #809e80; /* #809e80 */
-  cursor: pointer;
-  border-width: 3px;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: background 0.3s;
-}
-
+#login-btn,
 #register-btn {
   margin-top: 20px;
   padding: 10px 20px;
-  background: linear-gradient(to right, #aabcdd, #2c335a);
   color: white;
-  border: 3px solid #80829e;
   cursor: pointer;
-  border-width: 3px;
   border-radius: 5px;
   font-size: 1rem;
   transition: background 0.3s;
 }
 
-.login-card {
-  background: rgba(0, 0, 0, 0.7); /* Fundo preto semi-transparente */
-  backdrop-filter: blur(8px); /* Desfoca o GIF apenas atrás do card */
-  -webkit-backdrop-filter: blur(8px);
+#login-btn {
+  background: linear-gradient(to right, #b4ddaa, #a6ee91);
+  border: 3px solid #809e80;
+}
 
+#register-btn {
+  background: linear-gradient(to right, #aabcdd, #2c335a);
+  border: 3px solid #80829e;
+}
+
+.login-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 40px;
   border-radius: 20px;
-  border: 3px solid var(--border-color);
+  border: 3px solid #6e00fe;
   width: 350px;
   text-align: center;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-  border: 3px solid #6e00fe;
 }
 
 .login-card h2 {
-  /* 1. MOVER MAIS PARA CIMA: Aumenta o espaço entre o título e o Username */
-  margin-bottom: 30px; /* Espaço embaixo do título */
-  margin-top: -10px; /* "Puxa" o título levemente para cima */
-
-  /* Estilo do título Crystal Incremental (com base na image_9.png) */
-  background-color: #7b42f5; /* Roxo para o bloco do título */
+  margin-bottom: 30px;
+  margin-top: -10px;
+  background-color: #7b42f5;
   color: white;
   padding: 10px 15px;
   border-radius: 6px;
@@ -138,67 +166,67 @@ body {
 .input-group input:valid ~ label {
   top: -20px;
   font-size: 0.8rem;
-  color: var(--gold);
+  color: #ffffff;
 }
 
-/* 3. ESTRUTURA DE ABAS */
+/* 3. ESTRUTURA DE ABAS CORRIGIDA */
 .tab-content {
   display: none !important;
   width: 100%;
-  height: calc(100vh - 70px);
+  /* CORREÇÃO: Usa min-height para garantir que o fundo cubra tudo */
+  min-height: calc(100vh - 70px);
+  position: relative; /* Permite scroll interno se necessário */
 }
 .tab-content.active {
   display: flex !important;
 }
 
-/* 4. HOME TAB (SEU VISUAL ORIGINAL) */
+/* 4. HOME TAB (DESACHATADA) */
 #cookie-section {
   flex: 1.5;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Usando o mesmo GIF do Login */
   background:
     linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url("assets/gifs/background.gif");
-
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border-right: 4px solid var(--border-color);
   position: relative;
   transition: filter 0.5s ease;
+  padding: 10px; /* Reduzi paddings excessivos */
 }
 
 .score-board {
-  margin-top: 20px;
+  margin-top: 10px; /* Reduzi margens */
   text-align: center;
 }
 
 .cookie-text {
-  background: linear-gradient(
-    to right,
-    #8c57c9,
-    #5d27a3
-  ); /* Roxo acinzentado da imagem */
-  padding: 10px 20px;
+  /* CORREÇÃO: Mantive a gradient roxa, mas tirei paddings excessivos */
+  background: linear-gradient(to right, #8c57c9, #5d27a3);
+  padding: 8px 15px; /* Reduzi o padding interno */
   border-radius: 10px;
-  border: 5px ridge #ffffff;
   color: #dcd7e0;
   text-shadow: none;
-  -webkit-text-stroke: 5px rgba(234, 232, 238, 0.7);
+
+  /* CORREÇÃO CRÍTICA: Reduzi as bordas e contornos de 5px para 2px/1px */
+  border: 2px solid #fff;
+  -webkit-text-stroke: 1px rgba(234, 232, 238, 0.7);
 }
 
 .cookie-container {
   position: relative;
-  margin-top: 40px;
+  margin-top: 20px; /* Reduzi margem */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 #big-cookie {
-  width: 280px;
+  width: 250px; /* Reduzi levemente o tamanho do cristal */
   cursor: pointer;
   transition: transform 0.1s;
   z-index: 10;
@@ -211,7 +239,7 @@ body {
 .item-count {
   font-size: 1.8rem;
   padding: 0 15px;
-  color: rgba(255, 255, 255, 0.2); /* Fica meio transparente como no original */
+  color: rgba(255, 255, 255, 0.2);
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -219,13 +247,9 @@ body {
   min-width: 60px;
 }
 
-#cookie-section {
-  transition: filter 0.5s ease;
-}
-
 #golden-cookie {
   position: absolute;
-  width: 80px;
+  width: 70px;
   display: none;
   z-index: 100;
   cursor: pointer;
@@ -244,7 +268,6 @@ body {
   filter: drop-shadow(2px 2px 2px #000);
   transition: transform 0.3s;
 }
-
 #settings-icon:hover {
   transform: rotate(90deg) scale(1.1);
 }
@@ -262,7 +285,6 @@ body {
   justify-content: center;
   z-index: 10000;
 }
-
 .settings-content {
   background: var(--glass-bg);
   padding: 30px;
@@ -271,10 +293,21 @@ body {
   text-align: center;
   width: 300px;
 }
-
 #title-settings {
   background: #555;
-} /* Cor personalizada para o título das settings */
+}
+
+/* Efeito Vidro para os Cards internos do Rebirth e Modes */
+.rebirth-card,
+.mode-card {
+  background: rgba(0, 0, 0, 0.4); /* Fundo bem transparente */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Borda clarinha parecendo reflexo de vidro */
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra interna para dar profundidade */
+  backdrop-filter: blur(4px); /* Blur extra */
+}
 
 /* 5. STORE (LOJA) */
 #store-section {
@@ -282,6 +315,8 @@ body {
   background: #1a1a1a;
   border-left: 2px solid #000;
   overflow-y: auto;
+  border-top: #00e676 2px solid;
+  border-bottom: #00e676 2px solid;
 }
 
 h2 {
@@ -297,10 +332,9 @@ h2 {
   padding: 5px;
   background: #000;
   margin: 10px;
-  border: 1px solid var(--border-color);
+  border: 2px solid #003bfe;
   border-radius: 5px;
 }
-
 .selector-btn {
   flex: 1;
   background: #333;
@@ -328,14 +362,12 @@ h2 {
   opacity: 0.4;
   filter: grayscale(1);
 }
-
 .icone-loja {
   width: 64px;
   height: 64px;
   background: rgba(0, 0, 0, 0.5);
   padding: 8px;
 }
-
 .item-info {
   flex: 1;
   padding: 10px;
@@ -349,58 +381,47 @@ h2 {
   align-items: center;
 }
 
-/* 6. MODES & REBIRTH (CORES QUE VOCÊ ESCOLHEU) */
-#modes-tab {
-  background:
-    linear-gradient(rgba(45, 20, 80, 0.8), rgba(0, 0, 0, 0.8)),
-    url("https://orteil.dashnet.org/cookieclicker/img/bgCandy.jpg");
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
+.stats-panel,
+.prestige-panel {
+  background: rgba(0, 0, 0, 0.6);
 
-#rebirth-tab {
-  background:
-    linear-gradient(rgba(117, 127, 187, 0.8), rgba(0, 0, 0, 0.8)),
-    url("https://images.unsplash.com/photo-1454117096348-e4abbeba002c?auto=format&fit=crop&w=1470");
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.stats-panel {
-  background: rgba(196, 188, 76, 0.95);
+  /* O segredo mágico: embaça o GIF atrás do card */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 30px;
+  /* Reduzi a borda de 5px para 3px para ficar mais elegante e moderna */
   border: 3px solid var(--border-color);
   text-shadow: var(--text-shadow);
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   margin-bottom: 20px;
   border-radius: 15px;
-  border-width: 5px;
   width: 100%;
   max-width: 600px;
   text-align: center;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
 }
 
 /* PROGRESS BAR */
 .progress-container {
   width: 100%;
-  background: #222;
-  border: 2px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.6);
+
+  /* O segredo mágico: embaça o GIF atrás do card */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid #bafe00;
   border-radius: 10px;
   margin-bottom: 20px;
   height: 25px;
   position: relative;
   overflow: hidden;
 }
-
 #achievement-progress-bar {
   width: 0%;
   height: 100%;
   background: var(--gold);
   transition: width 0.5s ease;
 }
-
 #progress-text {
   position: absolute;
   width: 100%;
@@ -409,29 +430,55 @@ h2 {
   font-size: 1rem;
   color: #fff;
   text-shadow: 1px 1px #000;
-  -webkit-text-stroke: #9b9696 0.5px;
 }
 
+#achievement-toast {
+  /* Tira o elemento do fluxo da página (resolve a barra preta) */
+  position: fixed !important;
+  z-index: 99999;
+  /* Esconde ele lá no topo, fora da tela */
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Estilo do Toast */
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #00f2fe;
+  padding: 12px 25px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+  transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Classe para mostrar a conquista */
+#achievement-toast.show {
+  top: 20px;
+}
+.toast-icon {
+  font-size: 1.4rem;
+}
+#ach-title {
+  color: #fff;
+  font-size: 0.9rem;
+  white-space: nowrap; /* Impede que o texto quebre */
+}
+
+/* LISTA DE CONQUISTAS */
 #achievements-list {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(180px, 1fr)
-  ); /* Organiza em colunas automáticas */
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 15px;
   width: 100%;
   padding: 15px;
-
-  /* CONFIGURAÇÃO DO SCROLL */
-  max-height: 450px; /* Altura máxima antes de aparecer o scroll */
-  overflow-y: auto; /* Ativa o scroll vertical apenas se necessário */
-
-  /* Estilo da barra de rolagem (opcional para ficar mais bonito) */
+  /* CONFIGURAÇÃO DO SCROLL INTERNO */
+  max-height: 400px;
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--gold) #222;
 }
-
-/* ESTILO DA BARRA DE ROLAGEM PARA CHROME/EDGE */
+/* Estilo da barra de rolagem */
 #achievements-list::-webkit-scrollbar {
   width: 8px;
 }
@@ -453,74 +500,131 @@ h2 {
   text-align: center;
   transition: 0.3s;
 }
-
 .achievement-card.unlocked {
   background: rgba(255, 204, 0, 0.1);
   border-color: var(--gold);
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
 }
 
+/* TÍTULOS DE SEÇÃO */
 .section-title {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  text-shadow: var(--text-shadow);
-  background: rgb(119, 117, 145);
-  border-radius: 10px;
-  border-width: 5px;
+  font-size: 2rem; /* Aumentei um pouco para dar mais presença */
+  margin-bottom: 25px;
+  padding: 10px 30px;
+  display: inline-block;
+
+  /* Base de vidro embaçado */
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  /* Sombra no texto (Preta para leitura + Branca para brilho) */
+  color: #fff;
+  text-shadow:
+    2px 2px 0px #000,
+    0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-#title-store {
+/* CORES ESPECÍFICAS DE CADA ABA 
+  Usando gradientes translúcidos, bordas coloridas e brilho neon (Glow)
+*/
+
+#title-rebirth {
+  /* Tons de Roxo e Ciano Místico */
   background: linear-gradient(
-    to right,
-    #90a18f,
-    #1bff06
-  ); /* Roxo acinzentado da imagem */
-}
-
-#title-ranking {
-  background: linear-gradient(to right, #ffcc00, #ff9900);
+    135deg,
+    rgba(123, 66, 245, 0.5),
+    rgba(0, 242, 254, 0.5)
+  );
+  border: 2px solid #00f2fe;
+  box-shadow:
+    inset 0 0 15px rgba(0, 242, 254, 0.3),
+    0 0 20px rgba(120, 66, 245, 0.4);
 }
 
 #title-modes {
+  /* Tons de Rosa Neon e Roxo Arcade */
   background: linear-gradient(
-    to right,
-    #ececee,
-    #272796
-  ); /* Tom de azul dos Modos */
+    135deg,
+    rgb(108, 255, 89),
+    rgba(107, 236, 157, 0.5)
+  );
+  border: 2px solid #00ff9d;
+  box-shadow:
+    inset 0 0 15px rgba(81, 255, 0, 0.3),
+    0 0 20px rgba(66, 245, 161, 0.4);
 }
 
-#title-rebirth {
-  background: linear-gradient(to right, #0000ff, #8e8eaf); /* Tom do Rebirth */
+#title-ranking {
+  /* Tons de Laranja e Ouro Quente */
+  background: linear-gradient(
+    135deg,
+    rgba(74, 196, 189, 0.5),
+    rgba(0, 225, 255, 0.5)
+  );
+  border: 2px solid #00f7ff;
+  box-shadow:
+    inset 0 0 15px rgba(0, 89, 255, 0.3),
+    0 0 20px rgba(0, 247, 255, 0.4);
 }
 
 #title-achievements {
+  /* Tons de Ouro Brilhante (Troféu) */
   background: linear-gradient(
-    to right,
-    #c9c7ae,
-    #ddd55f
-  ); /* Tom das Conquistas */
+    135deg,
+    rgba(197, 176, 123, 0.699),
+    rgba(235, 222, 153, 0.747)
+  );
+  border: 2px solid #e6d788;
+  box-shadow:
+    inset 0 0 15px rgba(238, 223, 139, 0.644),
+    0 0 20px rgba(221, 191, 117, 0.671);
 }
 
-.prestige-panel {
-  background: rgba(153, 165, 206, 0.95);
-  padding: 30px;
-  border: 5px solid var(--border-color);
-  border-radius: 15px;
-  width: 100%;
-  max-width: 600px;
-  text-align: center;
+#title-store {
+  /* Tons de Esmeralda e Verde Neon (Dinheiro/Evolução) */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 200, 83, 0.5),
+    rgba(105, 240, 174, 0.5)
+  );
+  border: 2px solid #00e676;
+  box-shadow:
+    inset 0 0 15px rgba(0, 230, 118, 0.3),
+    0 0 20px rgba(0, 200, 83, 0.4);
 }
 
-/* 7. RANKING LADO A LADO */
-#ranking-tab {
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
-    url("https://orteil.dashnet.org/cookieclicker/img/bgCandy.jpg");
+#store-header {
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  align-items: center; /* Centraliza a placa de Upgrades perfeitamente */
+  padding-top: 20px;
+  width: 100%;
 }
 
+/* Garante que os botões 1x, 10x, Max ocupem o espaço certo embaixo do título */
+.buy-selector {
+  width: 90%;
+  max-width: 400px; /* Evita que fique esticado demais em telas grandes */
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Fundo um pouco mais transparente pra combinar */
+  margin: 15px auto 10px auto;
+  border: 2px solid #60e48c;
+  border-radius: 8px;
+}
+
+/* RANKING */
 .ranking-layout {
   display: flex;
   gap: 20px;
@@ -531,12 +635,12 @@ h2 {
   flex: 1;
 }
 .ranking-container {
-  height: 300px;
+  height: 250px; /* Reduzi altura */
   overflow-y: auto;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   padding: 10px;
-  border: 2px solid var(--border-color);
+  border: 2px solid #19b6be;
 }
 .ranking-item {
   display: flex;
@@ -546,16 +650,36 @@ h2 {
   font-size: 0.8rem;
 }
 
+/* REBIRTH ITEMS */
+#rebirth-shop-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgba(40, 47, 58, 0.295);
+  border: 2px solid #002ffe;
+  /* O segredo mágico: embaça o GIF atrás do card */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
 .rebirth-item.maxed {
   opacity: 0.7;
-  border-color: #555;
+  border-color: #5f63a0;
 }
-
 .rebirth-item.maxed button {
   background: #444 !important;
   color: #888 !important;
   cursor: not-allowed;
   box-shadow: none;
+}
+
+.sub-title {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+  text-shadow: var(--text-shadow);
+  background: linear-gradient(to right, #42f578, #085a2a);
+  border-radius: 8px;
+  padding: 5px 10px;
 }
 
 /* 8. PARTICLES & FX */
@@ -569,7 +693,6 @@ h2 {
   pointer-events: none;
   animation: floatUp 0.8s forwards;
 }
-
 .particle {
   position: absolute;
   width: 20px;
@@ -580,7 +703,6 @@ h2 {
   z-index: 99;
   animation: pExplode 0.8s forwards;
 }
-
 @keyframes floatUp {
   100% {
     transform: translateY(-120px);
@@ -611,7 +733,8 @@ h2 {
   height: 70px;
   background: #000;
   display: flex;
-  border-top: 4px solid var(--border-color);
+  border-top: 2px solid #ffffff;
+  z-index: 1000;
 }
 .nav-btn {
   flex: 1;
@@ -629,13 +752,102 @@ h2 {
 
 .prestige-btn {
   margin-top: 15px;
-  padding: 10px 15px;
-  background: #4c53af;
-  color: white;
-  border: 3px solid #000;
+  padding: 12px 20px;
+
+  /* Fundo gradiente escuro e transparente (Estilo Cristal/Vidro) */
+  background: linear-gradient(
+    135deg,
+    rgba(123, 66, 245, 0.2),
+    rgba(0, 242, 254, 0.2)
+  ) !important;
+  color: #fff !important;
+
+  /* Borda neon fina que usa a cor principal do seu tema */
+  border: 2px solid #0050fe;
+  border-radius: 8px !important;
+
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
   cursor: pointer;
-  border-width: 3px;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: background 0.3s;
+  text-transform: uppercase;
+
+  /* Sombras para criar o efeito Neon/Glow */
+  box-shadow:
+    0 0 10px rgba(66, 114, 245, 0.507),
+    inset 0 0 10px rgba(0, 242, 254, 0.2) !important;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+
+  /* Transição suave para todas as animações */
+  transition: all 0.3s ease !important;
+}
+
+#unlock-fishing {
+  border: 2px solid #5f9e6a;
+  background: #729786 !important;
+}
+
+#btn-rebirth {
+  margin-top: 25px !important; /* Descola da caixa de cima */
+  margin-bottom: 30px !important; /* Cria um espaço excelente antes do título verde */
+  width: 200px; /* (Opcional) Deixa o botão com um tamanho fixo mais bonito */
+}
+
+/* Efeito ao passar o mouse por cima (Brilho intenso) */
+.prestige-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    rgba(66, 114, 245, 0.5),
+    rgba(0, 242, 254, 0.5)
+  ) !important;
+  box-shadow:
+    0 0 20px var(--border-color),
+    inset 0 0 15px var(--border-color) !important;
+  border-color: #fff !important; /* A borda fica branca brilhante */
+  text-shadow: 0 0 8px #fff;
+  transform: translateY(-2px); /* O botão "levanta" levemente */
+}
+
+/* Efeito ao clicar no botão (Aperto) */
+.prestige-btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.95); /* O botão afunda e diminui */
+  box-shadow: 0 0 5px var(--border-color) !important;
+}
+
+/* Estilo para botão Desativado (Ex: MAX LEVEL ou sem dinheiro) */
+.prestige-btn:disabled,
+.rebirth-item.maxed button {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  border: 2px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  cursor: not-allowed;
+  transform: none; /* Tira a animação de hover */
+}
+
+/* --- CORES ESPECÍFICAS DOS PAINÉIS DE CADA ABA --- */
+
+/* 1. ABA MODES (Verde Neon / Arcade) */
+#modes-tab .prestige-panel {
+  border-color: #00e676 !important;
+  box-shadow: 0 0 25px rgba(0, 230, 118, 0.4) !important;
+}
+
+/* 2. ABA REBIRTH (Ciano / Azul Místico) */
+#rebirth-tab .prestige-panel {
+  border-color: #0059fe !important;
+  box-shadow: 0 0 25px rgba(0, 131, 254, 0.4) !important;
+}
+
+/* 3. ABA RANKING (Laranja / Fogo) */
+#ranking-tab .stats-panel {
+  border-color: #00f2fe !important;
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.4) !important;
+}
+
+/* 4. ABA ACHIEVEMENTS (Ouro / Troféu) */
+#achievements-tab .stats-panel {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4) !important;
 }
