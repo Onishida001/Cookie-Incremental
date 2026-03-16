@@ -1,4 +1,4 @@
-/* style.css completo e corrigido */
+/* style.css completo */
 
 /* 1. FONTES E CORES */
 @font-face {
@@ -11,7 +11,7 @@
   --border-color: #55158a;
   --gold: #ffcc00;
   --text-shadow: 2px 2px 0px #000;
-  --glass-bg: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente padrão */
+  --glass-bg: rgba(0, 0, 0, 0.7);
 }
 
 * {
@@ -25,12 +25,12 @@ body {
   background: var(--bg-dark);
   color: #fff;
   user-select: none;
-  overflow: hidden; /* Impede barras de rolagem globais */
+  overflow: hidden;
   height: 100vh;
   width: 100vw;
 }
 
-/* 2. TELA DE LOGIN (ESTILO GLASS) */
+/* 2. TELA DE LOGIN */
 #auth-screen {
   position: fixed;
   top: 0;
@@ -49,19 +49,24 @@ body {
   z-index: 9999;
 }
 
-/* Configuração Global para garantir que o GIF cubra a tela toda */
-#rebirth-tab,
-#modes-tab,
-#ranking-tab,
-#achievements-tab {
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centraliza o card horizontalmente */
-  justify-content: center; /* Centraliza o card verticalmente no GIF */
-  position: relative;
+#modes-tab .prestige-panel {
+  border: 3px solid #00e676 !important;
+  box-shadow: 0 0 25px rgba(0, 230, 118, 0.4) !important;
+}
+
+#rebirth-tab .prestige-panel {
+  border: 3px solid #0059fe !important;
+  box-shadow: 0 0 25px rgba(0, 131, 254, 0.4) !important;
+}
+
+#ranking-tab .stats-panel {
+  border: 3px solid #00f2fe !important;
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.4) !important;
+}
+
+#achievements-tab .stats-panel {
+  border: 3px solid #ffd700 !important;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4) !important;
 }
 
 #rebirth-tab {
@@ -69,19 +74,16 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
     url("assets/gifs/rebirthcave.gif");
 }
-
 #modes-tab {
   background:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)),
     url("assets/gifs/modes.gif");
 }
-
 #ranking-tab {
   background:
     linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url("assets/gifs/topglobal.gif");
 }
-
 #achievements-tab {
   background:
     linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.6)),
@@ -106,12 +108,10 @@ body {
   font-size: 1rem;
   transition: background 0.3s;
 }
-
 #login-btn {
   background: linear-gradient(to right, #b4ddaa, #a6ee91);
   border: 3px solid #809e80;
 }
-
 #register-btn {
   background: linear-gradient(to right, #aabcdd, #2c335a);
   border: 3px solid #80829e;
@@ -128,7 +128,6 @@ body {
   text-align: center;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
-
 .login-card h2 {
   margin-bottom: 30px;
   margin-top: -10px;
@@ -169,19 +168,31 @@ body {
   color: #ffffff;
 }
 
-/* 3. ESTRUTURA DE ABAS CORRIGIDA */
+/* 3. ESTRUTURA DE ABAS */
 .tab-content {
   display: none !important;
   width: 100%;
-  /* CORREÇÃO: Usa min-height para garantir que o fundo cubra tudo */
-  min-height: calc(100vh - 70px);
-  position: relative; /* Permite scroll interno se necessário */
-}
-.tab-content.active {
-  display: flex !important;
+  height: calc(100vh - 70px);
+  position: relative;
+  overflow: hidden;
 }
 
-/* 4. HOME TAB (DESACHATADA) */
+.tab-content.active {
+  display: flex !important;
+  width: 100%;
+  height: calc(
+    100vh - 70px
+  ); /* ← repete aqui também, o display:flex pode sobrescrever */
+}
+
+/* 4. HOME TAB */
+#home-tab {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
 #cookie-section {
   flex: 1.5;
   display: flex;
@@ -196,37 +207,78 @@ body {
   border-right: 4px solid var(--border-color);
   position: relative;
   transition: filter 0.5s ease;
-  padding: 10px; /* Reduzi paddings excessivos */
+  padding: 10px;
+  height: 100%;
+  overflow: hidden;
 }
 
 .score-board {
-  margin-top: 10px; /* Reduzi margens */
+  margin-top: 10px;
   text-align: center;
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .cookie-text {
-  /* CORREÇÃO: Mantive a gradient roxa, mas tirei paddings excessivos */
-  background: linear-gradient(to right, #8c57c9, #5d27a3);
-  padding: 8px 15px; /* Reduzi o padding interno */
-  border-radius: 10px;
-  color: #dcd7e0;
-  text-shadow: none;
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 20;
+  border: 2px solid #a855f7 !important;
+  box-shadow:
+    0 0 15px rgba(168, 85, 247, 0.4),
+    inset 0 0 10px rgba(168, 85, 247, 0.2);
+  padding: 10px 25px;
+  border-radius: 15px;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  -webkit-text-stroke: 0px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
+}
 
-  /* CORREÇÃO CRÍTICA: Reduzi as bordas e contornos de 5px para 2px/1px */
-  border: 2px solid #fff;
-  -webkit-text-stroke: 1px rgba(234, 232, 238, 0.7);
+.cps-text {
+  font-size: 1rem;
+  font-weight: bold;
+  position: relative;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid #a855f7 !important;
+  box-shadow:
+    0 0 15px rgba(168, 85, 247, 0.4),
+    inset 0 0 10px rgba(168, 85, 247, 0.2);
+  padding: 10px 25px;
+  border-radius: 15px;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  -webkit-text-stroke: 0px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
 }
 
 .cookie-container {
   position: relative;
-  margin-top: 20px; /* Reduzi margem */
+  margin-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 #big-cookie {
-  width: 250px; /* Reduzi levemente o tamanho do cristal */
+  width: 250px;
   cursor: pointer;
   transition: transform 0.1s;
   z-index: 10;
@@ -236,19 +288,8 @@ body {
   transform: scale(0.92);
 }
 
-.item-count {
-  font-size: 1.8rem;
-  padding: 0 15px;
-  color: rgba(255, 255, 255, 0.2);
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 60px;
-}
-
 #golden-cookie {
-  position: absolute;
+  position: fixed;
   width: 70px;
   display: none;
   z-index: 100;
@@ -257,7 +298,7 @@ body {
   animation: pulse 2s infinite;
 }
 
-/* Ícone da Engrenagem */
+/* Settings */
 #settings-icon {
   position: absolute;
   top: 20px;
@@ -272,7 +313,6 @@ body {
   transform: rotate(90deg) scale(1.1);
 }
 
-/* Modal de Settings */
 #settings-modal {
   position: fixed;
   top: 0;
@@ -289,34 +329,33 @@ body {
   background: var(--glass-bg);
   padding: 30px;
   border-radius: 15px;
-  border: 3px solid var(--border-color);
+  border: 3px solid #bebdc069;
   text-align: center;
   width: 300px;
 }
+.settings-content .prestige-btn {
+  border: 2px solid #b6b3b96b;
+}
 #title-settings {
-  background: #555;
+  background: linear-gradient(
+    135deg,
+    rgba(91, 86, 100, 0.2),
+    rgba(156, 160, 165, 0.2)
+  ) !important;
+  color: #fff !important;
+  border: 2px solid #ffffff;
+  border-radius: 8px !important;
 }
 
-/* Efeito Vidro para os Cards internos do Rebirth e Modes */
-.rebirth-card,
-.mode-card {
-  background: rgba(0, 0, 0, 0.4); /* Fundo bem transparente */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Borda clarinha parecendo reflexo de vidro */
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5); /* Sombra interna para dar profundidade */
-  backdrop-filter: blur(4px); /* Blur extra */
-}
-
-/* 5. STORE (LOJA) */
+/* Store */
 #store-section {
   flex: 1;
-  background: #1a1a1a;
-  border-left: 2px solid #000;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  max-height: calc(100vh - 70px);
   overflow-y: auto;
-  border-top: #00e676 2px solid;
-  border-bottom: #00e676 2px solid;
+  border-left: 2px solid var(--border-color);
 }
 
 h2 {
@@ -332,41 +371,92 @@ h2 {
   padding: 5px;
   background: #000;
   margin: 10px;
-  border: 2px solid #003bfe;
   border-radius: 5px;
 }
 .selector-btn {
   flex: 1;
-  background: #333;
-  color: #888;
-  border: none;
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: #aaa !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   padding: 8px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.3s ease !important;
   font-weight: bold;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: "Monocraft", monospace;
+}
+.selector-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
 }
 .selector-btn.active {
-  background: #4caf50;
-  color: white;
-  box-shadow: inset 0 0 8px #000;
+  background: rgba(0, 230, 118, 0.2) !important;
+  color: #00e676 !important;
+  border: 1px solid #00e676 !important;
+  box-shadow:
+    0 0 10px rgba(0, 230, 118, 0.4),
+    inset 0 0 8px rgba(0, 230, 118, 0.2) !important;
+  text-shadow: 0 0 5px #00e676 !important;
+}
+
+#title-settings {
+  background: linear-gradient(
+    135deg,
+    rgba(91, 86, 100, 0.2),
+    rgba(156, 160, 165, 0.2)
+  ) !important;
+  color: #fff !important;
+  border: 2px solid #ffffff;
+  border-radius: 8px !important;
 }
 
 .store-item {
   display: flex;
-  height: 64px;
-  border-bottom: 1px solid #333;
+  align-items: center;
+  height: 90px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.2);
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+.store-item:hover:not(.disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+.store-item:active:not(.disabled) {
+  transform: scale(0.98);
 }
 .store-item.disabled {
   opacity: 0.4;
   filter: grayscale(1);
 }
+
+.price-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  color: #fff;
+  font-size: 1.1rem;
+}
+.tiny-crystal {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 5px rgba(0, 242, 254, 0.5));
+}
 .icone-loja {
-  width: 64px;
-  height: 64px;
+  width: 75px;
+  height: 75px;
   background: rgba(0, 0, 0, 0.5);
   padding: 8px;
+  border-radius: 10px;
+  margin-left: 10px;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .item-info {
   flex: 1;
@@ -381,15 +471,29 @@ h2 {
   align-items: center;
 }
 
+#store-section::-webkit-scrollbar {
+  width: 8px;
+}
+#store-section::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+#store-section::-webkit-scrollbar-thumb {
+  background: #4b4e4d;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+}
+#store-section::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+  box-shadow: 0 0 10px #00e676;
+}
+
 .stats-panel,
 .prestige-panel {
   background: rgba(0, 0, 0, 0.6);
-
-  /* O segredo mágico: embaça o GIF atrás do card */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   padding: 30px;
-  /* Reduzi a borda de 5px para 3px para ficar mais elegante e moderna */
   border: 3px solid var(--border-color);
   text-shadow: var(--text-shadow);
   font-size: 1.2rem;
@@ -401,12 +505,10 @@ h2 {
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
 }
 
-/* PROGRESS BAR */
+/* Progress Bar */
 .progress-container {
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
-
-  /* O segredo mágico: embaça o GIF atrás do card */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 2px solid #bafe00;
@@ -432,15 +534,13 @@ h2 {
   text-shadow: 1px 1px #000;
 }
 
+/* Toast */
 #achievement-toast {
-  /* Tira o elemento do fluxo da página (resolve a barra preta) */
   position: fixed !important;
   z-index: 99999;
-  /* Esconde ele lá no topo, fora da tela */
   top: -150px;
   left: 50%;
   transform: translateX(-50%);
-  /* Estilo do Toast */
   background: rgba(0, 0, 0, 0.9);
   border: 2px solid #00f2fe;
   padding: 12px 25px;
@@ -451,8 +551,6 @@ h2 {
   box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
   transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-/* Classe para mostrar a conquista */
 #achievement-toast.show {
   top: 20px;
 }
@@ -462,23 +560,21 @@ h2 {
 #ach-title {
   color: #fff;
   font-size: 0.9rem;
-  white-space: nowrap; /* Impede que o texto quebre */
+  white-space: nowrap;
 }
 
-/* LISTA DE CONQUISTAS */
+/* Achievements */
 #achievements-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 15px;
   width: 100%;
   padding: 15px;
-  /* CONFIGURAÇÃO DO SCROLL INTERNO */
   max-height: 400px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--gold) #222;
 }
-/* Estilo da barra de rolagem */
 #achievements-list::-webkit-scrollbar {
   width: 8px;
 }
@@ -491,7 +587,6 @@ h2 {
   border-radius: 10px;
 }
 
-/* CARD DE CONQUISTA INDIVIDUAL */
 .achievement-card {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #444;
@@ -506,35 +601,25 @@ h2 {
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
 }
 
-/* TÍTULOS DE SEÇÃO */
+/* Section Titles */
 .section-title {
-  font-size: 2rem; /* Aumentei um pouco para dar mais presença */
+  font-size: 2rem;
   margin-bottom: 25px;
   padding: 10px 30px;
   display: inline-block;
-
-  /* Base de vidro embaçado */
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
   border-radius: 12px;
   text-transform: uppercase;
   letter-spacing: 2px;
-
-  /* Sombra no texto (Preta para leitura + Branca para brilho) */
   color: #fff;
   text-shadow:
     2px 2px 0px #000,
     0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* CORES ESPECÍFICAS DE CADA ABA 
-  Usando gradientes translúcidos, bordas coloridas e brilho neon (Glow)
-*/
-
 #title-rebirth {
-  /* Tons de Roxo e Ciano Místico */
   background: linear-gradient(
     135deg,
     rgba(123, 66, 245, 0.5),
@@ -545,9 +630,7 @@ h2 {
     inset 0 0 15px rgba(0, 242, 254, 0.3),
     0 0 20px rgba(120, 66, 245, 0.4);
 }
-
 #title-modes {
-  /* Tons de Rosa Neon e Roxo Arcade */
   background: linear-gradient(
     135deg,
     rgb(108, 255, 89),
@@ -558,9 +641,7 @@ h2 {
     inset 0 0 15px rgba(81, 255, 0, 0.3),
     0 0 20px rgba(66, 245, 161, 0.4);
 }
-
 #title-ranking {
-  /* Tons de Laranja e Ouro Quente */
   background: linear-gradient(
     135deg,
     rgba(74, 196, 189, 0.5),
@@ -571,9 +652,7 @@ h2 {
     inset 0 0 15px rgba(0, 89, 255, 0.3),
     0 0 20px rgba(0, 247, 255, 0.4);
 }
-
 #title-achievements {
-  /* Tons de Ouro Brilhante (Troféu) */
   background: linear-gradient(
     135deg,
     rgba(197, 176, 123, 0.699),
@@ -584,9 +663,7 @@ h2 {
     inset 0 0 15px rgba(238, 223, 139, 0.644),
     0 0 20px rgba(221, 191, 117, 0.671);
 }
-
 #title-store {
-  /* Tons de Esmeralda e Verde Neon (Dinheiro/Evolução) */
   background: linear-gradient(
     135deg,
     rgba(0, 200, 83, 0.5),
@@ -601,30 +678,26 @@ h2 {
 #store-header {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza a placa de Upgrades perfeitamente */
+  align-items: center;
   padding-top: 20px;
   width: 100%;
+  border-bottom: 2px solid rgba(84, 233, 161, 0.411);
+  padding-bottom: 10px;
+  margin-bottom: 5px;
 }
 
-/* Garante que os botões 1x, 10x, Max ocupem o espaço certo embaixo do título */
 .buy-selector {
   width: 90%;
-  max-width: 400px; /* Evita que fique esticado demais em telas grandes */
+  max-width: 400px;
   display: flex;
   gap: 5px;
   padding: 5px;
-  background: rgba(
-    0,
-    0,
-    0,
-    0.5
-  ); /* Fundo um pouco mais transparente pra combinar */
+  background: rgba(0, 0, 0, 0.5);
   margin: 15px auto 10px auto;
-  border: 2px solid #60e48c;
   border-radius: 8px;
 }
 
-/* RANKING */
+/* Ranking */
 .ranking-layout {
   display: flex;
   gap: 20px;
@@ -635,12 +708,28 @@ h2 {
   flex: 1;
 }
 .ranking-container {
-  height: 250px; /* Reduzi altura */
+  height: 250px;
   overflow-y: auto;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   padding: 10px;
   border: 2px solid #19b6be;
+}
+.ranking-container::-webkit-scrollbar {
+  width: 8px;
+}
+.ranking-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+.ranking-container::-webkit-scrollbar-thumb {
+  background: #00f2fe;
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+}
+.ranking-container::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+  box-shadow: 0 0 10px #00f2fe;
 }
 .ranking-item {
   display: flex;
@@ -650,7 +739,7 @@ h2 {
   font-size: 0.8rem;
 }
 
-/* REBIRTH ITEMS */
+/* Rebirth */
 #rebirth-shop-container {
   max-height: 400px;
   overflow-y: auto;
@@ -658,7 +747,6 @@ h2 {
   border-radius: 5px;
   background: rgba(40, 47, 58, 0.295);
   border: 2px solid #002ffe;
-  /* O segredo mágico: embaça o GIF atrás do card */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -673,6 +761,17 @@ h2 {
   box-shadow: none;
 }
 
+.rebirth-card,
+.mode-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
 .sub-title {
   font-size: 1.5rem;
   margin-bottom: 5px;
@@ -682,7 +781,7 @@ h2 {
   padding: 5px 10px;
 }
 
-/* 8. PARTICLES & FX */
+/* Particles & FX */
 .floating-text {
   position: absolute;
   color: #fff;
@@ -725,75 +824,121 @@ h2 {
   }
 }
 
-/* 9. MENU INFERIOR */
+/* Bottom Menu */
 #bottom-menu {
   position: fixed;
   bottom: 0;
   width: 100%;
   height: 70px;
-  background: #000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
-  border-top: 2px solid #ffffff;
+  border-top: 2px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 -4px 20px rgba(128, 0, 255, 0.3);
   z-index: 1000;
 }
 .nav-btn {
   flex: 1;
   background: none;
   border: none;
-  color: #888;
+  border-top: 3px solid transparent;
+  color: rgba(255, 255, 255, 0.35);
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.65rem;
+  font-family: "Monocraft", monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.nav-btn + .nav-btn {
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nav-btn:hover {
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.05);
 }
 .nav-btn.active {
-  color: var(--gold);
-  background: #111;
-  border-bottom: 4px solid var(--gold);
+  color: #fff;
+  background: rgba(168, 85, 247, 0.15);
+  border-top: 3px solid #a855f7;
+  text-shadow:
+    0 0 8px #a855f7,
+    0 0 20px rgba(168, 85, 247, 0.5);
+  box-shadow: inset 0 0 20px rgba(168, 85, 247, 0.1);
+}
+.nav-btn.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #a855f7,
+    #00f2fe,
+    #a855f7,
+    transparent
+  );
+  animation: navGlow 2s linear infinite;
+}
+.nav-btn span.nav-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+@keyframes navGlow {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
 }
 
+/* Prestige Button */
 .prestige-btn {
   margin-top: 15px;
   padding: 12px 20px;
-
-  /* Fundo gradiente escuro e transparente (Estilo Cristal/Vidro) */
   background: linear-gradient(
     135deg,
     rgba(123, 66, 245, 0.2),
     rgba(0, 242, 254, 0.2)
   ) !important;
   color: #fff !important;
-
-  /* Borda neon fina que usa a cor principal do seu tema */
   border: 2px solid #0050fe;
   border-radius: 8px !important;
-
   font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 1px;
   cursor: pointer;
   text-transform: uppercase;
-
-  /* Sombras para criar o efeito Neon/Glow */
   box-shadow:
     0 0 10px rgba(66, 114, 245, 0.507),
     inset 0 0 10px rgba(0, 242, 254, 0.2) !important;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-
-  /* Transição suave para todas as animações */
   transition: all 0.3s ease !important;
 }
-
 #unlock-fishing {
   border: 2px solid #5f9e6a;
   background: #729786 !important;
 }
-
 #btn-rebirth {
-  margin-top: 25px !important; /* Descola da caixa de cima */
-  margin-bottom: 30px !important; /* Cria um espaço excelente antes do título verde */
-  width: 200px; /* (Opcional) Deixa o botão com um tamanho fixo mais bonito */
+  margin-top: 25px !important;
+  margin-bottom: 30px !important;
+  width: 200px;
 }
-
-/* Efeito ao passar o mouse por cima (Brilho intenso) */
 .prestige-btn:hover:not(:disabled) {
   background: linear-gradient(
     135deg,
@@ -803,18 +948,14 @@ h2 {
   box-shadow:
     0 0 20px var(--border-color),
     inset 0 0 15px var(--border-color) !important;
-  border-color: #fff !important; /* A borda fica branca brilhante */
+  border-color: #fff !important;
   text-shadow: 0 0 8px #fff;
-  transform: translateY(-2px); /* O botão "levanta" levemente */
+  transform: translateY(-2px);
 }
-
-/* Efeito ao clicar no botão (Aperto) */
 .prestige-btn:active:not(:disabled) {
-  transform: translateY(1px) scale(0.95); /* O botão afunda e diminui */
+  transform: translateY(1px) scale(0.95);
   box-shadow: 0 0 5px var(--border-color) !important;
 }
-
-/* Estilo para botão Desativado (Ex: MAX LEVEL ou sem dinheiro) */
 .prestige-btn:disabled,
 .rebirth-item.maxed button {
   background: rgba(255, 255, 255, 0.05) !important;
@@ -823,31 +964,940 @@ h2 {
   box-shadow: none !important;
   text-shadow: none !important;
   cursor: not-allowed;
-  transform: none; /* Tira a animação de hover */
+  transform: none;
 }
 
-/* --- CORES ESPECÍFICAS DOS PAINÉIS DE CADA ABA --- */
-
-/* 1. ABA MODES (Verde Neon / Arcade) */
-#modes-tab .prestige-panel {
-  border-color: #00e676 !important;
-  box-shadow: 0 0 25px rgba(0, 230, 118, 0.4) !important;
+/* Painéis por aba */
+#rebirth-tab,
+#modes-tab,
+#ranking-tab,
+#achievements-tab {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  width: 100% !important; /* ← garante largura total */
+  height: calc(100vh - 70px) !important; /* ← garante altura total */
+  min-height: calc(100vh - 70px) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-y: auto;
 }
 
-/* 2. ABA REBIRTH (Ciano / Azul Místico) */
-#rebirth-tab .prestige-panel {
-  border-color: #0059fe !important;
-  box-shadow: 0 0 25px rgba(0, 131, 254, 0.4) !important;
+/* Pickaxe hit FX */
+.pickaxe-hit {
+  position: absolute;
+  pointer-events: none;
+  width: 60px;
+  height: 60px;
+  z-index: 1000;
+  transform-origin: bottom left;
+  animation: punchySwing 0.1s ease-out forwards;
+}
+@keyframes punchySwing {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0;
+  }
+  40% {
+    transform: rotate(90deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(100deg) scale(0.9);
+    opacity: 0;
+  }
 }
 
-/* 3. ABA RANKING (Laranja / Fogo) */
-#ranking-tab .stats-panel {
-  border-color: #00f2fe !important;
-  box-shadow: 0 0 25px rgba(0, 242, 254, 0.4) !important;
+/* Orbit */
+#orbit-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.orbit-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  animation: spinOrbit linear infinite;
+}
+.orbit-pickaxe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.9));
+  image-rendering: pixelated;
+}
+@keyframes spinOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* 4. ABA ACHIEVEMENTS (Ouro / Troféu) */
-#achievements-tab .stats-panel {
+/* Offline Modal */
+#offline-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+#offline-modal.offline-visible {
+  opacity: 1;
+}
+#offline-modal.offline-hiding {
+  opacity: 0;
+}
+#offline-card {
+  background: rgba(10, 0, 30, 0.95);
+  border: 3px solid #a855f7;
+  border-radius: 20px;
+  padding: 40px 50px;
+  text-align: center;
+  box-shadow:
+    0 0 40px rgba(168, 85, 247, 0.5),
+    inset 0 0 30px rgba(168, 85, 247, 0.1);
+  animation: offlineCardIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  max-width: 400px;
+  width: 90%;
+}
+@keyframes offlineCardIn {
+  from {
+    transform: scale(0.7) translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+#offline-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  animation: floatIcon 2s ease-in-out infinite;
+}
+@keyframes floatIcon {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+#offline-title {
+  font-family: "Monocraft", monospace;
+  font-size: 1.8rem;
+  color: #fff;
+  text-shadow:
+    0 0 10px #a855f7,
+    0 0 25px rgba(168, 85, 247, 0.5);
+  margin-bottom: 15px;
+  letter-spacing: 3px;
+}
+#offline-away-text {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  margin-bottom: 25px;
+}
+.offline-highlight {
+  color: #00f2fe;
+  font-weight: bold;
+  text-shadow: 0 0 8px #00f2fe;
+}
+#offline-reward-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: rgba(168, 85, 247, 0.15);
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  border-radius: 15px;
+  padding: 20px 30px;
+  margin-bottom: 15px;
+  animation: rewardPulse 1.5s ease-in-out infinite;
+}
+@keyframes rewardPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.7);
+  }
+}
+#offline-crystal-img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8));
+  animation: floatIcon 1.5s ease-in-out infinite;
+}
+#offline-amount {
+  font-family: "Monocraft", monospace;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow:
+    0 0 10px #a855f7,
+    0 0 30px rgba(168, 85, 247, 0.6);
+}
+#offline-subtitle {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.8rem;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+#offline-claim-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.4),
+    rgba(0, 242, 254, 0.3)
+  ) !important;
+  border: 2px solid #a855f7 !important;
+  color: #fff !important;
+  font-family: "Monocraft", monospace;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  padding: 14px 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4) !important;
+  transition: all 0.2s ease !important;
+  width: 100%;
+}
+#offline-claim-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.7),
+    rgba(0, 242, 254, 0.5)
+  ) !important;
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.7) !important;
+  transform: translateY(-2px);
+}
+#offline-claim-btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* ============================
+   FISHING SYSTEM
+   ============================ */
+.fishing-wrapper {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+.fishing-lake-panel {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+    url("assets/gifs/modes.gif");
+  background-size: cover;
+  background-position: center;
+  overflow-y: auto;
+  border-right: 3px solid #00e676;
+}
+
+.fishing-back-btn {
+  align-self: flex-start;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 2px solid #00e676 !important;
+  color: #00e676 !important;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+.fishing-back-btn:hover {
+  background: rgba(0, 230, 118, 0.2) !important;
+  box-shadow: 0 0 10px #00e676;
+}
+
+.fish-coins-display {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-family: "Monocraft", monospace;
+  font-size: 1.1rem;
+  color: #ffd700;
+  text-shadow: 0 0 8px #ffd700;
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Water Area */
+#water-area {
+  width: 90%;
+  height: 180px;
+  background: linear-gradient(180deg, #0a3d5c 0%, #0d5c8a 40%, #0a7abf 100%);
+  border-radius: 15px;
+  border: 3px solid #00f2fe;
+  box-shadow:
+    0 0 20px rgba(0, 242, 254, 0.4),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: box-shadow 0.3s;
+}
+#water-area:hover {
+  box-shadow:
+    0 0 35px rgba(0, 242, 254, 0.7),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+#water-area:active {
+  transform: scale(0.99);
+}
+
+.water-surface {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(180deg, rgba(0, 242, 254, 0.3), transparent);
+  animation: waterFlow 3s ease-in-out infinite;
+}
+.water-caustics {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 30% 50%,
+      rgba(0, 242, 254, 0.08) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 70% 30%,
+      rgba(0, 242, 254, 0.06) 0%,
+      transparent 50%
+    );
+  animation: causticsMove 4s ease-in-out infinite alternate;
+}
+@keyframes waterFlow {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.02);
+  }
+}
+@keyframes causticsMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(10px, 5px);
+  }
+}
+
+#fishing-status {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+  font-family: "Monocraft", monospace;
+  font-size: 0.85rem;
+  color: #aaa;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Fish caught popup */
+.fish-caught-popup {
+  position: absolute;
+  top: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fishPopup 2s forwards;
+  pointer-events: none;
+  z-index: 20;
+}
+@keyframes fishPopup {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-60px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80px);
+    opacity: 0;
+  }
+}
+
+/* Fish Gallery */
+.fish-gallery {
+  width: 90%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(0, 242, 254, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+}
+.fish-gallery-title {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #00f2fe;
+  margin-bottom: 10px;
+  font-family: "Monocraft", monospace;
+}
+.fish-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.fish-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  padding: 8px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.65rem;
+  text-align: center;
+  gap: 3px;
+}
+.fish-card img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.fish-card.common {
+  border-color: rgba(0, 230, 118, 0.4);
+}
+.fish-card.rare {
+  border-color: rgba(33, 150, 243, 0.4);
+}
+.fish-card.epic {
+  border-color: rgba(168, 85, 247, 0.4);
+}
+.fish-card.legendary {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+/* Upgrades Panel */
+.fishing-upgrades-panel {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-left: 2px solid #00e676;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fishing-upgrades-panel::-webkit-scrollbar {
+  width: 6px;
+}
+.fishing-upgrades-panel::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+.fishing-upgrades-panel::-webkit-scrollbar-thumb {
+  background: #00e676;
+  border-radius: 10px;
+}
+
+.fishing-upgrade-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: rgba(0, 230, 118, 0.05);
+  border: 1px solid rgba(0, 230, 118, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+.fishing-upgrade-item:hover:not(.maxed) {
+  background: rgba(0, 230, 118, 0.1);
+  border-color: rgba(0, 230, 118, 0.5);
+}
+.fishing-upgrade-item.maxed {
+  opacity: 0.6;
+  border-color: rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.05);
+}
+.fishing-upgrade-item.cant-afford {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+}
+
+.fishing-upg-icon {
+  font-size: 1.8rem;
+  min-width: 40px;
+  text-align: center;
+}
+.fishing-upg-info {
+  flex: 1;
+}
+.fishing-upg-name {
+  font-family: "Monocraft", monospace;
+  font-size: 0.75rem;
+  color: #fff;
+  margin-bottom: 3px;
+}
+.fishing-upg-level {
+  color: #00e676;
+  font-size: 0.65rem;
+}
+.fishing-upg-effect {
+  font-size: 0.65rem;
+  color: #aaa;
+}
+
+.fishing-upg-btn {
+  background: rgba(0, 230, 118, 0.2) !important;
+  border: 1px solid #00e676 !important;
+  color: #00e676 !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.fishing-upg-btn:hover:not(:disabled) {
+  background: rgba(0, 230, 118, 0.4) !important;
+  box-shadow: 0 0 10px #00e676;
+}
+.fishing-upg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.fishing-upg-btn.maxed {
+  background: rgba(255, 215, 0, 0.2) !important;
   border-color: #ffd700 !important;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4) !important;
+  color: #ffd700 !important;
+}
+
+/* ============================
+   MOBILE RESPONSIVE
+   ============================ */
+@media (max-width: 768px) {
+  #home-tab {
+    flex-direction: column;
+    height: auto;
+    min-height: calc(100vh - 70px);
+    overflow-y: auto;
+  }
+  #cookie-section {
+    flex: none;
+    width: 100%;
+    height: 55vh;
+    border-right: none;
+    border-bottom: 4px solid var(--border-color);
+  }
+  #store-section {
+    flex: none;
+    width: 100%;
+    max-height: 45vh;
+    border-left: none;
+  }
+  #big-cookie {
+    width: 160px;
+  }
+  .cookie-text {
+    font-size: 1.1rem;
+    padding: 8px 15px;
+  }
+  .cps-text {
+    font-size: 0.85rem;
+  }
+  .nav-btn {
+    font-size: 0.55rem;
+    gap: 2px;
+  }
+  .nav-icon {
+    font-size: 1rem !important;
+  }
+  .stats-panel,
+  .prestige-panel {
+    max-width: 95%;
+    padding: 20px 15px;
+    font-size: 1rem;
+  }
+  .ranking-layout {
+    flex-direction: column;
+  }
+  .login-card {
+    width: 90%;
+    padding: 25px 20px;
+  }
+  #achievements-list {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  #offline-card {
+    padding: 30px 20px;
+  }
+  #offline-amount {
+    font-size: 1.6rem;
+  }
+  .fishing-wrapper {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+  }
+  .fishing-lake-panel {
+    border-right: none;
+    border-bottom: 3px solid #00e676;
+  }
+  .fishing-upgrades-panel {
+    border-left: none;
+  }
+  .fish-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============================
+   EVENT BADGES (canto da tela)
+   ============================ */
+.event-badge {
+  position: fixed;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 8px 14px;
+  z-index: 5000;
+  animation: badgeSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  min-width: 160px;
+}
+
+@keyframes badgeSlideIn {
+  from {
+    transform: translateX(200px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.event-badge-icon {
+  font-size: 1.5rem;
+}
+.event-badge-name {
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+.event-badge-timer {
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+@keyframes timerPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ============================
+   ADMIN PANEL
+   ============================ */
+#admin-panel {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 320px;
+  background: rgba(5, 0, 15, 0.95);
+  backdrop-filter: blur(12px);
+  border: 2px solid #ff0055;
+  border-radius: 15px;
+  z-index: 99998;
+  box-shadow:
+    0 0 30px rgba(255, 0, 85, 0.4),
+    inset 0 0 20px rgba(255, 0, 85, 0.05);
+  overflow: hidden;
+}
+
+#admin-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: rgba(255, 0, 85, 0.15);
+  border-bottom: 1px solid rgba(255, 0, 85, 0.3);
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  color: #ff0055;
+  text-shadow: 0 0 8px #ff0055;
+  letter-spacing: 2px;
+}
+
+#admin-minimize-btn {
+  background: none;
+  border: 1px solid #ff0055;
+  color: #ff0055;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#admin-minimize-btn:hover {
+  background: rgba(255, 0, 85, 0.3);
+  box-shadow: 0 0 8px #ff0055;
+}
+
+#admin-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.admin-section-title {
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+  margin-top: 5px;
+}
+
+.admin-btn-row {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.6rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: 1px solid;
+}
+
+.crystal-btn {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #a855f7;
+  color: #a855f7;
+}
+.crystal-btn:hover {
+  background: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 12px #a855f7;
+}
+
+.fish-btn {
+  background: rgba(0, 242, 254, 0.2);
+  border-color: #00f2fe;
+  color: #00f2fe;
+}
+.fish-btn:hover {
+  background: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 0 12px #00f2fe;
+}
+
+.admin-events-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-event-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.2s;
+}
+.admin-event-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.admin-event-icon {
+  font-size: 1.4rem;
+  min-width: 30px;
+  text-align: center;
+}
+.admin-event-name {
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  color: #fff;
+}
+.admin-event-desc {
+  font-size: 0.6rem;
+  color: #666;
+}
+.admin-event-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-btn {
+  background: rgba(255, 0, 85, 0.2) !important;
+  border-color: #ff0055 !important;
+  color: #ff0055 !important;
+  flex: none !important;
+  padding: 6px 10px !important;
+  font-size: 0.55rem !important;
+}
+.event-btn:hover {
+  background: rgba(255, 0, 85, 0.4) !important;
+  box-shadow: 0 0 10px #ff0055;
+}
+
+.admin-active-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.cancel-btn {
+  background: rgba(255, 68, 68, 0.2) !important;
+  border-color: #ff4444 !important;
+  color: #ff4444 !important;
+  flex: none !important;
+  padding: 4px 8px !important;
+  font-size: 0.6rem !important;
+}
+.cancel-btn:hover {
+  background: rgba(255, 68, 68, 0.4) !important;
+  box-shadow: 0 0 8px #ff4444;
+}
+
+/* Admin Toast */
+.admin-toast {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #ff0055;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.75rem;
+  z-index: 999999;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+  transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  white-space: nowrap;
+}
+.admin-toast.show {
+  top: 15px;
+}
+
+/* Mobile admin */
+@media (max-width: 768px) {
+  #admin-panel {
+    width: 280px;
+    top: 5px;
+    right: 5px;
+  }
+  .event-badge {
+    right: 10px;
+    min-width: 140px;
+  }
+}
+
+/* --- FALLING CRYSTALS (Crystal Storm) --- */
+.falling-crystal {
+  position: fixed;
+  top: -40px;
+  z-index: 4999;
+  pointer-events: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.8));
+  animation: crystalFall linear forwards;
+}
+
+@keyframes crystalFall {
+  0% {
+    top: -40px;
+    transform: rotate(0deg) translateX(0px);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: 110vh;
+    transform: rotate(360deg) translateX(var(--sway));
+    opacity: 0;
+  }
 }

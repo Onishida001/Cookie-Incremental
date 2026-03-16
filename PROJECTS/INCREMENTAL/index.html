@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crystal Incremental</title>
+    <title>Crystal Clicker</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -12,7 +12,7 @@
   <body>
     <div id="auth-screen">
       <div class="login-card">
-        <h2 class="section-title" id="login-title">Crystal Incremental</h2>
+        <h2 class="section-title" id="login-title">Crystal Clicker</h2>
         <div class="input-group">
           <input type="text" id="auth-username" required autocorrect="off" />
           <label>Username</label>
@@ -22,11 +22,16 @@
           <label>Password</label>
         </div>
         <div class="auth-buttons">
-          <button class="prestige-btn login-main" id="login-btn" onclick="handleAuth('login')">
+          <button
+            class="prestige-btn login-main"
+            id="login-btn"
+            onclick="handleAuth('login')"
+          >
             LOGIN
           </button>
           <button
-            class="prestige-btn login-sub" id= "register-btn"
+            class="prestige-btn login-sub"
+            id="register-btn"
             onclick="handleAuth('register')"
           >
             REGISTER
@@ -41,11 +46,24 @@
           <div class="score-board">
             <h1 class="cookie-text">
               <span id="cookie-count">0</span> Crystals
+              <img
+                src="assets/images/ores/crystal.png"
+                style="width: 40px; vertical-align: middle; margin-left: 10px"
+              />
             </h1>
             <p class="cps-text">Per second/s: <span id="cps">0</span></p>
           </div>
-          <div class="cookie-container">
+          <div
+            class="cookie-container"
+            style="
+              position: relative;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
             <div class="cookie-shine"></div>
+            <div id="orbit-container"></div>
             <img
               src="assets/images/ores/crystal.png"
               id="big-cookie"
@@ -61,14 +79,28 @@
 
         <div id="settings-icon" onclick="toggleSettings()">⚙️</div>
 
-        <div id="settings-modal" style="display: none;">
-         <div class="settings-content">
-                   <h2 class="section-title" id="title-settings">Settings</h2>
-                 <p>User: <span id="settings-username" style="color: var(--gold);">---</span></p>
-                <br>
-                <button id="mute-btn" class="prestige-btn" onclick="toggleMute()">🔊 MUTE MUSIC</button>
-               <button class="prestige-btn" style="background: #d32f2f;" onclick="logout()">LOGOUT / CHANGE ACCOUNT</button>
-              <button class="prestige-btn" onclick="toggleSettings()">CLOSE</button>
+        <div id="settings-modal" style="display: none">
+          <div class="settings-content">
+            <h2 class="section-title" id="title-settings">Settings</h2>
+            <p>
+              User:
+              <span id="settings-username" style="color: var(--gold)">---</span>
+            </p>
+            <br />
+            <button id="mute-btn" class="prestige-btn" onclick="toggleMute()">
+              🔊 MUTE MUSIC
+            </button>
+            <button
+              class="prestige-btn"
+              id="logout-btn"
+              style="background: #d32f2f !important"
+              onclick="logout()"
+            >
+              LOGOUT
+            </button>
+            <button class="prestige-btn" onclick="toggleSettings()">
+              CLOSE
+            </button>
           </div>
         </div>
 
@@ -86,26 +118,22 @@
       </section>
 
       <section id="rebirth-tab" class="tab-content">
-  <div class="prestige-panel">
-    <h2 class="section-title" id="title-rebirth">Rebirth</h2>
-    <div class="rebirth-card">
-      <p>
-        Global Multiplier:
-        <span id="multi-val" class="highlight">1.0</span>x
-      </p>
-      <p>
-        RP:
-        <span id="rebirth-points" class="highlight">0</span>
-      </p>
-    </div>
-    <button id="btn-rebirth" class="prestige-btn">
-      RP (+<span id="pending-points">0</span>)
-    </button>
-    <h3 class="sub-title">Rebirth Upgrades</h3>
-    
-    <div id="rebirth-shop-container"></div> 
-  </div>
-</section>
+        <div class="prestige-panel">
+          <h2 class="section-title" id="title-rebirth">Rebirth</h2>
+          <div class="rebirth-card">
+            <p>
+              Global Multiplier:
+              <span id="multi-val" class="highlight">1.0</span>x
+            </p>
+            <p>RP: <span id="rebirth-points" class="highlight">0</span></p>
+          </div>
+          <button id="btn-rebirth" class="prestige-btn">
+            RP (+<span id="pending-points">0</span>)
+          </button>
+          <h3 class="sub-title">Rebirth Upgrades</h3>
+          <div id="rebirth-shop-container"></div>
+        </div>
+      </section>
 
       <section id="modes-tab" class="tab-content">
         <div id="modes-menu" class="prestige-panel">
@@ -130,22 +158,85 @@
             </button>
           </div>
         </div>
+
         <div id="fishing-area" class="sub-mode-content" style="display: none">
-          <div
-            class="prestige-panel"
-          >
-            <button class="selector-btn" onclick="showSubMode('modes-menu')">
-              ⬅ Back
-            </button>
-            <h2 class="section-title">Lake Incremental</h2>
-            <p>
-              Fish Coins:
-              <span id="fish-coins" class="highlight" style="color: #60a5fa"
-                >0</span
+          <div class="fishing-wrapper">
+            <!-- ESQUERDA: Lago -->
+            <div class="fishing-lake-panel">
+              <button
+                class="fishing-back-btn"
+                onclick="showSubMode('modes-menu')"
               >
-            </p>
-            <div id="water-area" onclick="castLine()">
-              <p id="fishing-status">Click to fish!</p>
+                ⬅ BACK
+              </button>
+              <h2 class="section-title" id="title-fishing">
+                🎣 Lake Incremental
+              </h2>
+
+              <div class="fish-coins-display">
+                🪙 <span id="fish-coins">0</span> Fish Coins
+              </div>
+
+              <!-- Área da água com anzol -->
+              <div id="water-area" onclick="castLine()">
+                <div class="water-surface"></div>
+                <div class="water-caustics"></div>
+                <div class="water-line" id="fishing-line"></div>
+                <img
+                  id="fishing-hook"
+                  src="assets/images/fish/fishing-rod.png"
+                  style="
+                    width: 20px;
+                    position: absolute;
+                    left: 50%;
+                    top: 0%;
+                    transform: translateX(-50%);
+                    z-index: 10;
+                    filter: drop-shadow(0 0 5px #00f2fe);
+                  "
+                />
+                <p id="fishing-status">
+                  <span style="color: #aaa">Click the water to fish!</span>
+                </p>
+              </div>
+
+              <!-- Enciclopédia de Peixes -->
+              <div class="fish-gallery">
+                <h3 class="fish-gallery-title">🐠 Fish Encyclopedia</h3>
+                <div class="fish-gallery-grid">
+                  <div class="fish-card common">
+                    <img src="assets/images/fish/catfish.png" />
+                    <span>Catfish</span>
+                    <small style="color: #00e676">Common • 5🪙</small>
+                  </div>
+                  <div class="fish-card rare">
+                    <img src="assets/images/fish/tuna.png" />
+                    <span>Tuna</span>
+                    <small style="color: #2196f3">Rare • 15🪙</small>
+                  </div>
+                  <div class="fish-card epic">
+                    <img src="assets/images/fish/clownfish.png" />
+                    <span>Clownfish</span>
+                    <small style="color: #a855f7">Epic • 40🪙</small>
+                  </div>
+                  <div class="fish-card legendary">
+                    <img src="assets/images/fish/barracuda.png" />
+                    <span>Barracuda</span>
+                    <small style="color: #ffd700">Legendary • 120🪙</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- DIREITA: Upgrades -->
+            <div class="fishing-upgrades-panel">
+              <h3
+                class="section-title"
+                style="font-size: 1.1rem; margin-bottom: 15px"
+              >
+                ⚙️ Upgrades
+              </h3>
+              <div id="fishing-upgrades-container"></div>
             </div>
           </div>
         </div>
@@ -163,36 +254,43 @@
               <h3>✨ RP</h3>
               <div id="ranking-rebirths" class="ranking-container"></div>
             </div>
+          </div>
+        </div>
       </section>
 
       <section id="achievements-tab" class="tab-content">
-    <div class="stats-panel">
-        <h2 class="section-title" id="title-achievements">Achievements</h2>
-        
-        <div class="progress-container">
+        <div class="stats-panel">
+          <h2 class="section-title" id="title-achievements">Achievements</h2>
+          <div class="progress-container">
             <div id="achievement-progress-bar"></div>
             <div id="progress-text">0/0 Unlocked (0%)</div>
+          </div>
+          <div id="achievements-list"></div>
         </div>
-
-        <div id="achievements-list"></div>
-    </div>
-</section>
+      </section>
 
       <nav id="bottom-menu">
-    <button class="nav-btn active" data-target="home-tab">🔮 HOME</button>
-    
-    <button class="nav-btn" data-target="rebirth-tab">✨ REBIRTH</button>
-    
-    <button class="nav-btn" data-target="modes-tab">🕹️ MODES</button>
-    
-    <button class="nav-btn" data-target="ranking-tab">🌎 TOP</button>
-    
-    <button class="nav-btn" data-target="achievements-tab">🏆 ACHIEVEMENTS</button>
-</nav>
+        <button class="nav-btn active" data-target="home-tab">
+          <span class="nav-icon">🔮</span>HOME
+        </button>
+        <button class="nav-btn" data-target="rebirth-tab">
+          <span class="nav-icon">✨</span>REBIRTH
+        </button>
+        <button class="nav-btn" data-target="modes-tab">
+          <span class="nav-icon">🕹️</span>MODES
+        </button>
+        <button class="nav-btn" data-target="ranking-tab">
+          <span class="nav-icon">🌎</span>TOP
+        </button>
+        <button class="nav-btn" data-target="achievements-tab">
+          <span class="nav-icon">🏆</span>ACHIEVEMENTS
+        </button>
+      </nav>
 
-    <div id="achievement-toast">
-      <div class="toast-icon">🏆</div>
-      <div class="toast-text"><b id="ach-title">Achievement!</b></div>
+      <div id="achievement-toast">
+        <div class="toast-icon">🏆</div>
+        <div class="toast-text"><b id="ach-title">Achievement!</b></div>
+      </div>
     </div>
 
     <script src="script.js"></script>

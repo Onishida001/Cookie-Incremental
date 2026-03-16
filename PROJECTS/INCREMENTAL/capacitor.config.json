@@ -1,0 +1,8 @@
+{
+  "appId": "com.samucazz.crystalclicker",
+  "appName": "Crystal Clicker",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

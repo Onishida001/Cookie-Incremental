@@ -21,7 +21,24 @@ let goldenMultiplier = 1;
 let buyAmount = 1;
 let userLogged = null;
 let userName = "";
-let modes = { fishing: { unlocked: false, fishCoins: 0, rodLevel: 1 } };
+let modes = {
+  fishing: {
+    unlocked: false,
+    fishCoins: 0,
+    rodLevel: 1,
+    baitLevel: 0,
+    netLevel: 0,
+    boatLevel: 0,
+    crystalFishLevel: 0,
+  },
+};
+
+// --- PROTEÇÃO DE ASSETS ---
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+document.addEventListener("dragstart", (e) => {
+  if (e.target.tagName === "IMG") e.preventDefault();
+});
+document.addEventListener("selectstart", (e) => e.preventDefault());
 
 const suffixes = [
   "",
@@ -129,24 +146,19 @@ const suffixes = [
 ];
 
 // --- MUSIC CONTROL ---
-const gameMusic = new Audio("assets/audios/Crystal-Waves.mp3");
-gameMusic.loop = true; // Faz a música repetir para sempre
-gameMusic.volume = 0.2; // Volume inicial em 20%
+const gameMusic = new Audio("assets/audios/background.mpeg");
+gameMusic.loop = true;
+gameMusic.volume = 0.2;
 let isMuted = false;
 
-// Função para ligar a música (precisa de um clique inicial do usuário)
 function startMusic() {
   gameMusic.play().catch(() => {
     console.log("Music waiting for user interaction...");
   });
-  // Remove o evento após a primeira execução
   document.removeEventListener("click", startMusic);
 }
-
-// Chamar a música no primeiro clique do jogo
 document.addEventListener("click", startMusic);
 
-// Função para o botão de Mute nas Settings
 function toggleMute() {
   isMuted = !isMuted;
   gameMusic.muted = isMuted;
@@ -154,41 +166,36 @@ function toggleMute() {
   btn.innerText = isMuted ? "🔈 UNMUTE MUSIC" : "🔊 MUTE MUSIC";
 }
 
-// Abrir/Fechar Settings
 function toggleSettings() {
   const modal = document.getElementById("settings-modal");
   document.getElementById("settings-username").innerText = userName;
   modal.style.display = modal.style.display === "none" ? "flex" : "none";
 }
 
-// Função de Sair (Logout)
 function logout() {
   if (confirm("Do you want to logout? Your progress is saved in the cloud.")) {
     auth.signOut().then(() => {
-      location.reload(); // Recarrega a página para voltar à tela de login
+      location.reload();
     });
   }
 }
 
-// CORREÇÃO DO UNDEFINED (Adicione mais sufixos ou limite o log)
 function formatNumbers(num) {
   if (isNaN(num) || num === undefined) return "0";
   if (num < 1000) return Math.floor(num).toString();
   const exp = Math.floor(Math.log10(num) / 3);
-
-  // Se o expoente for maior que a lista de sufixos, ele trava no último
   if (exp >= suffixes.length) {
     return (
       (num / Math.pow(10, (suffixes.length - 1) * 3)).toFixed(1) +
       suffixes[suffixes.length - 1]
     );
   }
-
   return (
     (num / Math.pow(10, exp * 3)).toFixed(1).replace(/\.0$/, "") + suffixes[exp]
   );
 }
 
+// --- BUILDINGS ---
 const buildings = [
   {
     id: "pickaxe",
@@ -233,7 +240,7 @@ const buildings = [
   {
     id: "bank",
     name: "Bank",
-    baseCost: 1e6, // 1,000,000
+    baseCost: 1e6,
     cps: 1000,
     quantity: 0,
     image: "assets/images/upgrades/bank.png",
@@ -241,7 +248,7 @@ const buildings = [
   {
     id: "wizard-tower",
     name: "Wizard Tower",
-    baseCost: 2.5e7, // 25,000,000
+    baseCost: 2.5e7,
     cps: 5000,
     quantity: 0,
     image: "assets/images/upgrades/wizard-tower.png",
@@ -249,7 +256,7 @@ const buildings = [
   {
     id: "hydro-eletric",
     name: "Hydro Electric",
-    baseCost: 5e8, // 500,000,000
+    baseCost: 5e8,
     cps: 20000,
     quantity: 0,
     image: "assets/images/upgrades/hydro-electric.png",
@@ -257,7 +264,7 @@ const buildings = [
   {
     id: "nuclear-plant",
     name: "Nuclear Plant",
-    baseCost: 1e10, // 1,000,000,000
+    baseCost: 1e10,
     cps: 50000,
     quantity: 0,
     image: "assets/images/upgrades/nuclear-plant.png",
@@ -265,13 +272,102 @@ const buildings = [
   {
     id: "data-center",
     name: "Data Center",
-    baseCost: 5e11, // 50,000,000,000
+    baseCost: 5e11,
     cps: 50000,
     quantity: 0,
     image: "assets/images/upgrades/data-center.png",
   },
+  {
+    id: "portal",
+    name: "Portal",
+    baseCost: 2.5e12,
+    cps: 200000,
+    quantity: 0,
+    image: "assets/images/upgrades/portal.png",
+  },
+  {
+    id: "hell",
+    name: "Hell",
+    baseCost: 5e14,
+    cps: 500000,
+    quantity: 0,
+    image: "assets/images/upgrades/hell.jpg",
+  },
+  {
+    id: "heaven",
+    name: "Heaven",
+    baseCost: 7.5e16,
+    cps: 1e6,
+    quantity: 0,
+    image: "assets/images/upgrades/heaven.jpg",
+  },
+  {
+    id: "satellite",
+    name: "Satellite",
+    baseCost: 1e18,
+    cps: 5e6,
+    quantity: 0,
+    image: "assets/images/upgrades/satellite.png",
+  },
+  {
+    id: "moon",
+    name: "Moon",
+    baseCost: 5e20,
+    cps: 2.5e7,
+    quantity: 0,
+    image: "assets/images/upgrades/moon.png",
+  },
+  {
+    id: "earth",
+    name: "Earth",
+    baseCost: 7.5e26,
+    cps: 1e8,
+    quantity: 0,
+    image: "assets/images/upgrades/earth.png",
+  },
+  {
+    id: "jupiter",
+    name: "Jupiter",
+    baseCost: 1e31,
+    cps: 7.5e8,
+    quantity: 0,
+    image: "assets/images/upgrades/jupiter-full.png",
+  },
+  {
+    id: "sun",
+    name: "Sun",
+    baseCost: 2.5e34,
+    cps: 2.5e9,
+    quantity: 0,
+    image: "assets/images/upgrades/sun.png",
+  },
+  {
+    id: "black-hole",
+    name: "Black Hole",
+    baseCost: 7.5e40,
+    cps: 2.5e10,
+    quantity: 0,
+    image: "assets/images/upgrades/black-hole.jpg",
+  },
+  {
+    id: "galaxy",
+    name: "Galaxy",
+    baseCost: 1e45,
+    cps: 1e11,
+    quantity: 0,
+    image: "assets/images/upgrades/galaxy.png",
+  },
+  {
+    id: "universe",
+    name: "Universe",
+    baseCost: 7.5e51,
+    cps: 1e12,
+    quantity: 0,
+    image: "assets/images/upgrades/universe.jpg",
+  },
 ];
 
+// --- ACHIEVEMENTS ---
 const achievements = [
   {
     id: "1k",
@@ -306,6 +402,20 @@ const achievements = [
     title: "Quadrillionaire",
     hint: "Reach 1,000,000,000,000,000 total crystals",
     condition: () => totalCookies >= 1e15,
+    unlocked: false,
+  },
+  {
+    id: "1Qn",
+    title: "Quintillionaire",
+    hint: "Reach 1,000,000,000,000,000,000 total crystals",
+    condition: () => totalCookies >= 1e18,
+    unlocked: false,
+  },
+  {
+    id: "1Sx",
+    title: "Sextillionaire",
+    hint: "Reach 1,000,000,000,000,000,000,000 total crystals",
+    condition: () => totalCookies >= 1e21,
     unlocked: false,
   },
   {
@@ -378,6 +488,83 @@ const achievements = [
     condition: () => buildings[9].quantity >= 50,
     unlocked: false,
   },
+  {
+    id: "50pt",
+    title: "Portal Hero",
+    hint: "Buy 50 Portals",
+    condition: () => buildings[10].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50hl",
+    title: "Hell Hero",
+    hint: "Buy 50 Hell",
+    condition: () => buildings[11].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50he",
+    title: "Heaven Hero",
+    hint: "Buy 50 Heaven",
+    condition: () => buildings[12].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50st",
+    title: "Satellite Hero",
+    hint: "Buy 50 Satellites",
+    condition: () => buildings[13].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50mn",
+    title: "Moon Hero",
+    hint: "Buy 50 Moons",
+    condition: () => buildings[14].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50ea",
+    title: "Earth Hero",
+    hint: "Buy 50 Earths",
+    condition: () => buildings[15].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50jp",
+    title: "Jupiter Hero",
+    hint: "Buy 50 Jupiters",
+    condition: () => buildings[16].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50sn",
+    title: "Sun Hero",
+    hint: "Buy 50 Suns",
+    condition: () => buildings[17].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50bl",
+    title: "Black-Hole Hero",
+    hint: "Buy 50 Black-Holes",
+    condition: () => buildings[18].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50gl",
+    title: "Galaxy Hero",
+    hint: "Buy 50 Galaxies",
+    condition: () => buildings[19].quantity >= 50,
+    unlocked: false,
+  },
+  {
+    id: "50un",
+    title: "Universe Hero",
+    hint: "Buy 50 Universes",
+    condition: () => buildings[20].quantity >= 50,
+    unlocked: false,
+  },
 ];
 
 const rebirthUpgrades = [
@@ -386,7 +573,7 @@ const rebirthUpgrades = [
     name: "Muscle Memory",
     cost: 10,
     level: 0,
-    desc: "Remember Your Soul How to Click.",
+    desc: "2x Crystals.",
   },
   {
     id: "at",
@@ -397,6 +584,273 @@ const rebirthUpgrades = [
   },
 ];
 
+// ============================
+// FISHING SYSTEM
+// ============================
+const FISH_TYPES = [
+  {
+    id: "catfish",
+    name: "Catfish",
+    image: "assets/images/fish/catfish.png",
+    rarity: "Common",
+    rarityColor: "#00e676",
+    baseCoins: 5,
+    chance: 0.5,
+  },
+  {
+    id: "tuna",
+    name: "Tuna",
+    image: "assets/images/fish/tuna.png",
+    rarity: "Rare",
+    rarityColor: "#2196F3",
+    baseCoins: 15,
+    chance: 0.3,
+  },
+  {
+    id: "clownfish",
+    name: "Clownfish",
+    image: "assets/images/fish/clownfish.png",
+    rarity: "Epic",
+    rarityColor: "#a855f7",
+    baseCoins: 40,
+    chance: 0.15,
+  },
+  {
+    id: "barracuda",
+    name: "Barracuda",
+    image: "assets/images/fish/barracuda.png",
+    rarity: "Legendary",
+    rarityColor: "#FFD700",
+    baseCoins: 120,
+    chance: 0.05,
+  },
+];
+
+const FISHING_UPGRADES = [
+  {
+    id: "rod",
+    name: "Better Rod",
+    icon: "🎣",
+    desc: "Reduces fishing time",
+    maxLevel: 10,
+    baseCost: 250,
+    effect: (lvl) => `${Math.max(800, 3000 - lvl * 200)}ms cast time`,
+  },
+  {
+    id: "bait",
+    name: "Better Bait",
+    icon: "🪱",
+    desc: "Increases catch chance",
+    maxLevel: 10,
+    baseCost: 500,
+    effect: (lvl) => `+${lvl * 5}% catch chance`,
+  },
+  {
+    id: "net",
+    name: "Fishing Net",
+    icon: "🕸️",
+    desc: "Chance to catch multiple fish",
+    maxLevel: 5,
+    baseCost: 750,
+    effect: (lvl) => `${lvl * 20}% multi-catch chance`,
+  },
+  {
+    id: "boat",
+    name: "Boat",
+    icon: "⛵",
+    desc: "Multiplies fish coins earned",
+    maxLevel: 5,
+    baseCost: 1000,
+    effect: (lvl) => `${lvl > 0 ? lvl * 2 : 1}x coins multiplier`,
+  },
+  {
+    id: "crystalFish",
+    name: "Crystal Fish",
+    icon: "💎",
+    desc: "Multiplies crystal production by 1.25x",
+    maxLevel: 5,
+    baseCost: 2500,
+    effect: (lvl) => `x${Math.pow(1.25, lvl).toFixed(2)} crystal multiplier`,
+  },
+];
+
+let isFishing = false;
+
+function getCastTime() {
+  const rodLvl = modes.fishing.rodLevel || 1;
+  return Math.max(800, 3000 - (rodLvl - 1) * 200);
+}
+
+function getCatchChance() {
+  const baitLvl = modes.fishing.baitLevel || 0;
+  return Math.min(0.95, 0.5 + baitLvl * 0.05);
+}
+
+function getCoinsMultiplier() {
+  const boatLvl = modes.fishing.boatLevel || 0;
+  return boatLvl > 0 ? boatLvl * 2 : 1;
+}
+
+function rollFish() {
+  const rand = Math.random();
+  let cumulative = 0;
+  for (let fish of FISH_TYPES) {
+    cumulative += fish.chance;
+    if (rand <= cumulative) return fish;
+  }
+  return FISH_TYPES[0];
+}
+
+function castLine() {
+  if (isFishing) return;
+  isFishing = true;
+
+  const statusEl = document.getElementById("fishing-status");
+  const hookEl = document.getElementById("fishing-hook");
+
+  if (!statusEl) {
+    isFishing = false;
+    return;
+  } // ← reseta se falhar
+
+  statusEl.innerHTML = `<span style="color:#00f2fe">Casting...</span>`;
+
+  if (hookEl) {
+    hookEl.style.transition = `top ${getCastTime()}ms ease-in`;
+    hookEl.style.top = "80%";
+  }
+
+  setTimeout(() => {
+    const caught = Math.random() < getCatchChance();
+
+    if (caught) {
+      const fish = rollFish();
+      const netLvl = modes.fishing.netLevel || 0;
+      const multiCatch = Math.random() < netLvl * 0.2;
+      const catchCount = multiCatch ? 2 : 1;
+      let totalCoins = 0;
+      let caughtNames = [];
+
+      for (let i = 0; i < catchCount; i++) {
+        const f = i === 0 ? fish : rollFish();
+        // ← coins agora está dentro do loop onde f existe
+        const coins = Math.floor(
+          f.baseCoins * getCoinsMultiplier() * getFishFrenzyMultiplier(),
+        );
+        totalCoins += coins;
+        caughtNames.push(f.name);
+        showCaughtFish(f, coins, i);
+      }
+
+      modes.fishing.fishCoins += totalCoins;
+      const fishDisplay = document.getElementById("fish-coins");
+      if (fishDisplay)
+        fishDisplay.innerText = formatNumbers(modes.fishing.fishCoins);
+
+      statusEl.innerHTML = `<span style="color:${fish.rarityColor}">🐟 ${caughtNames.join(" + ")}! +${formatNumbers(totalCoins)}🪙</span>`;
+
+      if (hookEl) {
+        hookEl.style.transition = "top 0.3s ease-out";
+        hookEl.style.top = "0%";
+      }
+      saveCloudData();
+    } else {
+      statusEl.innerHTML = `<span style="color:#ff6b6b">💨 Got away...</span>`;
+      if (hookEl) {
+        hookEl.style.transition = "top 0.3s ease-out";
+        hookEl.style.top = "0%";
+      }
+    }
+
+    setTimeout(() => {
+      isFishing = false;
+      if (statusEl)
+        statusEl.innerHTML = `<span style="color:#aaa">Click the water to fish!</span>`;
+    }, 1200);
+  }, getCastTime());
+}
+
+function showCaughtFish(fish, coins, offset) {
+  const area = document.getElementById("water-area");
+  if (!area) return;
+
+  const popup = document.createElement("div");
+  popup.className = "fish-caught-popup";
+  popup.style.left = `${25 + offset * 35}%`;
+  popup.innerHTML = `
+    <img src="${fish.image}" style="width:45px;height:45px;object-fit:contain;filter:drop-shadow(0 0 5px ${fish.rarityColor});">
+    <div style="color:${fish.rarityColor};font-size:0.65rem;font-weight:bold;">${fish.rarity}</div>
+    <div style="color:#FFD700;font-size:0.75rem;">+${formatNumbers(coins)}🪙</div>
+  `;
+  area.appendChild(popup);
+  setTimeout(() => popup.remove(), 2000);
+}
+
+function renderFishingUpgrades() {
+  const container = document.getElementById("fishing-upgrades-container");
+  if (!container) return;
+  container.innerHTML = "";
+
+  FISHING_UPGRADES.forEach((upg) => {
+    const key = upg.id === "rod" ? "rodLevel" : upg.id + "Level";
+    const currentLevel =
+      upg.id === "rod"
+        ? (modes.fishing.rodLevel || 1) - 1
+        : modes.fishing[key] || 0;
+
+    const isMaxed = currentLevel >= upg.maxLevel;
+    const cost = Math.floor(upg.baseCost * Math.pow(2.5, currentLevel));
+    const canAfford = modes.fishing.fishCoins >= cost;
+
+    container.innerHTML += `
+      <div class="fishing-upgrade-item ${isMaxed ? "maxed" : ""} ${!canAfford && !isMaxed ? "cant-afford" : ""}">
+        <div class="fishing-upg-icon">${upg.icon}</div>
+        <div class="fishing-upg-info">
+          <div class="fishing-upg-name">${upg.name} <span class="fishing-upg-level">${currentLevel}/${upg.maxLevel}</span></div>
+          <div class="fishing-upg-effect">${upg.effect(currentLevel)}</div>
+        </div>
+        <button class="fishing-upg-btn ${isMaxed ? "maxed" : ""}"
+          onclick="buyFishingUpgrade('${upg.id}')"
+          ${isMaxed || !canAfford ? "disabled" : ""}>
+          ${isMaxed ? "MAX" : `🪙 ${formatNumbers(cost)}`}
+        </button>
+      </div>
+    `;
+  });
+}
+
+function buyFishingUpgrade(id) {
+  const upg = FISHING_UPGRADES.find((u) => u.id === id);
+  if (!upg) return;
+
+  const key = id === "rod" ? "rodLevel" : id + "Level";
+  const currentLevel =
+    id === "rod" ? (modes.fishing.rodLevel || 1) - 1 : modes.fishing[key] || 0;
+
+  if (currentLevel >= upg.maxLevel) return;
+
+  const cost = Math.floor(upg.baseCost * Math.pow(2.5, currentLevel));
+
+  if (modes.fishing.fishCoins >= cost) {
+    modes.fishing.fishCoins -= cost;
+
+    if (id === "rod") {
+      modes.fishing.rodLevel = (modes.fishing.rodLevel || 1) + 1;
+    } else {
+      modes.fishing[key] = currentLevel + 1;
+    }
+
+    if (id === "crystalFish") recalculate();
+
+    const fishDisplay = document.getElementById("fish-coins");
+    if (fishDisplay)
+      fishDisplay.innerText = formatNumbers(modes.fishing.fishCoins);
+
+    renderFishingUpgrades();
+    saveCloudData();
+  }
+}
+
 // --- AUTH ---
 function handleAuth(type) {
   const userInp = document.getElementById("auth-username").value.trim();
@@ -405,21 +859,17 @@ function handleAuth(type) {
   const fakeEmail = `${userInp.toLowerCase()}@cookie.com`;
 
   if (type === "register") {
-    // --- CORREÇÃO AQUI ---
-    // Zera tudo no código ANTES de criar a conta
     cookies = 0;
     totalCookies = 0;
     rebirthPoints = 0;
     buildings.forEach((b) => (b.quantity = 0));
     rebirthUpgrades.forEach((u) => (u.level = 0));
-    // ---------------------
 
     auth
       .createUserWithEmailAndPassword(fakeEmail, pass)
       .then((res) => {
         res.user.updateProfile({ displayName: userInp }).then(() => {
           userName = userInp;
-          // Agora o saveCloudData vai salvar TUDO ZERADO para o novo player
           saveCloudData();
           updateUI();
         });
@@ -445,22 +895,25 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-// --- CLOUD ENGINE ---
-// --- CLOUD SAVE (ENVIAR PARA FIREBASE) ---
+// --- CLOUD SAVE ---
 async function saveCloudData() {
   if (!userLogged) return;
 
   const dataToSave = {
     name: userName,
-    cookies: cookies, // Garante que o número atual de cookies vá para a nuvem
+    cookies: cookies,
     totalCookies: totalCookies,
     rebirthPoints: rebirthPoints,
-    // SALVANDO OS DADOS DE PESCA
+    lastSeen: Date.now(),
     modes: {
       fishing: {
         unlocked: modes.fishing.unlocked,
-        fishCoins: modes.fishing.fishCoins, // ESSENCIAL: Salva as moedas de peixe
-        rodLevel: modes.fishing.rodLevel,
+        fishCoins: modes.fishing.fishCoins,
+        rodLevel: modes.fishing.rodLevel || 1,
+        baitLevel: modes.fishing.baitLevel || 0,
+        netLevel: modes.fishing.netLevel || 0,
+        boatLevel: modes.fishing.boatLevel || 0,
+        crystalFishLevel: modes.fishing.crystalFishLevel || 0,
       },
     },
     buildings: buildings.map((b) => ({ id: b.id, quantity: b.quantity })),
@@ -475,27 +928,30 @@ async function saveCloudData() {
   console.log("Progress synced with cloud.");
 }
 
+// --- CLOUD LOAD ---
 async function loadCloudData() {
   const doc = await db.collection("users").doc(userLogged.uid).get();
   if (doc.exists) {
     const d = doc.data();
 
-    // 1. Carrega os valores numéricos principais
     cookies = d.cookies || 0;
     totalCookies = d.totalCookies || 0;
     rebirthPoints = d.rebirthPoints || 0;
 
-    // 2. Carrega os Modos (Fishing, etc) e atualiza o HTML das moedas
-    if (d.modes) {
-      modes = d.modes;
-      // ESSENCIAL: Atualiza o texto das moedas na tela de pesca
+    if (d.modes && d.modes.fishing) {
+      modes.fishing.unlocked = d.modes.fishing.unlocked || false;
+      modes.fishing.fishCoins = d.modes.fishing.fishCoins || 0;
+      modes.fishing.rodLevel = d.modes.fishing.rodLevel || 1;
+      modes.fishing.baitLevel = d.modes.fishing.baitLevel || 0;
+      modes.fishing.netLevel = d.modes.fishing.netLevel || 0;
+      modes.fishing.boatLevel = d.modes.fishing.boatLevel || 0;
+      modes.fishing.crystalFishLevel = d.modes.fishing.crystalFishLevel || 0;
+
       const fishDisplay = document.getElementById("fish-coins");
-      if (fishDisplay && modes.fishing) {
-        fishDisplay.innerText = modes.fishing.fishCoins;
-      }
+      if (fishDisplay)
+        fishDisplay.innerText = formatNumbers(modes.fishing.fishCoins);
     }
 
-    // 3. Carrega os prédios (Buildings)
     if (d.buildings) {
       d.buildings.forEach((sb) => {
         let b = buildings.find((i) => i.id === sb.id);
@@ -503,27 +959,18 @@ async function loadCloudData() {
       });
     }
 
-    // 4. Carrega os Upgrades de Rebirth
     if (d.rebirthUpgrades) {
-      // 1. Primeiro carregamos os níveis e custos de cada upgrade
       d.rebirthUpgrades.forEach((su, i) => {
         if (rebirthUpgrades[i]) {
           rebirthUpgrades[i].level = su.level;
-          // Aplicando o Nerf de 4x no carregamento também
           rebirthUpgrades[i].cost = Math.floor(10 * Math.pow(4, su.level));
         }
       });
-
-      // 2. Calculamos o multiplicador UMA ÚNICA VEZ fora do loop
-      const multiplierValue = 1 + rebirthPoints * 0.01;
       const multiElement = document.getElementById("multi-val");
-
-      if (multiElement) {
-        multiElement.innerText = multiplierValue.toFixed(2) + "x";
-      }
+      if (multiElement)
+        multiElement.innerText = (1 + rebirthPoints * 0.01).toFixed(2) + "x";
     }
 
-    // 5. Carrega as Conquistas (Achievements)
     if (d.achievements) {
       d.achievements.forEach((sa) => {
         let a = achievements.find((i) => i.id === sa.id);
@@ -531,63 +978,34 @@ async function loadCloudData() {
       });
     }
 
-    function showAchievement(title) {
-      const toast = document.getElementById("achievement-toast");
-      const achTitle = document.getElementById("ach-title");
-
-      if (toast && achTitle) {
-        achTitle.innerText = title;
-        toast.classList.add("show");
-
-        // Toca um som de sucesso (opcional)
-        // new Audio("assets/audios/achievement.mp3").play().catch(() => {});
-
-        // Esconde depois de 3 segundos
-        setTimeout(() => {
-          toast.classList.remove("show");
-        }, 3000);
-      }
-    }
-
-    // Exemplo de como chamar dentro do seu loop de conquistas:
     achievements.forEach((ach) => {
       if (!ach.unlocked && ach.condition()) {
         ach.unlocked = true;
-        showAchievement(ach.title); // Chama a animação
+        showAchievement(ach.title);
         saveCloudData();
       }
     });
 
-    // 6. Atualiza toda a interface de uma vez
     recalculate();
-    updateUI();
-    updateModeUI();
-    console.log("Data loaded successfully!");
-  }
-}
 
-function castLine() {
-  if (isFishing) return;
-  isFishing = true;
-  document.getElementById("fishing-status").innerText = "Fishing...";
+    const lastSeen = d.lastSeen || null;
+    const offlineEarned = calcOfflineEarnings(lastSeen);
+    const hoursAway = lastSeen ? (Date.now() - lastSeen) / 3600000 : 0;
 
-  setTimeout(() => {
-    if (Math.random() < 0.5) {
-      modes.fishing.fishCoins += modes.fishing.rodLevel * 5;
-      document.getElementById("fishing-status").innerText = "CAUGHT!";
-      document.getElementById("fish-coins").innerText = modes.fishing.fishCoins;
-
-      // SALVA AUTOMATICAMENTE APÓS PESCAR
-      saveCloudData();
-    } else {
-      document.getElementById("fishing-status").innerText = "Escaped!";
+    if (offlineEarned > 0 && hoursAway > 1 / 60) {
+      setTimeout(() => showOfflineModal(offlineEarned, hoursAway), 1200);
     }
 
-    setTimeout(() => {
-      isFishing = false;
-      document.getElementById("fishing-status").innerText = "Cast again?";
-    }, 1000);
-  }, 1500);
+    updateUI();
+    updateModeUI();
+    updateOrbitingPickaxes();
+    listenToEvents(); // ← ADICIONA AQUI
+    startGoldenCookieSystem();
+    if (userName === ADMIN_USER) {
+      setTimeout(renderAdminPanel, 500);
+    }
+    console.log("Data loaded successfully!");
+  }
 }
 
 // --- RANKING ---
@@ -596,25 +1014,19 @@ async function updateGlobalRanking() {
   const rList = document.getElementById("ranking-rebirths");
   if (!cList || !rList) return;
 
-  // Puxa Top 100 cookies
   const snapC = await db
     .collection("users")
     .orderBy("totalCookies", "desc")
     .limit(100)
     .get();
   cList.innerHTML = "";
-  let indexC = 1; // Usar uma variável separada evita o NaN
+  let indexC = 1;
   snapC.forEach((doc) => {
     const d = doc.data();
-    cList.innerHTML += `
-            <div class="ranking-item">
-                <span>${indexC}º - ${d.name || "Anonymous"}</span>
-                <span>${formatNumbers(d.totalCookies || 0)}</span>
-            </div>`;
+    cList.innerHTML += `<div class="ranking-item"><span>${indexC}º - ${d.name || "Anonymous"}</span><span>${formatNumbers(d.totalCookies || 0)}</span></div>`;
     indexC++;
   });
 
-  // Puxa Top 100 Rebirths
   const snapR = await db
     .collection("users")
     .orderBy("rebirthPoints", "desc")
@@ -624,11 +1036,7 @@ async function updateGlobalRanking() {
   let indexR = 1;
   snapR.forEach((doc) => {
     const d = doc.data();
-    rList.innerHTML += `
-            <div class="ranking-item">
-                <span>${indexR}º - ${d.name || "Anonymous"}</span>
-                <span>${formatNumbers(d.rebirthPoints || 0)}</span>
-            </div>`;
+    rList.innerHTML += `<div class="ranking-item"><span>${indexR}º - ${d.name || "Anonymous"}</span><span>${formatNumbers(d.rebirthPoints || 0)}</span></div>`;
     indexR++;
   });
 }
@@ -653,26 +1061,34 @@ function spawnFX(e, val) {
     document.body.appendChild(p);
     setTimeout(() => p.remove(), 800);
   }
+
+  const pickaxe = document.createElement("img");
+  pickaxe.src = "assets/images/upgrades/pickaxe.png";
+  pickaxe.className = "pickaxe-hit";
+  pickaxe.style.left = e.clientX + 10 + "px";
+  pickaxe.style.top = e.clientY - 50 + "px";
+  document.body.appendChild(pickaxe);
+  setTimeout(() => pickaxe.remove(), 150);
 }
 
 // --- CORE ---
-function formatNumbers(num) {
-  if (isNaN(num)) return "0";
-  if (num < 1000) return Math.floor(num).toString();
-  const exp = Math.floor(Math.log10(num) / 3);
-  return (
-    (num / Math.pow(10, exp * 3)).toFixed(1).replace(/\.0$/, "") + suffixes[exp]
-  );
-}
-
 function recalculate() {
   cps = 0;
   let multi = 1 + rebirthPoints * 0.01;
-  buildings.forEach((b) => (cps += b.cps * b.quantity * multi));
+  const crystalFishLvl = modes.fishing.crystalFishLevel || 0;
+  const crystalFishBonus = Math.pow(1.25, crystalFishLvl);
+  const crystalStormBonus = getCrystalStormMultiplier(); // ← ADD
+  buildings.forEach(
+    (b) =>
+      (cps +=
+        b.cps * b.quantity * multi * crystalFishBonus * crystalStormBonus),
+  );
+  buildings.forEach(
+    (b) => (cps += b.cps * b.quantity * multi * crystalFishBonus),
+  );
 }
 
 function updateUI() {
-  // 1. Update Header Stats
   document.getElementById("cookie-count").innerText = formatNumbers(cookies);
   document.getElementById("cps").innerText = formatNumbers(
     cps * goldenMultiplier,
@@ -682,35 +1098,23 @@ function updateUI() {
   );
   document.getElementById("rebirth-points").innerText =
     formatNumbers(rebirthPoints);
-  document.getElementById("multi-val").innerText = (
-    1 +
-    rebirthPoints * 0.01
-  ).toFixed(1);
 
-  // 2. Loop through buildings to update the Store
+  const multiplierValue = 1 + rebirthPoints * 0.01;
+  const multiElement = document.getElementById("multi-val");
+  if (multiElement) multiElement.innerText = formatNumbers(multiplierValue);
+
   buildings.forEach((item) => {
     const costSpan = document.getElementById(`cost-${item.id}`);
     const qtdDisplay = document.getElementById(`qtd-${item.id}`);
     const div = document.getElementById(`item-${item.id}`);
 
-    const multiplierValue = 1 + rebirthPoints * 0.01;
-    const multiElement = document.getElementById("multi-val");
-    if (multiElement) {
-      // Agora ele passa pela sua função de formatação!
-      multiElement.innerText = formatNumbers(multiplierValue) + "";
-    }
-
-    // The price of exactly 1 next unit
     let unitCost = item.baseCost * Math.pow(1.15, item.quantity);
-
     let displayCost = 0;
     let canBuyCount = 0;
 
     if (buyAmount === "max") {
-      let tempC = cookies;
-      let tempQ = item.quantity;
-
-      // Geometric series simulation
+      let tempC = cookies,
+        tempQ = item.quantity;
       while (tempC >= item.baseCost * Math.pow(1.15, tempQ)) {
         let nextPrice = item.baseCost * Math.pow(1.15, tempQ);
         tempC -= nextPrice;
@@ -718,48 +1122,35 @@ function updateUI() {
         tempQ++;
         canBuyCount++;
       }
-
-      // If zero can be bought, display cost of the next 1
       if (canBuyCount === 0) displayCost = unitCost;
     } else {
-      // 1x or 10x calculation
-      displayCost = 0;
-      for (let i = 0; i < buyAmount; i++) {
+      for (let i = 0; i < buyAmount; i++)
         displayCost += item.baseCost * Math.pow(1.15, item.quantity + i);
-      }
     }
 
-    // Update Text Elements
     if (costSpan) {
       let bulkText =
         buyAmount === "max" && canBuyCount > 0 ? ` (${canBuyCount}x)` : "";
       costSpan.innerText = formatNumbers(displayCost) + bulkText;
     }
-
-    if (qtdDisplay) {
-      qtdDisplay.innerText = item.quantity;
-    }
-
-    // Disabled Logic (Visual feedback)
+    if (qtdDisplay) qtdDisplay.innerText = item.quantity;
     if (div) {
-      // If MAX: enabled if you can buy at least ONE. Else: needs full bulk price.
       let threshold = buyAmount === "max" ? unitCost : displayCost;
-      if (cookies < threshold) {
-        div.classList.add("disabled");
-      } else {
-        div.classList.remove("disabled");
-      }
+      cookies < threshold
+        ? div.classList.add("disabled")
+        : div.classList.remove("disabled");
     }
   });
 }
 
 function buyItem(idx) {
   const item = buildings[idx];
-  let totalCost = 0;
-  let count = 0;
+  let totalCost = 0,
+    count = 0;
+
   if (buyAmount === "max") {
-    let tempC = cookies;
-    let tempQ = item.quantity;
+    let tempC = cookies,
+      tempQ = item.quantity;
     while (tempC >= item.baseCost * Math.pow(1.15, tempQ)) {
       let cost = item.baseCost * Math.pow(1.15, tempQ);
       tempC -= cost;
@@ -772,11 +1163,13 @@ function buyItem(idx) {
     for (let i = 0; i < count; i++)
       totalCost += item.baseCost * Math.pow(1.15, item.quantity + i);
   }
+
   if (cookies >= totalCost && count > 0) {
     cookies -= totalCost;
     item.quantity += count;
     recalculate();
     updateUI();
+    if (idx === 0) updateOrbitingPickaxes();
     new Audio("assets/audios/sucess.mp3").play().catch(() => {});
     saveCloudData();
   }
@@ -792,6 +1185,7 @@ function unlockMode(id) {
     saveCloudData();
   }
 }
+
 function updateModeUI() {
   if (modes.fishing.unlocked) {
     document.getElementById("unlock-fishing").style.display = "none";
@@ -799,40 +1193,18 @@ function updateModeUI() {
   }
 }
 
-// --- FIX: GAME MODES NAVIGATION ---
 function showSubMode(targetId) {
   const modesMenu = document.getElementById("modes-menu");
   const fishingArea = document.getElementById("fishing-area");
 
-  console.log("Switching to mode: " + targetId); // Verifique isso no F12
-
   if (targetId === "modes-menu") {
-    // Força a exibição do menu principal de modos
-    modesMenu.style.setProperty("display", "block", "important");
+    modesMenu.style.setProperty("display", "flex", "important");
     fishingArea.style.setProperty("display", "none", "important");
   } else if (targetId === "fishing-area") {
-    // Força a exibição da área de pesca
     modesMenu.style.setProperty("display", "none", "important");
     fishingArea.style.setProperty("display", "flex", "important");
+    renderFishingUpgrades();
   }
-}
-
-let isFishing = false;
-function castLine() {
-  if (isFishing) return;
-  isFishing = true;
-  document.getElementById("fishing-status").innerText = "Fishing...";
-  setTimeout(() => {
-    if (Math.random() < 0.5) {
-      modes.fishing.fishCoins += modes.fishing.rodLevel * 5;
-      document.getElementById("fishing-status").innerText = "CAUGHT!";
-    } else document.getElementById("fishing-status").innerText = "Escaped!";
-    document.getElementById("fish-coins").innerText = modes.fishing.fishCoins;
-    setTimeout(() => {
-      isFishing = false;
-      document.getElementById("fishing-status").innerText = "Cast again?";
-    }, 1000);
-  }, 1500);
 }
 
 // --- REBIRTH ---
@@ -841,14 +1213,11 @@ function renderRebirthShop() {
   if (!shop) return;
   shop.innerHTML = "";
 
-  // CORREÇÃO: 0 (Muscle Memory) -> 50 | 1 (Auto-Tapper) -> 10
   const LIMITS = { 0: 50, 1: 10 };
 
   rebirthUpgrades.forEach((u, i) => {
     const isMaxed = u.level >= LIMITS[i];
     const price = Math.floor(10 * Math.pow(4, u.level));
-
-    // Pegamos a descrição do objeto. Se não existir, colocamos um texto padrão.
     const description = u.desc || "Improve your crystal production!";
 
     shop.innerHTML += `
@@ -865,7 +1234,6 @@ function renderRebirthShop() {
 
 document.getElementById("btn-rebirth").onclick = async () => {
   let pendingPoints = Math.floor(cookies / 5000);
-
   if (pendingPoints <= 0) {
     alert("You need at least 5,000 cookies to Rebirth!");
     return;
@@ -873,59 +1241,35 @@ document.getElementById("btn-rebirth").onclick = async () => {
 
   if (
     confirm(
-      `Do you want to Rebirth now? You will get ${pendingPoints} Heavenly Chips, but all cookies and buildings will be reset!`,
+      `Do you want to Rebirth now? You will get ${pendingPoints} RP, but all cookies and buildings will be reset!`,
     )
   ) {
-    // 1. Adiciona os pontos
     rebirthPoints += pendingPoints;
-
-    // 2. Reseta o progresso local
     cookies = 0;
-    buildings.forEach((b) => {
-      b.quantity = 0;
-    });
-
-    // 3. Recalcula o CPS (vai voltar pra 0 ou o bônus do upgrade auto-tapper)
+    buildings.forEach((b) => (b.quantity = 0));
     recalculate();
-
-    // 4. Salva IMEDIATAMENTE na nuvem para não perder os pontos
     await saveCloudData();
-
-    // 5. Atualiza a tela e volta para a aba principal
     updateUI();
     alert("Rebirth successful! Your multiplier has increased.");
-
-    // Força a volta para a aba do jogo
     document.querySelectorAll(".nav-btn")[0].click();
   }
 };
 
 function buyRebirthUpg(i) {
   const u = rebirthUpgrades[i];
+  const LIMITS = { 0: 50, 1: 10 };
 
-  // --- LIMITES CORRIGIDOS ---
-  const LIMITS = {
-    0: 50, // Muscle Memory (Índice 0) agora vai até 50
-    1: 10, // Auto-Tapper (Índice 1) agora vai até 10
-  };
-
-  // 1. Verifica o limite
   if (u.level >= LIMITS[i]) {
     alert("This upgrade has reached its maximum level!");
     return;
   }
 
-  // 2. Cálculo do custo (Nerf 4x)
   let upgradePrice = Math.floor(10 * Math.pow(4, u.level));
 
   if (rebirthPoints >= upgradePrice) {
     rebirthPoints -= upgradePrice;
     u.level++;
-
-    // 3. Atualiza o custo do objeto para o próximo nível
     u.cost = Math.floor(10 * Math.pow(4, u.level));
-
-    // 4. Atualiza o Jogo
     recalculate();
     renderRebirthShop();
     updateUI();
@@ -935,15 +1279,16 @@ function buyRebirthUpg(i) {
   }
 }
 
-// --- LOOPS ---
+// --- CLICK ---
 document.getElementById("big-cookie").onmousedown = (e) => {
-  new Audio("assets/audios/clicking.mp3").play().catch(() => {});
+  const clickSound = new Audio("assets/audios/clicking.mp3");
+  clickSound.volume = 0.1;
+  clickSound.play().catch(() => {});
 
-  // Multiplicador do Rebirth * Poder do Muscle Memory (Índice 0)
   let rebirthBonus = 1 + rebirthPoints * 0.01;
   let muscleMemoryBonus = Math.pow(2, rebirthUpgrades[0].level);
-
-  let val = rebirthBonus * muscleMemoryBonus;
+  let crystalFishBonus = Math.pow(1.25, modes.fishing.crystalFishLevel || 0);
+  let val = rebirthBonus * muscleMemoryBonus * crystalFishBonus;
 
   cookies += val;
   totalCookies += val;
@@ -951,38 +1296,44 @@ document.getElementById("big-cookie").onmousedown = (e) => {
   updateUI();
 };
 
+// --- ADMIN CHEATS ---
 const gameAdmins = ["SamucaZZ", "Juninho", "JotaLusca"];
-
 window.addEventListener("keydown", (e) => {
-  // Check if the key is 'p'
-  if (e.key.toLowerCase() === "p") {
-    // Check if the logged-in user is in the admin list
-    if (gameAdmins.includes(userName)) {
-      const cheatAmount = 10000;
-      cookies += cheatAmount;
-      totalcookies += cheatAmount;
-      updateUI();
-      console.log(`Cheat activated by Admin ${userName}: +10k`);
-    } else {
-      console.warn(`User ${userName} tried to use cheats without permission!`);
-      // Optional: You can add a funny message or alert here
-      // alert("Nice try! You are not an admin.");
-    }
+  if (e.key.toLowerCase() === "p" && gameAdmins.includes(userName)) {
+    const cheatAmount = 10000;
+    cookies += cheatAmount;
+    totalCookies += cheatAmount;
+    updateUI();
+    console.log(`Cheat activated by Admin ${userName}: +10k`);
   }
 });
 
+// --- ACHIEVEMENT TOAST ---
+function showAchievement(title) {
+  const toast = document.getElementById("achievement-toast");
+  const achTitle = document.getElementById("ach-title");
+  if (toast && achTitle) {
+    achTitle.innerText = title;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
+  }
+}
+
+// --- GAME LOOP ---
 setInterval(() => {
+  recalculate(); // ← ADICIONA AQUI para pegar o multiplicador do evento em tempo real
+
   let inc = (cps * goldenMultiplier) / 10;
   if (rebirthUpgrades[1].level > 0)
     inc += (rebirthUpgrades[1].level * (1 + rebirthPoints * 0.01)) / 10;
   cookies += inc;
   totalCookies += inc;
   updateUI();
+
   achievements.forEach((ach) => {
     if (!ach.unlocked && ach.condition()) {
       ach.unlocked = true;
-      document.getElementById("ach-title").innerText = ach.title;
-      // Toast logic...
+      showAchievement(ach.title);
     }
   });
 }, 100);
@@ -990,7 +1341,7 @@ setInterval(() => {
 setInterval(saveCloudData, 20000);
 setInterval(updateGlobalRanking, 60000);
 
-// NAV
+// --- NAV ---
 document.querySelectorAll(".nav-btn").forEach((btn) => {
   btn.onclick = () => {
     document
@@ -1007,6 +1358,7 @@ document.querySelectorAll(".nav-btn").forEach((btn) => {
   };
 });
 
+// --- STORE ---
 function initStore() {
   const container = document.getElementById("store-items");
   container.innerHTML = "";
@@ -1015,7 +1367,17 @@ function initStore() {
     div.className = "store-item";
     div.id = `item-${item.id}`;
     div.onclick = () => buyItem(i);
-    div.innerHTML = `<img src="${item.image}" class="icone-loja"><div><h3>${item.name}</h3><p>🔮 <span id="cost-${item.id}">0</span></p></div><div class="item-count" id="qtd-${item.id}">0</div>`;
+    div.innerHTML = `
+      <img src="${item.image}" class="icone-loja">
+      <div class="item-info">
+        <h3>${item.name}</h3>
+        <p class="price-container">
+          <img src="assets/images/ores/crystal.png" class="tiny-crystal">
+          <span id="cost-${item.id}">0</span>
+        </p>
+      </div>
+      <div class="item-count" id="qtd-${item.id}">0</div>
+    `;
     container.appendChild(div);
   });
 }
@@ -1032,11 +1394,11 @@ document.querySelectorAll(".selector-btn").forEach((btn) => {
   };
 });
 
+// --- ACHIEVEMENTS ---
 function renderAchievements() {
   const list = document.getElementById("achievements-list");
   const progressBar = document.getElementById("achievement-progress-bar");
   const progressText = document.getElementById("progress-text");
-
   if (!list) return;
 
   list.innerHTML = "";
@@ -1044,28 +1406,589 @@ function renderAchievements() {
 
   achievements.forEach((ach) => {
     if (ach.unlocked) unlockedCount++;
-
     const card = document.createElement("div");
     card.className = `achievement-card ${ach.unlocked ? "unlocked" : ""}`;
-
-    // When clicking, show the requirement
-    card.onclick = () => {
+    card.onclick = () =>
       alert(
         `Achievement: ${ach.title}\nStatus: ${ach.unlocked ? "UNLOCKED" : "LOCKED"}\nRequirement: ${ach.hint}`,
       );
-    };
-
     card.innerHTML = `
-            <div style="font-size: 1.5rem;">${ach.unlocked ? "🏆" : "🔒"}</div>
-            <b style="font-size: 0.7rem;">${ach.title}</b>
-        `;
+      <div style="font-size: 1.5rem;">${ach.unlocked ? "🏆" : "🔒"}</div>
+      <b style="font-size: 0.7rem;">${ach.title}</b>
+    `;
     list.appendChild(card);
   });
 
-  // Update Progress Bar
   let percent = (unlockedCount / achievements.length) * 100;
   progressBar.style.width = `${percent}%`;
   progressText.innerText = `${unlockedCount}/${achievements.length} Unlocked (${Math.floor(percent)}%)`;
 }
 
+// --- ORBIT SYSTEM ---
+function updateOrbitingPickaxes() {
+  const orbitContainer = document.getElementById("orbit-container");
+  if (!orbitContainer) return;
+  orbitContainer.innerHTML = "";
+
+  let pickaxeCount = buildings[0].quantity;
+  if (!pickaxeCount || pickaxeCount <= 0) return;
+
+  const layers = [
+    { maxItems: 8, radius: 110, speed: 20, size: 28 },
+    { maxItems: 16, radius: 150, speed: 25, size: 26 },
+    { maxItems: 24, radius: 192, speed: 30, size: 22 },
+    { maxItems: 32, radius: 236, speed: 35, size: 20 },
+    { maxItems: 40, radius: 280, speed: 40, size: 18 },
+    { maxItems: 50, radius: 326, speed: 45, size: 16 },
+  ];
+
+  let remaining = pickaxeCount;
+  let layerIndex = 0;
+
+  while (remaining > 0 && layerIndex < layers.length) {
+    const layer = layers[layerIndex];
+    const countInLayer = Math.min(remaining, layer.maxItems);
+    remaining -= countInLayer;
+
+    const ring = document.createElement("div");
+    ring.className = "orbit-ring";
+    ring.style.animationDuration = layer.speed + "s";
+    ring.style.animationDirection = layerIndex % 2 === 0 ? "normal" : "reverse";
+
+    for (let i = 0; i < countInLayer; i++) {
+      const img = document.createElement("img");
+      img.src = "assets/images/upgrades/pickaxe.png";
+      img.className = "orbit-pickaxe";
+      img.style.width = layer.size + "px";
+      img.style.height = layer.size + "px";
+      img.style.marginTop = -(layer.size / 2) + "px";
+      img.style.marginLeft = -(layer.size / 2) + "px";
+      const angle = (360 / countInLayer) * i;
+      img.style.transform = `rotate(${angle}deg) translateY(-${layer.radius}px) rotate(135deg)`;
+      ring.appendChild(img);
+    }
+
+    orbitContainer.appendChild(ring);
+    layerIndex++;
+  }
+}
+
+// --- OFFLINE EARNINGS ---
+const MAX_OFFLINE_HOURS = 8;
+
+function calcOfflineEarnings(lastSeen) {
+  if (!lastSeen) return 0;
+  const now = Date.now();
+  const diffMs = now - lastSeen;
+  const diffSeconds = Math.min(diffMs / 1000, MAX_OFFLINE_HOURS * 3600);
+  return Math.floor(cps * 0.5 * diffSeconds);
+}
+
+function showOfflineModal(earned, hoursAway) {
+  const modal = document.createElement("div");
+  modal.id = "offline-modal";
+
+  const hoursText =
+    hoursAway >= 1
+      ? `${Math.floor(hoursAway)}h ${Math.floor((hoursAway % 1) * 60)}min`
+      : `${Math.floor(hoursAway * 60)}min`;
+
+  modal.innerHTML = `
+    <div id="offline-card">
+      <div id="offline-icon">💤</div>
+      <h2 id="offline-title">WELCOME BACK!</h2>
+      <p id="offline-away-text">You were away for <span class="offline-highlight">${hoursText}</span></p>
+      <div id="offline-reward-box">
+        <img src="assets/images/ores/crystal.png" id="offline-crystal-img">
+        <span id="offline-amount">+${formatNumbers(earned)}</span>
+      </div>
+      <p id="offline-subtitle">Crystals collected while you were gone</p>
+      <button id="offline-claim-btn" onclick="claimOffline(${earned})">✨ CLAIM REWARD</button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add("offline-visible"));
+}
+
+function claimOffline(earned) {
+  cookies += earned;
+  totalCookies += earned;
+  updateUI();
+  saveCloudData();
+
+  const modal = document.getElementById("offline-modal");
+  if (modal) {
+    modal.classList.remove("offline-visible");
+    modal.classList.add("offline-hiding");
+    setTimeout(() => modal.remove(), 500);
+  }
+}
+
+// ============================
+// ADMIN PANEL SYSTEM
+// ============================
+
+const ADMIN_USER = "SamucaZZ";
+
+// Eventos globais salvos no Firestore
+const EVENTS = {
+  crystalStorm: {
+    id: "crystalStorm",
+    name: "Crystal Storm",
+    icon: "💎",
+    color: "#a855f7",
+    duration: 5 * 60, // 5 minutos em segundos
+    description: "2.5x Crystal production for 5 minutes!",
+  },
+  goldenHour: {
+    id: "goldenHour",
+    name: "Golden Hour",
+    icon: "✨",
+    color: "#FFD700",
+    duration: 5 * 60,
+    description: "Shiny Crystals appear 10x more often!",
+  },
+  fishFrenzy: {
+    id: "fishFrenzy",
+    name: "Fish Frenzy",
+    icon: "🐟",
+    color: "#00f2fe",
+    duration: 5 * 60,
+    description: "2x Fish Coins for 5 minutes!",
+  },
+};
+
+let activeEvents = {}; // { eventId: { endsAt: timestamp } }
+let eventTimerInterval = null;
+let adminPanelMinimized = false;
+
+// Escuta eventos em tempo real do Firestore
+function listenToEvents() {
+  db.collection("global")
+    .doc("events")
+    .onSnapshot((doc) => {
+      if (doc.exists) {
+        activeEvents = doc.data().active || {};
+      } else {
+        activeEvents = {};
+      }
+      updateEventDisplay();
+      updateAdminActiveEvents();
+      recalculate();
+      scheduleNextGoldenCookie();
+      if (isEventActive("crystalStorm")) {
+        startCrystalStormFX();
+      } else {
+        stopCrystalStormFX();
+      }
+    });
+}
+
+// Admin ativa um evento
+async function activateEvent(eventId) {
+  const event = EVENTS[eventId];
+  if (!event) return;
+
+  const now = Date.now();
+  const endsAt = now + event.duration * 1000;
+
+  // Salva no Firestore para todos verem
+  await db
+    .collection("global")
+    .doc("events")
+    .set(
+      {
+        active: {
+          ...activeEvents,
+          [eventId]: {
+            endsAt,
+            startedBy: userName,
+            name: event.name,
+            icon: event.icon,
+            color: event.color,
+          },
+        },
+      },
+      { merge: true },
+    );
+
+  showAdminToast(`✅ ${event.name} activated for all players!`);
+}
+
+// Remove evento expirado do Firestore
+async function removeEvent(eventId) {
+  const current = { ...activeEvents };
+  delete current[eventId];
+  await db.collection("global").doc("events").set({ active: current });
+}
+
+// Verifica se um evento está ativo
+function isEventActive(eventId) {
+  if (!activeEvents[eventId]) return false;
+  return Date.now() < activeEvents[eventId].endsAt;
+}
+
+// Retorna multiplicador do Crystal Storm
+function getCrystalStormMultiplier() {
+  return isEventActive("crystalStorm") ? 2.5 : 1;
+}
+
+// Retorna multiplicador do Fish Frenzy
+function getFishFrenzyMultiplier() {
+  return isEventActive("fishFrenzy") ? 2 : 1;
+}
+
+// Retorna se Golden Hour está ativo
+function isGoldenHourActive() {
+  return isEventActive("goldenHour");
+}
+
+// Atualiza display dos eventos na tela
+function updateEventDisplay() {
+  // Remove displays antigos
+  document.querySelectorAll(".event-badge").forEach((el) => el.remove());
+
+  const now = Date.now();
+  let activeCount = 0;
+
+  Object.entries(activeEvents).forEach(([eventId, data]) => {
+    if (now >= data.endsAt) {
+      // Evento expirou
+      removeEvent(eventId);
+      return;
+    }
+
+    const remaining = Math.ceil((data.endsAt - now) / 1000);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+
+    const badge = document.createElement("div");
+    badge.className = "event-badge";
+    badge.id = `event-badge-${eventId}`;
+    badge.style.bottom = `${90 + activeCount * 75}px`;
+    badge.style.borderColor = data.color;
+    badge.style.boxShadow = `0 0 15px ${data.color}40`;
+    badge.innerHTML = `
+      <div class="event-badge-icon" style="text-shadow: 0 0 10px ${data.color}">${data.icon}</div>
+      <div class="event-badge-info">
+        <div class="event-badge-name" style="color:${data.color}">${data.name}</div>
+        <div class="event-badge-timer" id="timer-${eventId}">${mins}:${secs.toString().padStart(2, "0")}</div>
+      </div>
+    `;
+    document.body.appendChild(badge);
+    activeCount++;
+  });
+
+  // Reinicia o interval do timer
+  if (eventTimerInterval) clearInterval(eventTimerInterval);
+  if (activeCount > 0) {
+    eventTimerInterval = setInterval(tickEventTimers, 1000);
+  }
+}
+
+// Atualiza os timers a cada segundo
+function tickEventTimers() {
+  const now = Date.now();
+  let anyActive = false;
+
+  Object.entries(activeEvents).forEach(([eventId, data]) => {
+    const timerEl = document.getElementById(`timer-${eventId}`);
+    if (!timerEl) return;
+
+    const remaining = Math.ceil((data.endsAt - now) / 1000);
+
+    if (remaining <= 0) {
+      removeEvent(eventId);
+      return;
+    }
+
+    anyActive = true;
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    timerEl.innerText = `${mins}:${secs.toString().padStart(2, "0")}`;
+
+    // Pisca vermelho nos últimos 30 segundos
+    if (remaining <= 30) {
+      timerEl.style.color = "#ff4444";
+      timerEl.style.animation = "timerPulse 1s infinite";
+    }
+  });
+
+  if (!anyActive) clearInterval(eventTimerInterval);
+}
+
+// Admin: adiciona crystals
+function adminAddCrystals() {
+  cookies += 999999;
+  totalCookies += 999999;
+  updateUI();
+  saveCloudData();
+  showAdminToast("💎 +999,999 Crystals added!");
+}
+
+// Admin: adiciona fish coins
+function adminAddFishCoins() {
+  modes.fishing.fishCoins += 999999;
+  const fishDisplay = document.getElementById("fish-coins");
+  if (fishDisplay)
+    fishDisplay.innerText = formatNumbers(modes.fishing.fishCoins);
+  renderFishingUpgrades();
+  saveCloudData();
+  showAdminToast("🪙 +999,999 Fish Coins added!");
+}
+
+// Admin: cancela evento ativo
+async function adminCancelEvent(eventId) {
+  await removeEvent(eventId);
+  showAdminToast(`❌ ${EVENTS[eventId]?.name} cancelled!`);
+}
+
+function showAdminToast(msg) {
+  const toast = document.createElement("div");
+  toast.className = "admin-toast";
+  toast.innerText = msg;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
+
+function toggleAdminPanel() {
+  adminPanelMinimized = !adminPanelMinimized;
+  const panel = document.getElementById("admin-panel");
+  const body = document.getElementById("admin-panel-body");
+  const btn = document.getElementById("admin-minimize-btn");
+  if (adminPanelMinimized) {
+    body.style.display = "none";
+    btn.innerText = "▲";
+    panel.style.height = "auto";
+  } else {
+    body.style.display = "flex";
+    btn.innerText = "▼";
+  }
+}
+
+function renderAdminPanel() {
+  if (userName !== ADMIN_USER) return;
+  if (document.getElementById("admin-panel")) return;
+
+  const panel = document.createElement("div");
+  panel.id = "admin-panel";
+  panel.innerHTML = `
+    <div id="admin-panel-header">
+      <span>⚡ ADMIN PANEL</span>
+      <button id="admin-minimize-btn" onclick="toggleAdminPanel()">▼</button>
+    </div>
+    <div id="admin-panel-body">
+      <div class="admin-section-title">💰 Resources</div>
+      <div class="admin-btn-row">
+        <button class="admin-btn crystal-btn" onclick="adminAddCrystals()">💎 +999k Crystals</button>
+        <button class="admin-btn fish-btn" onclick="adminAddFishCoins()">🪙 +999k Fish Coins</button>
+      </div>
+
+      <div class="admin-section-title">🎉 Global Events</div>
+      <div class="admin-events-grid">
+        <div class="admin-event-card" id="card-crystalStorm">
+          <div class="admin-event-icon">💎</div>
+          <div class="admin-event-name">Crystal Storm</div>
+          <div class="admin-event-desc">2.5x crystals • 5min</div>
+          <button class="admin-btn event-btn" onclick="activateEvent('crystalStorm')">ACTIVATE</button>
+        </div>
+        <div class="admin-event-card" id="card-goldenHour">
+          <div class="admin-event-icon">✨</div>
+          <div class="admin-event-name">Golden Hour</div>
+          <div class="admin-event-desc">10x golden cookies • 5min</div>
+          <button class="admin-btn event-btn" onclick="activateEvent('goldenHour')">ACTIVATE</button>
+        </div>
+        <div class="admin-event-card" id="card-fishFrenzy">
+          <div class="admin-event-icon">🐟</div>
+          <div class="admin-event-name">Fish Frenzy</div>
+          <div class="admin-event-desc">2x fish coins • 5min</div>
+          <button class="admin-btn event-btn" onclick="activateEvent('fishFrenzy')">ACTIVATE</button>
+        </div>
+      </div>
+
+      <div class="admin-section-title">🔴 Active Events</div>
+      <div id="admin-active-events">
+        <p style="color:#666;font-size:0.7rem;">No active events</p>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+  updateAdminActiveEvents();
+}
+
+function updateAdminActiveEvents() {
+  const container = document.getElementById("admin-active-events");
+  if (!container) return;
+
+  const now = Date.now();
+  const active = Object.entries(activeEvents).filter(
+    ([_, d]) => now < d.endsAt,
+  );
+
+  if (active.length === 0) {
+    container.innerHTML = `<p style="color:#666;font-size:0.7rem;">No active events</p>`;
+    return;
+  }
+
+  container.innerHTML = active
+    .map(([id, data]) => {
+      const remaining = Math.ceil((data.endsAt - now) / 1000);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      return `
+      <div class="admin-active-row">
+        <span>${data.icon} ${data.name}</span>
+        <span style="color:#aaa">${mins}:${secs.toString().padStart(2, "0")}</span>
+        <button class="admin-btn cancel-btn" onclick="adminCancelEvent('${id}')">✕</button>
+      </div>
+    `;
+    })
+    .join("");
+}
+
+// Atualiza painel admin a cada segundo
+setInterval(() => {
+  if (userName === ADMIN_USER) updateAdminActiveEvents();
+}, 1000);
+
+// --- GOLDEN COOKIE / SHINY CRYSTAL SYSTEM ---
+let goldenCookieTimeout = null;
+
+function startGoldenCookieSystem() {
+  scheduleNextGoldenCookie();
+}
+
+function scheduleNextGoldenCookie() {
+  if (goldenCookieTimeout) clearTimeout(goldenCookieTimeout);
+  const baseMin = isGoldenHourActive() ? 6000 : 60000;
+  const baseMax = isGoldenHourActive() ? 18000 : 180000;
+  const delay = Math.random() * (baseMax - baseMin) + baseMin;
+  goldenCookieTimeout = setTimeout(showGoldenCookie, delay);
+}
+
+function showGoldenCookie() {
+  const gc = document.getElementById("golden-cookie");
+  if (!gc) return;
+  const section = document.getElementById("cookie-section");
+  if (!section) return;
+
+  const rect = section.getBoundingClientRect();
+  const x = rect.left + Math.random() * (rect.width - 80) + 10;
+  const y = rect.top + Math.random() * (rect.height - 120) + 60;
+
+  gc.style.left = x + "px";
+  gc.style.top = y + "px";
+  gc.style.display = "block";
+  gc.style.animation =
+    "goldenAppear 0.5s ease forwards, pulse 1.5s 0.5s infinite";
+
+  const hideTimer = setTimeout(() => hideGoldenCookie(), 15000);
+
+  gc.onclick = (e) => {
+    clearTimeout(hideTimer);
+    collectGoldenCookie(e);
+  };
+}
+
+function hideGoldenCookie() {
+  const gc = document.getElementById("golden-cookie");
+  if (gc) {
+    gc.style.animation = "goldenDisappear 0.4s ease forwards";
+    setTimeout(() => {
+      gc.style.display = "none";
+      gc.onclick = null;
+    }, 400);
+  }
+  scheduleNextGoldenCookie();
+}
+
+function collectGoldenCookie(e) {
+  const gc = document.getElementById("golden-cookie");
+  if (gc) {
+    gc.style.display = "none";
+    gc.onclick = null;
+  }
+
+  const reward = Math.max(1000, cps * 60 * 15);
+  cookies += reward;
+  totalCookies += reward;
+  updateUI();
+  saveCloudData();
+  spawnFX(e, reward);
+
+  // Toast dourado
+  const toast = document.createElement("div");
+  toast.className = "golden-toast";
+  toast.innerHTML = `✨ Shiny Crystal! <span style="color:#FFD700">+${formatNumbers(reward)}</span>`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+
+  scheduleNextGoldenCookie();
+}
+
+// --- CRYSTAL STORM VISUAL FX ---
+let crystalStormInterval = null;
+
+function startCrystalStormFX() {
+  if (crystalStormInterval) return; // já está rodando
+
+  crystalStormInterval = setInterval(() => {
+    if (!isEventActive("crystalStorm")) {
+      stopCrystalStormFX();
+      return;
+    }
+    // Spawna 3 crystals por vez
+    for (let i = 0; i < 3; i++) {
+      spawnFallingCrystal();
+    }
+  }, 200);
+}
+
+function stopCrystalStormFX() {
+  if (crystalStormInterval) {
+    clearInterval(crystalStormInterval);
+    crystalStormInterval = null;
+  }
+  // Remove todos os crystals caindo que sobraram
+  document.querySelectorAll(".falling-crystal").forEach((el) => el.remove());
+}
+
+function spawnFallingCrystal() {
+  const crystal = document.createElement("img");
+  crystal.src = "assets/images/ores/crystal.png";
+  crystal.className = "falling-crystal";
+
+  // Posição horizontal aleatória em toda a tela
+  const x = Math.random() * window.innerWidth;
+  const size = Math.random() * 20 + 10; // entre 10px e 30px
+  const duration = Math.random() * 2 + 1.5; // entre 1.5s e 3.5s
+  const rotation = Math.random() * 360;
+  const swayX = (Math.random() - 0.5) * 100; // balanço horizontal
+
+  crystal.style.left = x + "px";
+  crystal.style.width = size + "px";
+  crystal.style.height = size + "px";
+  crystal.style.setProperty("--sway", swayX + "px");
+  crystal.style.animationDuration = duration + "s";
+  crystal.style.animationDelay = "0s";
+  crystal.style.transform = `rotate(${rotation}deg)`;
+  crystal.style.opacity = Math.random() * 0.5 + 0.5;
+
+  document.body.appendChild(crystal);
+
+  // Remove após a animação terminar
+  setTimeout(() => crystal.remove(), duration * 1000 + 100);
+}
+
+// --- INIT ---
 initStore();
