@@ -86,20 +86,19 @@
               User:
               <span id="settings-username" style="color: var(--gold)">---</span>
             </p>
-            <br />
+            <div class="settings-divider"></div>
+            <button id="orbit-btn" class="prestige-btn" onclick="toggleOrbit()">
+              ⚙️ DISABLE PICKAXES
+            </button>
             <button id="mute-btn" class="prestige-btn" onclick="toggleMute()">
               🔊 MUTE MUSIC
             </button>
-            <button
-              class="prestige-btn"
-              id="logout-btn"
-              style="background: #d32f2f !important"
-              onclick="logout()"
-            >
-              LOGOUT
+            <div class="settings-divider"></div>
+            <button class="prestige-btn" id="logout-btn" onclick="logout()">
+              🚪 LOGOUT
             </button>
             <button class="prestige-btn" onclick="toggleSettings()">
-              CLOSE
+              ✕ CLOSE
             </button>
           </div>
         </div>

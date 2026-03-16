@@ -277,15 +277,147 @@ body {
   justify-content: center;
 }
 
+/* --- CRYSTAL IDLE ANIMATION --- */
 #big-cookie {
   width: 250px;
   cursor: pointer;
-  transition: transform 0.1s;
   z-index: 10;
   position: relative;
+  will-change: transform;
+  transform-origin: center center;
+  animation: crystalFloat 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6))
+    drop-shadow(0 0 30px rgba(168, 85, 247, 0.3));
 }
+
 #big-cookie:active {
-  transform: scale(0.92);
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 1))
+    drop-shadow(0 0 50px rgba(168, 85, 247, 0.7)) brightness(1.3);
+}
+
+#big-cookie.clicking {
+  animation: crystalFloatClick 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 1))
+    drop-shadow(0 0 50px rgba(168, 85, 247, 0.7)) brightness(1.3);
+}
+
+@keyframes crystalFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes crystalFloatClick {
+  0%,
+  100% {
+    transform: translateY(0px) scale(0.92);
+  }
+  50% {
+    transform: translateY(-20px) scale(0.92);
+  }
+}
+
+@keyframes crystalFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(1deg);
+  }
+}
+
+@keyframes crystalFloatClick {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg) scale(0.92);
+  }
+  50% {
+    transform: translateY(-20px) rotate(1deg) scale(0.92);
+  }
+}
+
+/* --- CRYSTAL GLOW ORBS --- */
+.cookie-container::before,
+.cookie-container::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Orb roxo grande atrás */
+.cookie-container::before {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.25) 0%,
+    transparent 70%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbPulse 3s ease-in-out infinite;
+}
+
+/* Orb ciano menor */
+.cookie-container::after {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 242, 254, 0.15) 0%,
+    transparent 70%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbPulse 3s ease-in-out infinite reverse;
+}
+
+@keyframes orbPulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* Partículas de brilho girando */
+.crystal-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a855f7;
+  pointer-events: none;
+  z-index: 4;
+  animation: sparkleSpin linear infinite;
+}
+
+@keyframes sparkleSpin {
+  0% {
+    transform: rotate(0deg) translateX(120px) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(180deg) translateX(120px) scale(0.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(360deg) translateX(120px) scale(1);
+    opacity: 1;
+  }
 }
 
 #golden-cookie {
@@ -326,25 +458,113 @@ body {
   z-index: 10000;
 }
 .settings-content {
-  background: var(--glass-bg);
-  padding: 30px;
-  border-radius: 15px;
-  border: 3px solid #bebdc069;
+  background: rgba(5, 0, 15, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 25px 20px;
+  border-radius: 20px;
+  border: 2px solid rgba(168, 85, 247, 0.5);
+  box-shadow:
+    0 0 30px rgba(168, 85, 247, 0.3),
+    inset 0 0 20px rgba(168, 85, 247, 0.05);
   text-align: center;
   width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.settings-content .prestige-btn {
-  border: 2px solid #b6b3b96b;
-}
+
+/* Título settings */
 #title-settings {
   background: linear-gradient(
     135deg,
-    rgba(91, 86, 100, 0.2),
-    rgba(156, 160, 165, 0.2)
+    rgba(168, 85, 247, 0.3),
+    rgba(0, 242, 254, 0.3)
   ) !important;
+  border: 2px solid #a855f7 !important;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.4) !important;
+  border-radius: 10px !important;
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  margin-bottom: 5px;
+}
+
+/* Username */
+.settings-content p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+/* Todos os botões dentro das settings */
+.settings-content .prestige-btn {
+  margin-top: 0 !important;
+  width: 100%;
+  padding: 10px 15px !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 2px;
+  border-radius: 10px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Orbit button */
+#orbit-btn {
+  background: rgba(168, 85, 247, 0.15) !important;
+  border: 2px solid #a855f7 !important;
+  color: #a855f7 !important;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3) !important;
+}
+#orbit-btn:hover {
+  background: rgba(168, 85, 247, 0.3) !important;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.6) !important;
+}
+
+/* Mute button */
+#mute-btn {
+  background: rgba(0, 242, 254, 0.15) !important;
+  border: 2px solid #00f2fe !important;
+  color: #00f2fe !important;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.3) !important;
+}
+#mute-btn:hover {
+  background: rgba(0, 242, 254, 0.3) !important;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.6) !important;
+}
+
+/* Logout button */
+#logout-btn {
+  background: rgba(211, 47, 47, 0.2) !important;
+  border: 2px solid #d32f2f !important;
+  color: #ff6b6b !important;
+  box-shadow: 0 0 10px rgba(211, 47, 47, 0.3) !important;
+}
+#logout-btn:hover {
+  background: rgba(211, 47, 47, 0.4) !important;
+  box-shadow: 0 0 20px rgba(211, 47, 47, 0.6) !important;
+}
+
+/* Close button */
+.settings-content .prestige-btn:last-child {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.settings-content .prestige-btn:last-child:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
   color: #fff !important;
-  border: 2px solid #ffffff;
-  border-radius: 8px !important;
+}
+
+/* Divisor entre botões */
+.settings-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 2px 0;
 }
 
 /* Store */
@@ -356,6 +576,10 @@ body {
   max-height: calc(100vh - 70px);
   overflow-y: auto;
   border-left: 2px solid var(--border-color);
+}
+
+#store-items {
+  padding-bottom: 20px; /* ← espaço para o menu inferior */
 }
 
 h2 {
@@ -1518,49 +1742,77 @@ h2 {
 /* ============================
    MOBILE RESPONSIVE
    ============================ */
-@media (max-width: 768px) {
+/* === PORTRAIT (celular em pé) === */
+@media (max-width: 768px) and (orientation: portrait) {
   #home-tab {
     flex-direction: column;
     height: auto;
     min-height: calc(100vh - 70px);
     overflow-y: auto;
   }
+
   #cookie-section {
     flex: none;
     width: 100%;
-    height: 55vh;
+    height: 52vh;
     border-right: none;
     border-bottom: 4px solid var(--border-color);
+    overflow: hidden;
   }
+
   #store-section {
     flex: none;
     width: 100%;
-    max-height: 45vh;
+    max-height: 48vh;
     border-left: none;
+    overflow-y: auto;
   }
+
   #big-cookie {
-    width: 160px;
+    width: 250px;
+    cursor: pointer;
+    z-index: 10;
+    position: relative;
+    will-change: transform;
+    transform-origin: center center;
+    filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.6))
+      drop-shadow(0 0 30px rgba(168, 85, 247, 0.3));
+    animation: crystalFloat 4s ease-in-out infinite;
   }
+
   .cookie-text {
-    font-size: 1.1rem;
-    padding: 8px 15px;
+    font-size: 1rem;
+    padding: 6px 12px;
   }
   .cps-text {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+  .score-board {
+    margin-top: 8px;
+    gap: 6px;
   }
   .nav-btn {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     gap: 2px;
   }
-  .nav-icon {
-    font-size: 1rem !important;
+  .nav-btn span.nav-icon {
+    font-size: 0.95rem;
   }
+
   .stats-panel,
   .prestige-panel {
     max-width: 95%;
-    padding: 20px 15px;
-    font-size: 1rem;
+    padding: 15px 12px;
+    font-size: 0.9rem;
   }
+
+  .section-title {
+    font-size: 1.4rem;
+    padding: 8px 20px;
+    margin-bottom: 15px;
+  }
+
   .ranking-layout {
     flex-direction: column;
   }
@@ -1568,15 +1820,19 @@ h2 {
     width: 90%;
     padding: 25px 20px;
   }
+
   #achievements-list {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    max-height: 300px;
   }
+
   #offline-card {
-    padding: 30px 20px;
+    padding: 25px 15px;
   }
   #offline-amount {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
+
   .fishing-wrapper {
     flex-direction: column;
     overflow-y: auto;
@@ -1585,12 +1841,179 @@ h2 {
   .fishing-lake-panel {
     border-right: none;
     border-bottom: 3px solid #00e676;
+    height: auto;
+    min-height: 60vh;
   }
   .fishing-upgrades-panel {
     border-left: none;
+    min-height: 40vh;
   }
   .fish-gallery-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  #admin-panel {
+    width: 260px;
+    font-size: 0.85rem;
+  }
+}
+
+/* === LANDSCAPE (celular deitado) === */
+@media (max-width: 900px) and (orientation: landscape) {
+  #home-tab {
+    flex-direction: row; /* lado a lado como desktop */
+    height: calc(100vh - 60px);
+    overflow: hidden;
+  }
+
+  #cookie-section {
+    flex: 1.2;
+    height: 100%;
+    border-right: 3px solid var(--border-color);
+    border-bottom: none;
+    overflow: hidden;
+    padding: 5px;
+  }
+
+  #store-section {
+    flex: 1;
+    max-height: calc(100vh - 60px);
+    border-left: none;
+    overflow-y: auto;
+  }
+
+  #big-cookie {
+    width: 160px;
+  }
+
+  .cookie-text {
+    font-size: 0.9rem;
+    padding: 5px 12px;
+  }
+  .cps-text {
+    font-size: 0.75rem;
+    padding: 5px 12px;
+  }
+
+  .score-board {
+    margin-top: 5px;
+    gap: 5px;
+  }
+
+  .cookie-container {
+    margin-top: 8px;
+  }
+
+  /* Menu menor no landscape */
+  #bottom-menu {
+    height: 60px;
+  }
+  .nav-btn {
+    font-size: 0.5rem;
+    gap: 1px;
+  }
+  .nav-btn span.nav-icon {
+    font-size: 1rem;
+  }
+
+  /* Abas com GIF no landscape */
+  #rebirth-tab,
+  #modes-tab,
+  #ranking-tab,
+  #achievements-tab {
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+
+  .stats-panel,
+  .prestige-panel {
+    max-width: 90%;
+    padding: 15px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    padding: 6px 18px;
+    margin-bottom: 12px;
+  }
+
+  #rebirth-shop-container {
+    max-height: 250px;
+  }
+
+  .ranking-layout {
+    flex-direction: row;
+  }
+  .ranking-container {
+    height: 180px;
+  }
+
+  #achievements-list {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    max-height: 250px;
+  }
+
+  /* Fishing landscape */
+  .fishing-wrapper {
+    flex-direction: row;
+    height: calc(100vh - 60px);
+  }
+  .fishing-lake-panel {
+    flex: 1.3;
+    border-right: 3px solid #00e676;
+    border-bottom: none;
+    padding: 8px;
+  }
+  .fishing-upgrades-panel {
+    flex: 1;
+    border-left: none;
+  }
+  #water-area {
+    height: 130px;
+  }
+  .fish-gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .fish-card img {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Offline modal landscape */
+  #offline-card {
+    padding: 20px 30px;
+  }
+  #offline-amount {
+    font-size: 1.6rem;
+  }
+
+  /* Admin panel landscape */
+  #admin-panel {
+    width: 260px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    top: 5px;
+    right: 5px;
+  }
+
+  /* Event badges landscape */
+  .event-badge {
+    right: 10px;
+    min-width: 130px;
+    padding: 6px 10px;
+  }
+  .event-badge-icon {
+    font-size: 1.2rem;
+  }
+  .event-badge-name {
+    font-size: 0.6rem;
+  }
+  .event-badge-timer {
+    font-size: 0.7rem;
   }
 }
 
@@ -1875,6 +2298,35 @@ h2 {
   }
 }
 
+@keyframes rainbowPulse {
+  0% {
+    filter: drop-shadow(0 0 10px #ff0080) drop-shadow(0 0 20px #ffd700);
+  }
+  33% {
+    filter: drop-shadow(0 0 10px #00f2fe) drop-shadow(0 0 20px #ff0080);
+  }
+  66% {
+    filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #00f2fe);
+  }
+  100% {
+    filter: drop-shadow(0 0 10px #ff0080) drop-shadow(0 0 20px #ffd700);
+  }
+}
+
+@keyframes rainbowFlash {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2) hue-rotate(180deg);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+/* --- RAINBOW CRYSTAL --- */
+
 /* --- FALLING CRYSTALS (Crystal Storm) --- */
 .falling-crystal {
   position: fixed;
@@ -1900,4 +2352,91 @@ h2 {
     transform: rotate(360deg) translateX(var(--sway));
     opacity: 0;
   }
+}
+
+/* --- CUSTOM MODALS --- */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.custom-modal-overlay.show {
+  opacity: 1;
+}
+
+.custom-modal {
+  background: rgba(5, 0, 20, 0.97);
+  border: 2px solid #a855f7;
+  border-radius: 16px;
+  padding: 30px 35px;
+  max-width: 380px;
+  width: 90%;
+  text-align: center;
+  box-shadow:
+    0 0 40px rgba(168, 85, 247, 0.4),
+    inset 0 0 20px rgba(168, 85, 247, 0.05);
+  animation: offlineCardIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.custom-modal-text {
+  color: #fff;
+  font-family: "Monocraft", monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.custom-modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.custom-modal-btn {
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  border: 2px solid;
+}
+
+.custom-modal-btn.confirm {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #a855f7;
+  color: #a855f7;
+}
+.custom-modal-btn.confirm:hover {
+  background: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+  transform: translateY(-2px);
+}
+
+.custom-modal-btn.cancel {
+  background: rgba(255, 68, 68, 0.15);
+  border-color: #ff4444;
+  color: #ff4444;
+}
+.custom-modal-btn.cancel:hover {
+  background: rgba(255, 68, 68, 0.3);
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+  transform: translateY(-2px);
+}
+
+.custom-modal-btn:active {
+  transform: translateY(1px) scale(0.97);
 }
