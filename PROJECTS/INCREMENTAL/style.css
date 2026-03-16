@@ -567,7 +567,7 @@ body {
   margin: 2px 0;
 }
 
-/* Store */
+/* Base Store */
 #store-section {
   flex: 1;
   background: rgba(0, 0, 0, 0.4);
@@ -575,9 +575,10 @@ body {
   -webkit-backdrop-filter: blur(8px);
   max-height: calc(100vh - 70px);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   border-left: 2px solid var(--border-color);
+  padding-bottom: 80px;
 }
-
 #store-items {
   padding-bottom: 80px; /* ← espaço para o menu inferior */
 }
@@ -695,6 +696,7 @@ h2 {
   align-items: center;
 }
 
+/* Scrollbar */
 #store-section::-webkit-scrollbar {
   width: 8px;
 }
@@ -1765,7 +1767,9 @@ h2 {
     width: 100%;
     max-height: 48vh;
     border-left: none;
-    overflow-y: auto;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 80px;
   }
 
   #big-cookie {
@@ -1879,7 +1883,9 @@ h2 {
     flex: 1;
     max-height: calc(100vh - 60px);
     border-left: none;
-    overflow-y: auto;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 80px;
   }
 
   #big-cookie {
