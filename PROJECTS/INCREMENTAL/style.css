@@ -579,7 +579,7 @@ body {
 }
 
 #store-items {
-  padding-bottom: 20px; /* ← espaço para o menu inferior */
+  padding-bottom: 80px; /* ← espaço para o menu inferior */
 }
 
 h2 {
