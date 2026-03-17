@@ -12,6 +12,31 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// --- GAME DATA ---
+let cookies = 0;
+let totalCookies = 0;
+let cps = 0;
+let rebirthPoints = 0;
+let goldenMultiplier = 1;
+let rainbowMultiplier = 1;
+let orbitEnabled = true;
+let buyAmount = 1;
+let userLogged = null;
+let userName = "";
+let currentLang = "en"; // ← declarado aqui
+let modes = {
+  fishing: {
+    unlocked: false,
+    fishCoins: 0,
+    rodLevel: 1,
+    baitLevel: 0,
+    netLevel: 0,
+    boatLevel: 0,
+    crystalFishLevel: 0,
+  },
+};
+
+// ← onAuthStateChanged APÓS as variáveis
 auth.onAuthStateChanged((user) => {
   if (user) {
     userLogged = user;
@@ -24,29 +49,6 @@ auth.onAuthStateChanged((user) => {
     document.getElementById("game-container").style.display = "none";
   }
 });
-
-// --- GAME DATA ---
-let cookies = 0;
-let totalCookies = 0;
-let cps = 0;
-let rebirthPoints = 0;
-let goldenMultiplier = 1;
-let rainbowMultiplier = 1;
-let orbitEnabled = true;
-let buyAmount = 1;
-let userLogged = null;
-let userName = "";
-let modes = {
-  fishing: {
-    unlocked: false,
-    fishCoins: 0,
-    rodLevel: 1,
-    baitLevel: 0,
-    netLevel: 0,
-    boatLevel: 0,
-    crystalFishLevel: 0,
-  },
-};
 
 // --- PROTEÇÃO DE ASSETS ---
 document.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -178,44 +180,33 @@ function toggleMute() {
   isMuted = !isMuted;
   gameMusic.muted = isMuted;
   const btn = document.getElementById("mute-btn");
-  btn.innerText = isMuted ? "🔈 UNMUTE MUSIC" : "🔊 MUTE MUSIC";
+  btn.innerText = isMuted ? t("unmuteMusic") : t("muteMusic"); // ← usa t()
 }
 
 function toggleOrbit() {
   orbitEnabled = !orbitEnabled;
   const btn = document.getElementById("orbit-btn");
-
   if (orbitEnabled) {
-    btn.innerText = "⚙️ DISABLE ORBIT";
+    btn.innerText = t("disablePickaxes"); // ← usa t()
     updateOrbitingPickaxes();
   } else {
-    btn.innerText = "⚙️ ENABLE ORBIT";
+    btn.innerText = t("enablePickaxes"); // ← usa t()
     const orbitContainer = document.getElementById("orbit-container");
     if (orbitContainer) orbitContainer.innerHTML = "";
   }
-
-  // Salva preferência no localStorage
   localStorage.setItem("orbitEnabled", orbitEnabled);
 }
 
 function toggleSettings() {
   const modal = document.getElementById("settings-modal");
   document.getElementById("settings-username").innerText = userName;
-
-  // Sincroniza o texto do botão com o estado atual
   const orbitBtn = document.getElementById("orbit-btn");
   if (orbitBtn) {
-    orbitBtn.innerText = orbitEnabled ? "⚙️ DISABLE ORBIT" : "⚙️ ENABLE ORBIT";
+    orbitBtn.innerText = orbitEnabled
+      ? t("disablePickaxes")
+      : t("enablePickaxes"); // ← usa t()
   }
-
   modal.style.display = modal.style.display === "none" ? "flex" : "none";
-}
-
-function logout() {
-  showConfirm(
-    "Do you want to logout?<br><small style='color:#aaa'>Your progress is saved in the cloud.</small>",
-    () => auth.signOut().then(() => location.reload()),
-  );
 }
 
 function formatNumbers(num) {
@@ -295,7 +286,7 @@ const buildings = [
     id: "hydro-eletric",
     name: "Hydro Electric",
     baseCost: 5e8,
-    cps: 20000,
+    cps: 25000,
     quantity: 0,
     image: "assets/images/upgrades/hydro-electric.png",
   },
@@ -303,7 +294,7 @@ const buildings = [
     id: "nuclear-plant",
     name: "Nuclear Plant",
     baseCost: 1e10,
-    cps: 50000,
+    cps: 100000,
     quantity: 0,
     image: "assets/images/upgrades/nuclear-plant.png",
   },
@@ -311,7 +302,7 @@ const buildings = [
     id: "data-center",
     name: "Data Center",
     baseCost: 5e11,
-    cps: 50000,
+    cps: 250000,
     quantity: 0,
     image: "assets/images/upgrades/data-center.png",
   },
@@ -319,7 +310,7 @@ const buildings = [
     id: "portal",
     name: "Portal",
     baseCost: 2.5e12,
-    cps: 200000,
+    cps: 5e6,
     quantity: 0,
     image: "assets/images/upgrades/portal.png",
   },
@@ -327,7 +318,7 @@ const buildings = [
     id: "satellite",
     name: "Satellite",
     baseCost: 1e16,
-    cps: 5e6,
+    cps: 7.5e7,
     quantity: 0,
     image: "assets/images/upgrades/satellite.png",
   },
@@ -335,7 +326,7 @@ const buildings = [
     id: "moon",
     name: "Moon",
     baseCost: 5e20,
-    cps: 2.5e7,
+    cps: 2.5e9,
     quantity: 0,
     image: "assets/images/upgrades/moon.png",
   },
@@ -343,7 +334,7 @@ const buildings = [
     id: "earth",
     name: "Earth",
     baseCost: 7.5e26,
-    cps: 1e8,
+    cps: 1e10,
     quantity: 0,
     image: "assets/images/upgrades/earth.png",
   },
@@ -351,7 +342,7 @@ const buildings = [
     id: "jupiter",
     name: "Jupiter",
     baseCost: 1e31,
-    cps: 7.5e8,
+    cps: 7.5e12,
     quantity: 0,
     image: "assets/images/upgrades/jupiter-full.png",
   },
@@ -359,7 +350,7 @@ const buildings = [
     id: "sun",
     name: "Sun",
     baseCost: 2.5e34,
-    cps: 2.5e9,
+    cps: 2.5e13,
     quantity: 0,
     image: "assets/images/upgrades/sun.png",
   },
@@ -367,7 +358,7 @@ const buildings = [
     id: "black-hole",
     name: "Black Hole",
     baseCost: 7.5e40,
-    cps: 2.5e10,
+    cps: 1e15,
     quantity: 0,
     image: "assets/images/upgrades/black-hole.jpg",
   },
@@ -375,7 +366,7 @@ const buildings = [
     id: "hell",
     name: "Hell",
     baseCost: 5e42,
-    cps: 500000,
+    cps: 1e17,
     quantity: 0,
     image: "assets/images/upgrades/hell.png",
   },
@@ -383,7 +374,7 @@ const buildings = [
     id: "heaven",
     name: "Heaven",
     baseCost: 7.5e43,
-    cps: 1e6,
+    cps: 5e19,
     quantity: 0,
     image: "assets/images/upgrades/heaven.png",
   },
@@ -391,7 +382,7 @@ const buildings = [
     id: "galaxy",
     name: "Galaxy",
     baseCost: 1e45,
-    cps: 1e11,
+    cps: 2.5e21,
     quantity: 0,
     image: "assets/images/upgrades/galaxy.png",
   },
@@ -399,7 +390,7 @@ const buildings = [
     id: "universe",
     name: "Universe",
     baseCost: 7.5e51,
-    cps: 1e12,
+    cps: 5e23,
     quantity: 0,
     image: "assets/images/upgrades/universe.png",
   },
@@ -407,7 +398,7 @@ const buildings = [
     id: "multiverse",
     name: "Multiverse",
     baseCost: 2.5e56,
-    cps: 2.5e13,
+    cps: 7.5e25,
     quantity: 0,
     image: "assets/images/upgrades/multiverse.png",
   },
@@ -415,7 +406,7 @@ const buildings = [
     id: "omniverse",
     name: "Omniverse",
     baseCost: 5e62,
-    cps: 2.5e15,
+    cps: 1e27,
     quantity: 0,
     image: "assets/images/upgrades/omniverse.webp",
   },
@@ -423,7 +414,7 @@ const buildings = [
     id: "outerverse",
     name: "Outerverse",
     baseCost: 5e69,
-    cps: 5e17,
+    cps: 2.5e29,
     quantity: 0,
     image: "assets/images/upgrades/outerverse.png",
   },
@@ -431,7 +422,7 @@ const buildings = [
     id: "void",
     name: "The Void",
     baseCost: 5e75,
-    cps: 1e20,
+    cps: 5e31,
     quantity: 0,
     image: "assets/images/upgrades/void.png",
   },
@@ -1055,7 +1046,7 @@ async function loadCloudData() {
       });
       const multiElement = document.getElementById("multi-val");
       if (multiElement)
-        multiElement.innerText = getRebirthMultiplier().toFixed(2) + "";
+        multiElement.innerText = getRebirthMultiplier().toFixed(2) + "x";
     }
 
     if (d.achievements) {
@@ -1073,6 +1064,17 @@ async function loadCloudData() {
       }
     });
 
+    // Versão mínima — mude MIN_VERSION para forçar atualização
+    const CURRENT_VERSION = [0, 9, 0];
+    const MIN_VERSION = [0, 9, 0];
+    const isOutdated = CURRENT_VERSION.some((v, i) => v < MIN_VERSION[i]);
+    if (isOutdated) {
+      showAlert(
+        "⚠️ Your version is outdated!<br>Please update the game on the Play Store.",
+      );
+      return;
+    }
+
     recalculate();
 
     const lastSeen = d.lastSeen || null;
@@ -1086,10 +1088,13 @@ async function loadCloudData() {
     updateUI();
     updateModeUI();
     updateOrbitingPickaxes();
-    listenToEvents(); // ← ADICIONA AQUI
+    applyTranslations();
+    checkFirstLogin();
+    listenToEvents();
     startGoldenCookieSystem();
     initCrystalSparkles();
     if (userName === ADMIN_USER) {
+      // ← de volta para ADMIN_USER simples
       setTimeout(renderAdminPanel, 500);
     }
     console.log("Data loaded successfully!");
@@ -1666,14 +1671,14 @@ function showOfflineModal(earned, hoursAway) {
   modal.innerHTML = `
     <div id="offline-card">
       <div id="offline-icon">💤</div>
-      <h2 id="offline-title">WELCOME BACK!</h2>
-      <p id="offline-away-text">You were away for <span class="offline-highlight">${hoursText}</span></p>
+      <h2 id="offline-title">${t("welcomeBack")}</h2>
+      <p id="offline-away-text">${t("awayFor")} <span class="offline-highlight">${hoursText}</span></p>
       <div id="offline-reward-box">
         <img src="assets/images/ores/crystal.png" id="offline-crystal-img">
         <span id="offline-amount">+${formatNumbers(earned)}</span>
       </div>
-      <p id="offline-subtitle">Crystals collected while you were gone</p>
-      <button id="offline-claim-btn" onclick="claimOffline(${earned})">✨ CLAIM REWARD</button>
+      <p id="offline-subtitle">${t("crystalsCollected")}</p>
+      <button id="offline-claim-btn" onclick="claimOffline(${earned})">${t("claimReward")}</button>
     </div>
   `;
 
@@ -2415,5 +2420,710 @@ function showConfirm(message, onConfirm, onCancel) {
   };
 }
 
+// ============================
+// TRANSLATION SYSTEM
+// ============================
+const TRANSLATIONS = {
+  en: {
+    // UI
+    crystals: "Crystals",
+    perSecond: "Per second/s:",
+    upgrades: "Upgrades",
+    rebirth: "Rebirth",
+    gameModes: "Game Modes",
+    topGlobal: "Top 100 Global",
+    achievements: "Achievements",
+    settings: "Settings",
+    // Nav
+    home: "HOME",
+    rebirthNav: "REBIRTH",
+    modes: "MODES",
+    top: "TOP",
+    achievementsNav: "ACHIEVEMENTS",
+    // Store
+    buyMax: "Max",
+    // Rebirth
+    globalMultiplier: "Global Multiplier:",
+    rebirthBtn: "RP",
+    rebirthUpgrades: "Rebirth Upgrades",
+    // Fishing
+    lakeIncremental: "🎣 Lake Incremental",
+    fishCoins: "Fish Coins",
+    clickToFish: "Click the water to fish!",
+    casting: "Casting...",
+    gotAway: "💨 Got away...",
+    fishEncyclopedia: "🐠 Fish Encyclopedia",
+    fishUpgrades: "⚙️ Upgrades",
+    // Settings
+    disablePickaxes: "⚙️ DISABLE PICKAXES",
+    enablePickaxes: "⚙️ ENABLE PICKAXES",
+    muteMusic: "🔊 MUTE MUSIC",
+    unmuteMusic: "🔈 UNMUTE MUSIC",
+    logout: "🚪 LOGOUT",
+    close: "✕ CLOSE",
+    language: "🌍 LANGUAGE",
+    // Fishing Mode
+    fishingMode: "🎣 Fishing Mode",
+    fishingDesc: "Catch rare fish and earn Fish Coins!",
+    unlockFishing: "Unlock (100 RP)",
+    enterLake: "Enter Lake",
+    back: "⬅ BACK",
+    // Modals
+    fillFields: "Fill all fields!",
+    wrongPassword: "❌ Wrong username or password!",
+    rebirthConfirm: "Rebirth now?",
+    rebirthReceive: "You will receive",
+    rebirthReset: "All crystals and buildings will be reset!",
+    rebirthSuccess: "✨ Rebirth successful! Your multiplier has increased.",
+    rebirthNeedCrystals: "You need at least",
+    rebirthToCrystals: "crystals to Rebirth!",
+    maxLevel: "⚠️ This upgrade has reached its maximum level!",
+    needMoreRP: "❌ You need more Rebirth Points!",
+    confirm: "✓ CONFIRM",
+    cancel: "✕ CANCEL",
+    ok: "OK",
+    // Offline
+    welcomeBack: "WELCOME BACK!",
+    awayFor: "You were away for",
+    crystalsCollected: "Crystals collected while you were gone",
+    claimReward: "✨ CLAIM REWARD",
+    // Fishing rarity
+    common: "Common",
+    rare: "Rare",
+    epic: "Epic",
+    legendary: "Legendary",
+    // Ranking
+    rankingCrystals: "🔮 Crystals",
+    rankingRP: "✨ RP",
+  },
+
+  pt: {
+    crystals: "Cristais",
+    perSecond: "Por segundo/s:",
+    upgrades: "Melhorias",
+    rebirth: "Renascimento",
+    gameModes: "Modos de Jogo",
+    topGlobal: "Top 100 Global",
+    achievements: "Conquistas",
+    settings: "Configurações",
+    home: "INÍCIO",
+    rebirthNav: "RENASCER",
+    modes: "MODOS",
+    top: "TOP",
+    achievementsNav: "CONQUISTAS",
+    buyMax: "Máx",
+    globalMultiplier: "Multiplicador Global:",
+    rebirthBtn: "RP",
+    rebirthUpgrades: "Melhorias de Renascimento",
+    lakeIncremental: "🎣 Lago Incremental",
+    fishCoins: "Moedas de Peixe",
+    clickToFish: "Clique na água para pescar!",
+    casting: "Lançando...",
+    gotAway: "💨 Escapou...",
+    fishEncyclopedia: "🐠 Enciclopédia de Peixes",
+    fishUpgrades: "⚙️ Melhorias",
+    disablePickaxes: "⚙️ DESATIVAR PICARETAS",
+    enablePickaxes: "⚙️ ATIVAR PICARETAS",
+    muteMusic: "🔊 SILENCIAR MÚSICA",
+    unmuteMusic: "🔈 ATIVAR MÚSICA",
+    logout: "🚪 SAIR",
+    close: "✕ FECHAR",
+    language: "🌍 IDIOMA",
+    fishingMode: "🎣 Modo Pesca",
+    fishingDesc: "Pesque peixes raros e ganhe Moedas de Peixe!",
+    unlockFishing: "Desbloquear (100 RP)",
+    enterLake: "Entrar no Lago",
+    back: "⬅ VOLTAR",
+    fillFields: "Preencha todos os campos!",
+    wrongPassword: "❌ Usuário ou senha incorretos!",
+    rebirthConfirm: "Renascer agora?",
+    rebirthReceive: "Você vai receber",
+    rebirthReset: "Todos os cristais e melhorias serão resetados!",
+    rebirthSuccess: "✨ Renascimento concluído! Seu multiplicador aumentou.",
+    rebirthNeedCrystals: "Você precisa de pelo menos",
+    rebirthToCrystals: "cristais para Renascer!",
+    maxLevel: "⚠️ Este upgrade atingiu o nível máximo!",
+    needMoreRP: "❌ Você precisa de mais Pontos de Renascimento!",
+    confirm: "✓ CONFIRMAR",
+    cancel: "✕ CANCELAR",
+    ok: "OK",
+    welcomeBack: "BEM-VINDO DE VOLTA!",
+    awayFor: "Você ficou ausente por",
+    crystalsCollected: "Cristais coletados enquanto você estava fora",
+    claimReward: "✨ RESGATAR RECOMPENSA",
+    common: "Comum",
+    rare: "Raro",
+    epic: "Épico",
+    legendary: "Lendário",
+    rankingCrystals: "🔮 Cristais",
+    rankingRP: "✨ RP",
+  },
+
+  es: {
+    crystals: "Cristales",
+    perSecond: "Por segundo/s:",
+    upgrades: "Mejoras",
+    rebirth: "Renacimiento",
+    gameModes: "Modos de Juego",
+    topGlobal: "Top 100 Global",
+    achievements: "Logros",
+    settings: "Configuración",
+    home: "INICIO",
+    rebirthNav: "RENACER",
+    modes: "MODOS",
+    top: "TOP",
+    achievementsNav: "LOGROS",
+    buyMax: "Máx",
+    globalMultiplier: "Multiplicador Global:",
+    rebirthBtn: "RP",
+    rebirthUpgrades: "Mejoras de Renacimiento",
+    lakeIncremental: "🎣 Lago Incremental",
+    fishCoins: "Monedas de Pez",
+    clickToFish: "¡Haz clic en el agua para pescar!",
+    casting: "Lanzando...",
+    gotAway: "💨 Se escapó...",
+    fishEncyclopedia: "🐠 Enciclopedia de Peces",
+    fishUpgrades: "⚙️ Mejoras",
+    disablePickaxes: "⚙️ DESACTIVAR PICOS",
+    enablePickaxes: "⚙️ ACTIVAR PICOS",
+    muteMusic: "🔊 SILENCIAR MÚSICA",
+    unmuteMusic: "🔈 ACTIVAR MÚSICA",
+    logout: "🚪 SALIR",
+    close: "✕ CERRAR",
+    language: "🌍 IDIOMA",
+    fishingMode: "🎣 Modo Pesca",
+    fishingDesc: "¡Pesca peces raros y gana Monedas de Pez!",
+    unlockFishing: "Desbloquear (100 RP)",
+    enterLake: "Entrar al Lago",
+    back: "⬅ VOLVER",
+    fillFields: "¡Completa todos los campos!",
+    wrongPassword: "❌ Usuario o contraseña incorrectos!",
+    rebirthConfirm: "¿Renacer ahora?",
+    rebirthReceive: "Recibirás",
+    rebirthReset: "¡Todos los cristales y mejoras serán reiniciados!",
+    rebirthSuccess: "✨ ¡Renacimiento exitoso! Tu multiplicador ha aumentado.",
+    rebirthNeedCrystals: "Necesitas al menos",
+    rebirthToCrystals: "cristales para Renacer!",
+    maxLevel: "⚠️ ¡Esta mejora ha alcanzado su nivel máximo!",
+    needMoreRP: "❌ ¡Necesitas más Puntos de Renacimiento!",
+    confirm: "✓ CONFIRMAR",
+    cancel: "✕ CANCELAR",
+    ok: "OK",
+    welcomeBack: "¡BIENVENIDO DE VUELTA!",
+    awayFor: "Estuviste ausente por",
+    crystalsCollected: "Cristales recolectados mientras estabas fuera",
+    claimReward: "✨ RECLAMAR RECOMPENSA",
+    common: "Común",
+    rare: "Raro",
+    epic: "Épico",
+    legendary: "Legendario",
+    rankingCrystals: "🔮 Cristales",
+    rankingRP: "✨ RP",
+  },
+
+  fr: {
+    crystals: "Cristaux",
+    perSecond: "Par seconde/s:",
+    upgrades: "Améliorations",
+    rebirth: "Renaissance",
+    gameModes: "Modes de Jeu",
+    topGlobal: "Top 100 Mondial",
+    achievements: "Succès",
+    settings: "Paramètres",
+    home: "ACCUEIL",
+    rebirthNav: "RENAISSANCE",
+    modes: "MODES",
+    top: "TOP",
+    achievementsNav: "SUCCÈS",
+    buyMax: "Max",
+    globalMultiplier: "Multiplicateur Global:",
+    rebirthBtn: "RP",
+    rebirthUpgrades: "Améliorations de Renaissance",
+    lakeIncremental: "🎣 Lac Incrémental",
+    fishCoins: "Pièces de Poisson",
+    clickToFish: "Cliquez sur l'eau pour pêcher!",
+    casting: "Lancement...",
+    gotAway: "💨 S'est échappé...",
+    fishEncyclopedia: "🐠 Encyclopédie des Poissons",
+    fishUpgrades: "⚙️ Améliorations",
+    disablePickaxes: "⚙️ DÉSACTIVER PIOCHES",
+    enablePickaxes: "⚙️ ACTIVER PIOCHES",
+    muteMusic: "🔊 COUPER MUSIQUE",
+    unmuteMusic: "🔈 ACTIVER MUSIQUE",
+    logout: "🚪 DÉCONNEXION",
+    close: "✕ FERMER",
+    language: "🌍 LANGUE",
+    fishingMode: "🎣 Mode Pêche",
+    fishingDesc: "Pêchez des poissons rares et gagnez des Pièces!",
+    unlockFishing: "Débloquer (100 RP)",
+    enterLake: "Entrer dans le Lac",
+    back: "⬅ RETOUR",
+    fillFields: "Remplissez tous les champs!",
+    wrongPassword: "❌ Nom d'utilisateur ou mot de passe incorrect!",
+    rebirthConfirm: "Renaissance maintenant?",
+    rebirthReceive: "Vous recevrez",
+    rebirthReset: "Tous les cristaux et bâtiments seront réinitialisés!",
+    rebirthSuccess: "✨ Renaissance réussie! Votre multiplicateur a augmenté.",
+    rebirthNeedCrystals: "Vous avez besoin d'au moins",
+    rebirthToCrystals: "cristaux pour Renaissance!",
+    maxLevel: "⚠️ Cette amélioration a atteint son niveau maximum!",
+    needMoreRP: "❌ Vous avez besoin de plus de Points de Renaissance!",
+    confirm: "✓ CONFIRMER",
+    cancel: "✕ ANNULER",
+    ok: "OK",
+    welcomeBack: "BIENVENUE DE RETOUR!",
+    awayFor: "Vous étiez absent pendant",
+    crystalsCollected: "Cristaux collectés pendant votre absence",
+    claimReward: "✨ RÉCLAMER LA RÉCOMPENSE",
+    common: "Commun",
+    rare: "Rare",
+    epic: "Épique",
+    legendary: "Légendaire",
+    rankingCrystals: "🔮 Cristaux",
+    rankingRP: "✨ RP",
+  },
+
+  ja: {
+    crystals: "クリスタル",
+    perSecond: "毎秒/s:",
+    upgrades: "アップグレード",
+    rebirth: "リバース",
+    gameModes: "ゲームモード",
+    topGlobal: "グローバルトップ100",
+    achievements: "実績",
+    settings: "設定",
+    home: "ホーム",
+    rebirthNav: "リバース",
+    modes: "モード",
+    top: "TOP",
+    achievementsNav: "実績",
+    buyMax: "最大",
+    globalMultiplier: "グローバル倍率:",
+    rebirthBtn: "RP",
+    rebirthUpgrades: "リバースアップグレード",
+    lakeIncremental: "🎣 湖インクリメンタル",
+    fishCoins: "フィッシュコイン",
+    clickToFish: "水をクリックして釣り!",
+    casting: "キャスト中...",
+    gotAway: "💨 逃げられた...",
+    fishEncyclopedia: "🐠 魚図鑑",
+    fishUpgrades: "⚙️ アップグレード",
+    disablePickaxes: "⚙️ ピッケル無効",
+    enablePickaxes: "⚙️ ピッケル有効",
+    muteMusic: "🔊 ミュート",
+    unmuteMusic: "🔈 ミュート解除",
+    logout: "🚪 ログアウト",
+    close: "✕ 閉じる",
+    language: "🌍 言語",
+    fishingMode: "🎣 釣りモード",
+    fishingDesc: "レアな魚を釣ってフィッシュコインを獲得!",
+    unlockFishing: "アンロック (100 RP)",
+    enterLake: "湖に入る",
+    back: "⬅ 戻る",
+    fillFields: "全てのフィールドを入力してください!",
+    wrongPassword: "❌ ユーザー名またはパスワードが違います!",
+    rebirthConfirm: "今すぐリバース?",
+    rebirthReceive: "獲得する",
+    rebirthReset: "全てのクリスタルと建物がリセットされます!",
+    rebirthSuccess: "✨ リバース成功! 倍率が上がりました。",
+    rebirthNeedCrystals: "リバースには最低",
+    rebirthToCrystals: "クリスタルが必要です!",
+    maxLevel: "⚠️ このアップグレードは最大レベルに達しました!",
+    needMoreRP: "❌ リバースポイントが足りません!",
+    confirm: "✓ 確認",
+    cancel: "✕ キャンセル",
+    ok: "OK",
+    welcomeBack: "おかえりなさい!",
+    awayFor: "不在時間:",
+    crystalsCollected: "不在中に集めたクリスタル",
+    claimReward: "✨ 報酬を受け取る",
+    common: "コモン",
+    rare: "レア",
+    epic: "エピック",
+    legendary: "レジェンダリー",
+    rankingCrystals: "🔮 クリスタル",
+    rankingRP: "✨ RP",
+  },
+};
+
+function detectLanguage() {
+  const saved = localStorage.getItem("gameLanguage");
+  if (saved && TRANSLATIONS[saved]) {
+    currentLang = saved;
+    return;
+  }
+  const browserLang = navigator.language || navigator.userLanguage || "en";
+  if (browserLang.startsWith("pt")) currentLang = "pt";
+  else if (browserLang.startsWith("es")) currentLang = "es";
+  else if (browserLang.startsWith("fr")) currentLang = "fr";
+  else if (browserLang.startsWith("ja")) currentLang = "ja";
+  else currentLang = "en";
+}
+
+function t(key) {
+  return TRANSLATIONS[currentLang]?.[key] || TRANSLATIONS["en"][key] || key;
+}
+
+function setLanguage(lang) {
+  if (!TRANSLATIONS[lang]) return;
+  currentLang = lang;
+  localStorage.setItem("gameLanguage", lang);
+  applyTranslations();
+  // Fecha o modal de idioma se estiver aberto
+  const langModal = document.getElementById("language-modal");
+  if (langModal) langModal.remove();
+}
+
+function applyTranslations() {
+  // Nav buttons
+  const navBtns = document.querySelectorAll(".nav-btn");
+  const navKeys = ["home", "rebirthNav", "modes", "top", "achievementsNav"];
+  const navIcons = ["🔮", "✨", "🕹️", "🌎", "🏆"];
+  navBtns.forEach((btn, i) => {
+    btn.innerHTML = `<span class="nav-icon">${navIcons[i]}</span>${t(navKeys[i])}`;
+  });
+
+  // Títulos das abas
+  const titleMap = {
+    "title-store": "upgrades",
+    "title-rebirth": "rebirth",
+    "title-modes": "gameModes",
+    "title-ranking": "topGlobal",
+    "title-achievements": "achievements",
+    "title-settings": "settings",
+    "title-fishing": "lakeIncremental",
+  };
+  Object.entries(titleMap).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = t(key);
+  });
+
+  // Score board
+  const cpsEl = document.querySelector(".cps-text");
+  if (cpsEl) {
+    cpsEl.innerHTML = `${t("perSecond")} <span id="cps">${document.getElementById("cps")?.innerText || "0"}</span>`;
+  }
+
+  const cookieText = document.querySelector(".cookie-text");
+  if (cookieText) {
+    cookieText.innerHTML = `
+      <span id="cookie-count">${document.getElementById("cookie-count")?.innerText || "0"}</span> ${t("crystals")}
+      <img src="assets/images/ores/crystal.png" style="width: 40px; vertical-align: middle; margin-left: 10px;">
+    `;
+  }
+
+  // Rebirth panel
+  const multiValEl = document.getElementById("multi-val");
+  const rebirthCardEl = document.querySelector(".rebirth-card");
+  if (rebirthCardEl && multiValEl) {
+    rebirthCardEl.innerHTML = `
+      <p>${t("globalMultiplier")} <span id="multi-val" class="highlight">${multiValEl.innerText}</span></p>
+      <p>RP: <span id="rebirth-points" class="highlight">${document.getElementById("rebirth-points")?.innerText || "0"}</span></p>
+    `;
+  }
+
+  // Sub-title rebirth upgrades
+  const subTitle = document.querySelector(".sub-title");
+  if (subTitle) subTitle.innerText = t("rebirthUpgrades");
+
+  // Fishing mode card
+  const fishingTitle = document.querySelector(".mode-card h3");
+  const fishingDesc = document.querySelector(".mode-card p");
+  if (fishingTitle) fishingTitle.innerText = t("fishingMode");
+  if (fishingDesc) fishingDesc.innerText = t("fishingDesc");
+
+  const unlockBtn = document.getElementById("unlock-fishing");
+  if (unlockBtn) unlockBtn.innerText = t("unlockFishing");
+
+  const enterBtn = document.getElementById("enter-fishing");
+  if (enterBtn) enterBtn.innerText = t("enterLake");
+
+  // Fishing area
+  const backBtn = document.querySelector(".fishing-back-btn");
+  if (backBtn) backBtn.innerText = t("back");
+
+  const fishCoinsDisplay = document.querySelector(".fish-coins-display");
+  if (fishCoinsDisplay) {
+    fishCoinsDisplay.innerHTML = `🪙 <span id="fish-coins">${document.getElementById("fish-coins")?.innerText || "0"}</span> ${t("fishCoins")}`;
+  }
+
+  const fishStatus = document.getElementById("fishing-status");
+  if (fishStatus && !isFishing) {
+    fishStatus.innerHTML = `<span style="color:#aaa">${t("clickToFish")}</span>`;
+  }
+
+  const galleryTitle = document.querySelector(".fish-gallery-title");
+  if (galleryTitle) galleryTitle.innerText = t("fishEncyclopedia");
+
+  const fishUpgradesTitle = document.querySelector(
+    ".fishing-upgrades-panel .section-title",
+  );
+  if (fishUpgradesTitle) fishUpgradesTitle.innerText = t("fishUpgrades");
+
+  // Settings buttons
+  const orbitBtn = document.getElementById("orbit-btn");
+  if (orbitBtn)
+    orbitBtn.innerText = orbitEnabled
+      ? t("disablePickaxes")
+      : t("enablePickaxes");
+
+  const muteBtn = document.getElementById("mute-btn");
+  if (muteBtn) muteBtn.innerText = isMuted ? t("unmuteMusic") : t("muteMusic");
+
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) logoutBtn.innerText = t("logout");
+
+  // Selector buttons
+  const selectorBtns = document.querySelectorAll(".selector-btn");
+  selectorBtns.forEach((btn) => {
+    if (btn.dataset.amount === "max") btn.innerText = t("buyMax");
+  });
+
+  // Ranking titles
+  const rankCrystals = document.querySelector(
+    "#ranking-tab .ranking-box:first-child h3",
+  );
+  const rankRP = document.querySelector(
+    "#ranking-tab .ranking-box:last-child h3",
+  );
+  if (rankCrystals) rankCrystals.innerText = t("rankingCrystals");
+  if (rankRP) rankRP.innerText = t("rankingRP");
+}
+
+function showLanguageModal() {
+  const existing = document.getElementById("language-modal");
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  const langs = [
+    { code: "en", flag: "🇺🇸", name: "English" },
+    { code: "pt", flag: "🇧🇷", name: "Português" },
+    { code: "es", flag: "🇪🇸", name: "Español" },
+    { code: "fr", flag: "🇫🇷", name: "Français" },
+    { code: "ja", flag: "🇯🇵", name: "日本語" },
+  ];
+
+  const modal = document.createElement("div");
+  modal.id = "language-modal";
+  modal.innerHTML = `
+    <div class="lang-modal-card">
+      <h3 class="lang-modal-title">🌍 ${t("language")}</h3>
+      <div class="lang-grid">
+        ${langs
+          .map(
+            (l) => `
+          <button class="lang-btn ${currentLang === l.code ? "active" : ""}" onclick="setLanguage('${l.code}')">
+            <span class="lang-flag">${l.flag}</span>
+            <span class="lang-name">${l.name}</span>
+            ${currentLang === l.code ? '<span class="lang-check">✓</span>' : ""}
+          </button>
+        `,
+          )
+          .join("")}
+      </div>
+      <button class="lang-close-btn" onclick="document.getElementById('language-modal').remove()">✕</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => modal.classList.add("show"));
+}
+
+// ============================
+// TUTORIAL SYSTEM
+// ============================
+const TUTORIAL_STEPS = [
+  {
+    id: "click-crystal",
+    target: "#big-cookie",
+    title: "👆 Click the Crystal!",
+    text: "Click the crystal to earn Crystals! The more you click, the faster you progress.",
+    arrow: "bottom",
+    position: "top",
+  },
+  {
+    id: "store",
+    target: "#store-section",
+    title: "🛒 Buy Upgrades!",
+    text: "Use your Crystals to buy upgrades on the right. Each upgrade increases your Crystals per second automatically!",
+    arrow: "right",
+    position: "left",
+  },
+  {
+    id: "pickaxe",
+    target: "#item-pickaxe",
+    title: "⛏️ Start with Pickaxe!",
+    text: "The Pickaxe is your first upgrade. Buy as many as you can — they generate 1 Crystal per second each!",
+    arrow: "right",
+    position: "left",
+  },
+  {
+    id: "rebirth",
+    target: "[data-target='rebirth-tab']",
+    title: "✨ Rebirth System!",
+    text: "When you have enough Crystals, go to REBIRTH to reset and gain RP — which permanently multiplies your production!",
+    arrow: "top",
+    position: "bottom",
+  },
+  {
+    id: "fishing",
+    target: "[data-target='modes-tab']",
+    title: "🎣 Fishing Mode!",
+    text: "Unlock Fishing Mode with 100 RP! Catch rare fish to earn Fish Coins and buy powerful upgrades.",
+    arrow: "top",
+    position: "bottom",
+  },
+  {
+    id: "finish",
+    target: null,
+    title: "🎮 You're ready!",
+    text: "That's everything you need to know! Watch out for Shiny Crystals that appear randomly — click them for big bonuses!",
+    arrow: null,
+    position: "center",
+  },
+];
+
+let tutorialStep = 0;
+let tutorialActive = false;
+
+function checkFirstLogin() {
+  const hasSeenTutorial = localStorage.getItem("tutorialDone");
+  if (!hasSeenTutorial) {
+    setTimeout(() => startTutorial(), 1500);
+  }
+}
+
+function startTutorial() {
+  tutorialActive = true;
+  tutorialStep = 0;
+  showTutorialStep(0);
+}
+
+function showTutorialStep(index) {
+  // Remove step anterior
+  const old = document.getElementById("tutorial-overlay");
+  if (old) old.remove();
+
+  if (index >= TUTORIAL_STEPS.length) {
+    endTutorial();
+    return;
+  }
+
+  const step = TUTORIAL_STEPS[index];
+  const overlay = document.createElement("div");
+  overlay.id = "tutorial-overlay";
+
+  // Escurece tudo exceto o target
+  let highlightHTML = "";
+  let tooltipStyle = "";
+  let arrowHTML = "";
+
+  if (step.target) {
+    const targetEl = document.querySelector(step.target);
+    if (targetEl) {
+      const rect = targetEl.getBoundingClientRect();
+      const padding = 8;
+
+      // Highlight box ao redor do elemento
+      highlightHTML = `
+        <div class="tutorial-highlight" style="
+          left: ${rect.left - padding}px;
+          top: ${rect.top - padding}px;
+          width: ${rect.width + padding * 2}px;
+          height: ${rect.height + padding * 2}px;
+        "></div>
+      `;
+
+      // Posiciona o tooltip
+      let tipLeft, tipTop;
+      const tipWidth = 280;
+      const tipHeight = 160;
+
+      if (step.position === "top") {
+        tipLeft = rect.left + rect.width / 2 - tipWidth / 2;
+        tipTop = rect.top - tipHeight - 20;
+        arrowHTML = `<div class="tutorial-arrow arrow-down"></div>`;
+      } else if (step.position === "bottom") {
+        tipLeft = rect.left + rect.width / 2 - tipWidth / 2;
+        tipTop = rect.bottom + 20;
+        arrowHTML = `<div class="tutorial-arrow arrow-up"></div>`;
+      } else if (step.position === "left") {
+        tipLeft = rect.left - tipWidth - 20;
+        tipTop = rect.top + rect.height / 2 - tipHeight / 2;
+        arrowHTML = `<div class="tutorial-arrow arrow-right"></div>`;
+      } else if (step.position === "right") {
+        tipLeft = rect.right + 20;
+        tipTop = rect.top + rect.height / 2 - tipHeight / 2;
+        arrowHTML = `<div class="tutorial-arrow arrow-left"></div>`;
+      }
+
+      // Garante que o tooltip não saia da tela
+      tipLeft = Math.max(
+        10,
+        Math.min(tipLeft, window.innerWidth - tipWidth - 10),
+      );
+      tipTop = Math.max(
+        10,
+        Math.min(tipTop, window.innerHeight - tipHeight - 10),
+      );
+
+      tooltipStyle = `left: ${tipLeft}px; top: ${tipTop}px;`;
+    }
+  } else {
+    // Centro da tela (último step)
+    tooltipStyle = `
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    `;
+  }
+
+  const isLast = index === TUTORIAL_STEPS.length - 1;
+  const progress = `${index + 1}/${TUTORIAL_STEPS.length}`;
+
+  overlay.innerHTML = `
+    <div class="tutorial-backdrop"></div>
+    ${highlightHTML}
+    <div class="tutorial-tooltip" style="${tooltipStyle}">
+      ${arrowHTML}
+      <div class="tutorial-progress">${progress}</div>
+      <h3 class="tutorial-title">${step.title}</h3>
+      <p class="tutorial-text">${step.text}</p>
+      <div class="tutorial-buttons">
+        <button class="tutorial-skip-btn" onclick="endTutorial()">Skip</button>
+        <button class="tutorial-next-btn" onclick="nextTutorialStep()">
+          ${isLast ? "🎮 Let's Play!" : "Next →"}
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add("show"));
+}
+
+function nextTutorialStep() {
+  tutorialStep++;
+  showTutorialStep(tutorialStep);
+}
+
+function endTutorial() {
+  tutorialActive = false;
+  localStorage.setItem("tutorialDone", "true");
+  const overlay = document.getElementById("tutorial-overlay");
+  if (overlay) {
+    overlay.classList.remove("show");
+    setTimeout(() => overlay.remove(), 400);
+  }
+}
+
+function resetTutorial() {
+  localStorage.removeItem("tutorialDone");
+  tutorialStep = 0;
+  showAlert("Tutorial reset! It will appear on next login.");
+}
+
 // --- INIT ---
 initStore();
+detectLanguage();

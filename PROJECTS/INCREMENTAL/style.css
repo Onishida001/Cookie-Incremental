@@ -2446,3 +2446,321 @@ h2 {
 .custom-modal-btn:active {
   transform: translateY(1px) scale(0.97);
 }
+
+/* --- LANGUAGE MODAL --- */
+#language-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#language-modal.show {
+  opacity: 1;
+}
+
+.lang-modal-card {
+  background: rgba(5, 0, 20, 0.97);
+  border: 2px solid #a855f7;
+  border-radius: 16px;
+  padding: 25px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.4);
+  animation: offlineCardIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  position: relative;
+}
+
+.lang-modal-title {
+  font-family: "Monocraft", monospace;
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.lang-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Monocraft", monospace;
+  color: #fff;
+  width: 100%;
+}
+.lang-btn:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+.lang-btn.active {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #a855f7;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+
+.lang-flag {
+  font-size: 1.5rem;
+}
+.lang-name {
+  flex: 1;
+  text-align: left;
+  font-size: 0.8rem;
+}
+.lang-check {
+  color: #00e676;
+  font-size: 0.9rem;
+}
+
+.lang-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+.lang-close-btn:hover {
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+/* ============================
+   TUTORIAL SYSTEM
+   ============================ */
+#tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999990;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: all;
+}
+#tutorial-overlay.show {
+  opacity: 1;
+}
+
+.tutorial-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+}
+
+/* Destaque do elemento alvo */
+.tutorial-highlight {
+  position: fixed;
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 4px #a855f7,
+    0 0 0 9999px rgba(0, 0, 0, 0.75),
+    0 0 30px rgba(168, 85, 247, 0.8);
+  z-index: 999991;
+  pointer-events: none;
+  animation: highlightPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes highlightPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 4px #a855f7,
+      0 0 0 9999px rgba(0, 0, 0, 0.75),
+      0 0 20px rgba(168, 85, 247, 0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px #a855f7,
+      0 0 0 9999px rgba(0, 0, 0, 0.75),
+      0 0 40px rgba(168, 85, 247, 1);
+  }
+}
+
+/* Tooltip */
+.tutorial-tooltip {
+  position: fixed;
+  width: 280px;
+  background: rgba(5, 0, 20, 0.97);
+  border: 2px solid #a855f7;
+  border-radius: 16px;
+  padding: 20px;
+  z-index: 999992;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+  animation: tooltipIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes tooltipIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Para o último step centralizado */
+.tutorial-tooltip[style*="translate(-50%, -50%)"] {
+  animation: tooltipInCenter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    forwards;
+}
+@keyframes tooltipInCenter {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.tutorial-progress {
+  font-family: "Monocraft", monospace;
+  font-size: 0.6rem;
+  color: rgba(168, 85, 247, 0.7);
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.tutorial-title {
+  font-family: "Monocraft", monospace;
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+.tutorial-text {
+  font-family: "Monocraft", monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.tutorial-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.tutorial-skip-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.4);
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  transition: all 0.2s;
+}
+.tutorial-skip-btn:hover {
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+.tutorial-next-btn {
+  background: rgba(168, 85, 247, 0.25);
+  border: 2px solid #a855f7;
+  color: #fff;
+  padding: 7px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+  transition: all 0.2s;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+.tutorial-next-btn:hover {
+  background: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Setas do tooltip */
+.tutorial-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.arrow-down {
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 12px solid #a855f7;
+}
+
+.arrow-up {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 12px solid #a855f7;
+}
+
+.arrow-right {
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 12px solid #a855f7;
+}
+
+.arrow-left {
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid #a855f7;
+}
+
+/* Mobile tutorial */
+@media (max-width: 768px) {
+  .tutorial-tooltip {
+    width: 240px;
+    padding: 15px;
+  }
+  .tutorial-title {
+    font-size: 0.85rem;
+  }
+  .tutorial-text {
+    font-size: 0.65rem;
+  }
+}
