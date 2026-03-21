@@ -98,6 +98,7 @@
             </button>
             <button
               class="prestige-btn"
+              id="tutorial-btn"
               onclick="
                 startTutorial();
                 toggleSettings();
@@ -139,19 +140,24 @@
             <p>RP: <span id="rebirth-points" class="highlight">0</span></p>
           </div>
           <button id="btn-rebirth" class="prestige-btn">
-            RP (+<span id="pending-points">0</span>)
+            Rebirth (+<span id="pending-points">0</span>)
           </button>
           <h3 class="sub-title">Rebirth Upgrades</h3>
           <div id="rebirth-shop-container"></div>
         </div>
       </section>
 
+      <!-- ============================================================ -->
+      <!-- MODES TAB — modes-menu e sub-modos são irmãos, NÃO aninhados -->
+      <!-- ============================================================ -->
       <section id="modes-tab" class="tab-content">
+        <!-- Menu principal dos modos -->
         <div id="modes-menu" class="prestige-panel">
           <h2 class="section-title" id="title-modes">Game Modes</h2>
+
           <div class="mode-card">
-            <h3>🎣 Fishing Mode</h3>
-            <p>Catch rare fish and earn Fish Coins!</p>
+            <h3 id="fishing-name">🎣 Fishing Mode</h3>
+            <p id="fishing-desc">Catch rare fish and earn Fish Coins!</p>
             <button
               id="unlock-fishing"
               class="prestige-btn"
@@ -168,11 +174,56 @@
               Enter Lake
             </button>
           </div>
-        </div>
 
+          <div class="mode-card">
+            <h3 id="title-trees-mode">🌲 Trees Mode</h3>
+            <p id="desc-trees-mode">
+              Chop trees and earn Wood to buy powerful upgrades!
+            </p>
+            <button
+              id="unlock-trees-btn"
+              class="prestige-btn"
+              onclick="unlockMode('trees')"
+            >
+              Unlock (5M RP)
+            </button>
+            <button
+              id="enter-trees-btn"
+              class="prestige-btn"
+              style="display: none"
+              onclick="showSubMode('trees-area')"
+            >
+              Enter Forest
+            </button>
+          </div>
+
+          <div class="mode-card">
+            <h3 id="title-mobs-mode">⚔️ Mobs Mode</h3>
+            <p id="desc-mobs-mode">
+              Slay mobs and collect Flesh to buy powerful upgrades!
+            </p>
+            <button
+              id="unlock-mobs-btn"
+              class="prestige-btn"
+              onclick="unlockMode('mobs')"
+            >
+              Unlock (2.5Qd RP)
+            </button>
+            <button
+              id="enter-mobs-btn"
+              class="prestige-btn"
+              style="display: none"
+              onclick="showSubMode('mobs-area')"
+            >
+              Enter Battle
+            </button>
+          </div>
+        </div>
+        <!-- FIM do modes-menu -->
+
+        <!-- Fishing Area — irmão do modes-menu -->
         <div id="fishing-area" class="sub-mode-content" style="display: none">
           <div class="fishing-wrapper">
-            <!-- ESQUERDA: Lago -->
             <div class="fishing-lake-panel">
               <button
                 class="fishing-back-btn"
@@ -183,12 +234,19 @@
               <h2 class="section-title" id="title-fishing">
                 🎣 Lake Incremental
               </h2>
-
               <div class="fish-coins-display">
-                🪙 <span id="fish-coins">0</span> Fish Coins
+                <img
+                  src="assets/images/fish/fish-coin.png"
+                  style="
+                    width: 28px;
+                    height: 28px;
+                    object-fit: contain;
+                    vertical-align: middle;
+                    margin-right: 6px;
+                  "
+                />
+                <span id="fish-coins">0</span> Fish Coins
               </div>
-
-              <!-- Área da água com anzol -->
               <div id="water-area" onclick="castLine()">
                 <div class="water-surface"></div>
                 <div class="water-caustics"></div>
@@ -210,36 +268,72 @@
                   <span style="color: #aaa">Click the water to fish!</span>
                 </p>
               </div>
-
-              <!-- Enciclopédia de Peixes -->
               <div class="fish-gallery">
                 <h3 class="fish-gallery-title">🐠 Fish Encyclopedia</h3>
                 <div class="fish-gallery-grid">
                   <div class="fish-card common">
                     <img src="assets/images/fish/catfish.png" />
                     <span>Catfish</span>
-                    <small style="color: #00e676">Common • 5🪙</small>
+                    <small style="color: #00e676"
+                      >Common • 5
+                      <img
+                        src="assets/images/modes/fish-coin.png"
+                        style="
+                          width: 12px;
+                          height: 12px;
+                          object-fit: contain;
+                          vertical-align: middle;
+                        "
+                    /></small>
                   </div>
                   <div class="fish-card rare">
                     <img src="assets/images/fish/tuna.png" />
                     <span>Tuna</span>
-                    <small style="color: #2196f3">Rare • 15🪙</small>
+                    <small style="color: #2196f3"
+                      >Rare • 15
+                      <img
+                        src="assets/images/modes/fish-coin.png"
+                        style="
+                          width: 12px;
+                          height: 12px;
+                          object-fit: contain;
+                          vertical-align: middle;
+                        "
+                    /></small>
                   </div>
                   <div class="fish-card epic">
                     <img src="assets/images/fish/clownfish.png" />
                     <span>Clownfish</span>
-                    <small style="color: #a855f7">Epic • 40🪙</small>
+                    <small style="color: #a855f7"
+                      >Epic • 40
+                      <img
+                        src="assets/images/modes/fish-coin.png"
+                        style="
+                          width: 12px;
+                          height: 12px;
+                          object-fit: contain;
+                          vertical-align: middle;
+                        "
+                    /></small>
                   </div>
                   <div class="fish-card legendary">
                     <img src="assets/images/fish/barracuda.png" />
                     <span>Barracuda</span>
-                    <small style="color: #ffd700">Legendary • 120🪙</small>
+                    <small style="color: #ffd700"
+                      >Legendary • 120
+                      <img
+                        src="assets/images/modes/fish-coin.png"
+                        style="
+                          width: 12px;
+                          height: 12px;
+                          object-fit: contain;
+                          vertical-align: middle;
+                        "
+                    /></small>
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- DIREITA: Upgrades -->
             <div class="fishing-upgrades-panel">
               <h3
                 class="section-title"
@@ -251,27 +345,571 @@
             </div>
           </div>
         </div>
+
+        <!-- Trees Area — irmão do modes-menu -->
+        <div id="trees-area" class="sub-mode-content" style="display: none">
+          <div class="trees-wrapper">
+            <div class="trees-forest-panel">
+              <button
+                class="fishing-back-btn"
+                onclick="showSubMode('modes-menu')"
+              >
+                ⬅ BACK
+              </button>
+              <h2 class="section-title" id="title-trees">Forest Incremental</h2>
+              <div class="wood-display">
+                <img
+                  src="assets/images/modes/log.png"
+                  style="
+                    width: 22px;
+                    height: 22px;
+                    object-fit: contain;
+                    vertical-align: middle;
+                    margin-right: 6px;
+                  "
+                />
+                <span id="wood-count">0</span>&nbsp;Wood
+              </div>
+              <div id="tree-area">
+                <div class="tree-glow"></div>
+                <img
+                  id="tree-img"
+                  src="assets/images/modes/tree.png"
+                  onclick="chopTree(event)"
+                />
+                <div id="tree-status">
+                  <span style="color: #aaa">Click the tree to chop!</span>
+                </div>
+              </div>
+              <div class="wood-info-box">
+                <span>🪓 Wood/click: <b id="wood-per-click">1</b></span>
+                <span>🤖 Auto: <b id="wood-auto">0</b>/s</span>
+              </div>
+            </div>
+            <div class="trees-upgrades-panel">
+              <h3
+                class="section-title"
+                style="font-size: 1.1rem; margin-bottom: 15px"
+              >
+                🪓 Upgrades
+              </h3>
+              <div id="trees-upgrades-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobs Area — irmão do modes-menu -->
+        <div id="mobs-area" class="sub-mode-content" style="display: none">
+          <div class="mobs-wrapper">
+            <div class="mobs-arena-panel">
+              <button
+                class="fishing-back-btn"
+                onclick="showSubMode('modes-menu')"
+              >
+                ⬅ BACK
+              </button>
+              <h2 class="section-title" id="title-mobs">⚔️ Mob Arena</h2>
+              <div class="flesh-display">
+                <img
+                  src="assets/images/modes/flesh.png"
+                  style="
+                    width: 22px;
+                    height: 22px;
+                    object-fit: contain;
+                    vertical-align: middle;
+                    margin-right: 6px;
+                  "
+                />
+                <span id="flesh-count">0</span>&nbsp;Flesh
+              </div>
+              <div id="mob-area" onclick="attackMob(event)">
+                <div class="arena-bg-glow"></div>
+                <div id="mob-container">
+                  <img id="mob-img" src="assets/images/modes/mob.png" />
+                  <div class="mob-hp-bar-container">
+                    <div class="mob-hp-bar-bg">
+                      <div id="mob-hp-bar" class="mob-hp-bar-fill"></div>
+                    </div>
+                    <div id="mob-hp-text" class="mob-hp-text">100 / 100</div>
+                  </div>
+                </div>
+                <div id="mob-status">
+                  <span style="color: #aaa">Click to attack!</span>
+                </div>
+              </div>
+              <div class="mob-info-box">
+                <span>⚔️ DMG/click: <b id="mob-dmg">1</b></span>
+                <span>🤖 Auto: <b id="mob-auto-dmg">0</b>/s</span>
+                <span>💀 Kills: <b id="mob-kills">0</b></span>
+              </div>
+            </div>
+            <div class="mobs-upgrades-panel">
+              <h3
+                class="section-title"
+                style="font-size: 1.1rem; margin-bottom: 15px"
+              >
+                ⚔️ Upgrades
+              </h3>
+              <div id="mobs-upgrades-container"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- FIM do modes-tab -->
+
+      <section id="misc-tab" class="tab-content">
+        <div class="misc-wrapper">
+          <!-- STATS PANEL -->
+          <div class="misc-stats-panel">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 15px;
+              "
+            >
+              <h2
+                class="section-title"
+                id="title-misc-stats"
+                style="font-size: 1.2rem; margin-bottom: 0"
+              >
+                📊 Statistics
+              </h2>
+            </div>
+            <div class="misc-stats-grid" id="misc-stats-grid">
+              <!-- preenchido por JS -->
+            </div>
+          </div>
+
+          <!-- BUTTONS: TOP & ACHIEVEMENTS & SKINS -->
+          <div class="misc-links-panel">
+            <button class="misc-link-btn" onclick="openMiscTab('ranking-tab')">
+              <img
+                src="assets/images/ui/top.png"
+                onerror="this.style.display = 'none'"
+                style="width: 36px; height: 36px; object-fit: contain"
+              />
+              <div>
+                <div class="misc-link-title" id="title-misc-top">
+                  🌎 Top 100 Global
+                </div>
+                <div class="misc-link-desc">See the best players worldwide</div>
+              </div>
+            </button>
+            <button
+              class="misc-link-btn"
+              onclick="openMiscTab('achievements-tab')"
+            >
+              <img
+                src="assets/images/ui/achievements.png"
+                onerror="this.style.display = 'none'"
+                style="width: 36px; height: 36px; object-fit: contain"
+              />
+              <div>
+                <div class="misc-link-title" id="title-misc-ach">
+                  🏆 Achievements
+                </div>
+                <div class="misc-link-desc">Track your progress</div>
+              </div>
+            </button>
+            <button
+              class="misc-link-btn skins-btn"
+              onclick="openMiscTab('skins-tab')"
+              style="
+                border-color: rgba(255, 215, 0, 0.4);
+                background: rgba(255, 215, 0, 0.05);
+              "
+            >
+              <img
+                src="assets/images/ores/crystal.png"
+                style="
+                  width: 36px;
+                  height: 36px;
+                  object-fit: contain;
+                  filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
+                "
+              />
+              <div>
+                <div
+                  class="misc-link-title"
+                  id="title-misc-skins"
+                  style="color: #ffd700"
+                >
+                  Crystal Skins 💅
+                </div>
+                <div class="misc-link-desc" id="desc-misc-skins">
+                  Customize your crystal with exclusive skins
+                </div>
+              </div>
+              <div
+                style="
+                  font-size: 0.5rem;
+                  background: rgba(255, 215, 0, 0.2);
+                  border: 1px solid #ffd700;
+                  border-radius: 4px;
+                  padding: 2px 6px;
+                  color: #ffd700;
+                  margin-left: auto;
+                  white-space: nowrap;
+                "
+              >
+                STORE
+              </div>
+            </button>
+            <button
+              class="misc-link-btn"
+              onclick="openMiscTab('diamonds-tab')"
+              style="
+                border-color: rgba(0, 242, 254, 0.4);
+                background: rgba(0, 242, 254, 0.05);
+              "
+            >
+              <img
+                src="assets/images/ores/diamond.png"
+                style="
+                  width: 36px;
+                  height: 36px;
+                  object-fit: contain;
+                  filter: drop-shadow(0 0 6px rgba(0, 242, 254, 0.8))
+                    hue-rotate(180deg);
+                "
+              />
+              <div>
+                <div
+                  class="misc-link-title"
+                  id="title-misc-diamonds"
+                  style="color: #00f2fe"
+                >
+                  Diamond Upgrades 💎
+                </div>
+                <div class="misc-link-desc" id="desc-misc-diamonds">
+                  Powerful boosts purchased with Diamonds
+                </div>
+              </div>
+              <div
+                style="
+                  font-size: 0.5rem;
+                  background: rgba(0, 242, 254, 0.2);
+                  border: 1px solid #00f2fe;
+                  border-radius: 4px;
+                  padding: 2px 6px;
+                  color: #00f2fe;
+                  margin-left: auto;
+                  white-space: nowrap;
+                "
+              >
+                PREMIUM
+              </div>
+            </button>
+          </div>
+        </div>
       </section>
 
-      <section id="ranking-tab" class="tab-content">
+      <!-- SKINS TAB -->
+      <section
+        id="skins-tab"
+        class="tab-content"
+        style="display: none !important"
+      >
+        <div
+          class="stats-panel"
+          style="
+            max-width: 700px;
+            border-color: #ffd700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 15px;
+              margin-bottom: 20px;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
+          >
+            <button
+              class="fishing-back-btn"
+              onclick="openMiscTab('misc-tab')"
+              style="margin-bottom: 0; border-color: #ffd700; color: #ffd700"
+            >
+              ⬅ BACK
+            </button>
+            <h2
+              class="section-title"
+              id="title-skins"
+              style="
+                margin-bottom: 0;
+                background: linear-gradient(
+                  135deg,
+                  rgba(255, 215, 0, 0.6),
+                  rgba(255, 152, 0, 0.6)
+                ) !important;
+                border-color: #ffd700 !important;
+                box-shadow:
+                  inset 0 0 15px rgba(255, 215, 0, 0.3),
+                  0 0 20px rgba(255, 152, 0, 0.4) !important;
+              "
+            >
+              💎 CRYSTAL SKINS
+            </h2>
+          </div>
+
+          <!-- Preview do crystal atual -->
+          <div style="text-align: center; margin-bottom: 20px">
+            <div
+              style="
+                font-size: 0.7rem;
+                color: rgba(255, 255, 255, 0.4);
+                margin-bottom: 8px;
+                font-family: &quot;Monocraft&quot;, monospace;
+                letter-spacing: 2px;
+              "
+              id="skins-equipped-label"
+            >
+              EQUIPPED SKIN
+            </div>
+            <div
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                background: rgba(255, 215, 0, 0.08);
+                border: 2px solid rgba(255, 215, 0, 0.3);
+                border-radius: 12px;
+                padding: 12px 25px;
+              "
+            >
+              <img
+                id="skin-preview-img"
+                src="assets/images/ores/crystal.png"
+                style="
+                  width: 50px;
+                  height: 50px;
+                  object-fit: contain;
+                  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.8));
+                "
+              />
+              <span
+                id="skin-preview-name"
+                style="
+                  font-family: &quot;Monocraft&quot;, monospace;
+                  font-size: 0.75rem;
+                  color: #ffd700;
+                "
+                >Default Crystal</span
+              >
+            </div>
+          </div>
+
+          <!-- Grid de skins -->
+          <div
+            id="skins-grid"
+            style="
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 12px;
+              width: 100%;
+            "
+          ></div>
+        </div>
+      </section>
+
+      <!-- DIAMONDS TAB -->
+      <section
+        id="diamonds-tab"
+        class="tab-content"
+        style="display: none !important"
+      >
+        <div
+          class="stats-panel"
+          style="
+            max-width: 700px;
+            border-color: #00f2fe;
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <button
+              class="fishing-back-btn"
+              onclick="openMiscTab('misc-tab')"
+              style="margin-bottom: 0; border-color: #00f2fe; color: #00f2fe"
+            >
+              ⬅ BACK
+            </button>
+            <h2
+              class="section-title"
+              id="title-diamonds"
+              style="
+                margin-bottom: 0;
+                background: linear-gradient(
+                  135deg,
+                  rgba(0, 242, 254, 0.5),
+                  rgba(0, 100, 200, 0.5)
+                ) !important;
+                border-color: #00f2fe !important;
+                box-shadow:
+                  inset 0 0 15px rgba(0, 242, 254, 0.2),
+                  0 0 20px rgba(0, 242, 254, 0.4) !important;
+              "
+            >
+              💎 DIAMOND UPGRADES
+            </h2>
+          </div>
+
+          <!-- Diamond balance -->
+          <div style="text-align: center; margin-bottom: 20px">
+            <div
+              style="
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                background: rgba(0, 242, 254, 0.08);
+                border: 2px solid rgba(0, 242, 254, 0.4);
+                border-radius: 12px;
+                padding: 10px 25px;
+              "
+            >
+              <span style="font-size: 1.5rem">💎</span>
+              <div>
+                <div
+                  style="
+                    font-family: &quot;Monocraft&quot;, monospace;
+                    font-size: 0.55rem;
+                    color: rgba(255, 255, 255, 0.4);
+                    letter-spacing: 2px;
+                  "
+                >
+                  DIAMONDS
+                </div>
+                <div
+                  id="diamond-balance"
+                  style="
+                    font-family: &quot;Monocraft&quot;, monospace;
+                    font-size: 1.2rem;
+                    color: #00f2fe;
+                    font-weight: bold;
+                    text-shadow: 0 0 10px #00f2fe;
+                  "
+                >
+                  0
+                </div>
+              </div>
+              <button
+                onclick="showDiamondShop()"
+                style="
+                  background: rgba(0, 242, 254, 0.2);
+                  border: 1px solid #00f2fe;
+                  color: #00f2fe;
+                  border-radius: 8px;
+                  padding: 6px 12px;
+                  font-family: &quot;Monocraft&quot;, monospace;
+                  font-size: 0.55rem;
+                  cursor: pointer;
+                  letter-spacing: 1px;
+                "
+              >
+                + GET MORE
+              </button>
+            </div>
+          </div>
+
+          <!-- Upgrades grid -->
+          <div
+            id="diamond-upgrades-grid"
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              width: 100%;
+            "
+          ></div>
+        </div>
+      </section>
+
+      <section
+        id="ranking-tab"
+        class="tab-content"
+        style="display: none !important"
+      >
         <div class="stats-panel">
-          <h2 class="section-title" id="title-ranking">Top 100 Global</h2>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <button
+              class="fishing-back-btn"
+              onclick="openMiscTab('misc-tab')"
+              style="margin-bottom: 0"
+            >
+              ⬅ BACK
+            </button>
+            <h2
+              class="section-title"
+              id="title-ranking"
+              style="margin-bottom: 0"
+            >
+              Top 100 Global
+            </h2>
+          </div>
           <div class="ranking-layout">
             <div class="ranking-box">
               <h3>🔮 Crystals</h3>
               <div id="ranking-cookies" class="ranking-container"></div>
             </div>
             <div class="ranking-box">
-              <h3>✨ RP</h3>
-              <div id="ranking-rebirths" class="ranking-container"></div>
+              <h3 id="title-ranking-playtime">⏱️ Time Played</h3>
+              <div id="ranking-playtime" class="ranking-container"></div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="achievements-tab" class="tab-content">
+      <section
+        id="achievements-tab"
+        class="tab-content"
+        style="display: none !important"
+      >
         <div class="stats-panel">
-          <h2 class="section-title" id="title-achievements">Achievements</h2>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 12px;
+              margin-bottom: 20px;
+            "
+          >
+            <button
+              class="fishing-back-btn"
+              onclick="openMiscTab('misc-tab')"
+              style="margin-bottom: 0"
+            >
+              ⬅ BACK
+            </button>
+            <h2
+              class="section-title"
+              id="title-achievements"
+              style="margin-bottom: 0"
+            >
+              Achievements
+            </h2>
+          </div>
           <div class="progress-container">
             <div id="achievement-progress-bar"></div>
             <div id="progress-text">0/0 Unlocked (0%)</div>
@@ -280,21 +918,185 @@
         </div>
       </section>
 
+      <section id="runes-tab" class="tab-content">
+        <div class="runes-panel">
+          <h2 class="section-title" id="title-runes">💠 RUNES</h2>
+
+          <div class="rune-categories">
+            <!-- STARTER -->
+            <div class="rune-category-card" id="rune-cat-starter">
+              <div class="rune-cat-header">
+                <span class="rune-cat-icon">⭐</span>
+                <div>
+                  <div class="rune-cat-name" id="rune-name-starter">
+                    Starter Rune
+                  </div>
+                  <div class="rune-cat-cost">💎 <span>1k</span> Crystals</div>
+                </div>
+                <button class="rune-roll-btn" onclick="rollRune('starter')">
+                  ROLL
+                </button>
+              </div>
+              <div class="rune-chances">
+                <span class="rune-chance" style="color: #aaa">Common 50%</span>
+                <span class="rune-chance" style="color: #00e676"
+                  >Uncommon 25%</span
+                >
+                <span class="rune-chance" style="color: #2196f3">Rare 12%</span>
+                <span class="rune-chance" style="color: #a855f7">Epic 7%</span>
+                <span class="rune-chance" style="color: #ffd700"
+                  >Legendary 4%</span
+                >
+                <span class="rune-chance" style="color: #ff0080"
+                  >Mythic 1.5%</span
+                >
+                <span class="rune-chance rune-secret">???</span>
+              </div>
+              <div class="rune-collection" id="runes-starter"></div>
+            </div>
+
+            <!-- ADVANCED -->
+            <div class="rune-category-card" id="rune-cat-advanced">
+              <div class="rune-cat-header">
+                <span class="rune-cat-icon">💠</span>
+                <div>
+                  <div class="rune-cat-name" id="rune-name-advanced">
+                    Advanced Rune
+                  </div>
+                  <div class="rune-cat-cost">💎 <span>1Qd</span> Crystals</div>
+                </div>
+                <button
+                  class="rune-roll-btn advanced"
+                  onclick="rollRune('advanced')"
+                >
+                  ROLL
+                </button>
+              </div>
+              <div class="rune-chances">
+                <span class="rune-chance" style="color: #aaa">Basic 50%</span>
+                <span class="rune-chance" style="color: #00e676"
+                  >Expert 25%</span
+                >
+                <span class="rune-chance" style="color: #2196f3"
+                  >Elite 12%</span
+                >
+                <span class="rune-chance" style="color: #a855f7"
+                  >Fabled 7%</span
+                >
+                <span class="rune-chance" style="color: #ffd700"
+                  >Superior 4%</span
+                >
+                <span class="rune-chance" style="color: #ff0080"
+                  >Transcendant 1.5%</span
+                >
+                <span class="rune-chance rune-secret">???</span>
+              </div>
+              <div class="rune-collection" id="runes-advanced"></div>
+            </div>
+
+            <!-- ANCIENT -->
+            <div class="rune-category-card" id="rune-cat-ancient">
+              <div class="rune-cat-header">
+                <span class="rune-cat-icon">🏺</span>
+                <div>
+                  <div class="rune-cat-name" id="rune-name-ancient">
+                    Ancient Rune
+                  </div>
+                  <div class="rune-cat-cost">💎 <span>1No</span> Crystals</div>
+                </div>
+                <button
+                  class="rune-roll-btn ancient"
+                  onclick="rollRune('ancient')"
+                >
+                  ROLL
+                </button>
+              </div>
+              <div class="rune-chances">
+                <span class="rune-chance" style="color: #aaa">Primal 50%</span>
+                <span class="rune-chance" style="color: #00e676"
+                  >Fossilized 25%</span
+                >
+                <span class="rune-chance" style="color: #2196f3"
+                  >Spectral 12%</span
+                >
+                <span class="rune-chance" style="color: #a855f7"
+                  >Enchanted 7%</span
+                >
+                <span class="rune-chance" style="color: #ffd700">Curse 4%</span>
+                <span class="rune-chance" style="color: #ff0080"
+                  >Eternal 1.5%</span
+                >
+                <span class="rune-chance rune-secret">???</span>
+              </div>
+              <div class="rune-collection" id="runes-ancient"></div>
+            </div>
+
+            <!-- CELESTIAL -->
+            <div class="rune-category-card" id="rune-cat-celestial">
+              <div class="rune-cat-header">
+                <span class="rune-cat-icon">🌌</span>
+                <div>
+                  <div class="rune-cat-name" id="rune-name-celestial">
+                    Celestial Rune
+                  </div>
+                  <div class="rune-cat-cost">💎 <span>1qN</span> Crystals</div>
+                </div>
+                <button
+                  class="rune-roll-btn celestial"
+                  onclick="rollRune('celestial')"
+                >
+                  ROLL
+                </button>
+              </div>
+              <div class="rune-chances">
+                <span class="rune-chance" style="color: #aaa">Astral 50%</span>
+                <span class="rune-chance" style="color: #00e676"
+                  >Solar 25%</span
+                >
+                <span class="rune-chance" style="color: #2196f3"
+                  >Galactic 12%</span
+                >
+                <span class="rune-chance" style="color: #a855f7"
+                  >Nebula 7%</span
+                >
+                <span class="rune-chance" style="color: #ffd700">Void 4%</span>
+                <span class="rune-chance" style="color: #ff0080"
+                  >Cosmic 1.5%</span
+                >
+                <span class="rune-chance rune-secret">???</span>
+              </div>
+              <div class="rune-collection" id="runes-celestial"></div>
+            </div>
+          </div>
+
+          <!-- Painel de bônus ativos -->
+          <div class="rune-bonuses-panel">
+            <h3 class="rune-bonuses-title">✨ Active Bonuses</h3>
+            <div id="rune-bonuses-display"></div>
+          </div>
+        </div>
+      </section>
+
       <nav id="bottom-menu">
         <button class="nav-btn active" data-target="home-tab">
-          <span class="nav-icon">🔮</span>HOME
+          <img src="assets/images/ui/home.png" class="nav-icon-img" />
+          <span class="nav-label">HOME</span>
         </button>
         <button class="nav-btn" data-target="rebirth-tab">
-          <span class="nav-icon">✨</span>REBIRTH
+          <img src="assets/images/ui/rebirth.png" class="nav-icon-img" />
+          <span class="nav-label">REBIRTH</span>
         </button>
         <button class="nav-btn" data-target="modes-tab">
-          <span class="nav-icon">🕹️</span>MODES
+          <img src="assets/images/ui/modes.png" class="nav-icon-img" />
+          <span class="nav-label">MODES</span>
         </button>
-        <button class="nav-btn" data-target="ranking-tab">
-          <span class="nav-icon">🌎</span>TOP
+        <button class="nav-btn" data-target="runes-tab">
+          <img src="assets/images/ui/runes.png" class="nav-icon-img" />
+          <span class="nav-label">RUNES</span>
         </button>
-        <button class="nav-btn" data-target="achievements-tab">
-          <span class="nav-icon">🏆</span>ACHIEVEMENTS
+        <button class="nav-btn" data-target="misc-tab">
+          <img src="assets/images/ui/misc.png" class="nav-icon-img" />
+          <span class="nav-label">MISC</span>
         </button>
       </nav>
 

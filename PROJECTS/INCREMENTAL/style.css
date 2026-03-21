@@ -54,9 +54,267 @@ body {
   box-shadow: 0 0 25px rgba(0, 230, 118, 0.4) !important;
 }
 
+#modes-menu {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 15px;
+}
+
+#modes-menu .mode-card {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* === REBIRTH RPG STYLE === */
+
+/* Painel principal */
 #rebirth-tab .prestige-panel {
-  border: 3px solid #0059fe !important;
-  box-shadow: 0 0 25px rgba(0, 131, 254, 0.4) !important;
+  background-image: url("assets/images/ui/panel-bg.png");
+  background-size: cover;
+  border-image: url("assets/images/ui/panel-border.png") 30 fill stretch;
+  border-width: 30px;
+}
+
+#title-rebirth {
+  background-image: url("assets/images/ui/title-banner.png");
+  background-size: 100% 100%;
+  background-color: transparent !important;
+}
+
+#rebirth-tab .prestige-panel {
+  background: rgba(8, 4, 20, 0.92) !important;
+  border: 3px solid #7f788b !important;
+  box-shadow:
+    0 0 0 1px #612ac8,
+    0 0 0 2px #2f1e6b,
+    0 0 30px rgba(41, 10, 100, 0.5),
+    inset 0 0 40px rgba(80, 40, 120, 0.3) !important;
+  border-radius: 12px !important;
+  position: relative;
+  padding: 25px 20px !important;
+  overflow: visible !important;
+}
+
+/* Cantos decorativos do painel */
+#rebirth-tab .prestige-panel::before,
+#rebirth-tab .prestige-panel::after {
+  content: none;
+}
+#rebirth-tab .prestige-panel::before {
+  left: 10px;
+}
+#rebirth-tab .prestige-panel::after {
+  right: 10px;
+}
+
+#rebirth-tab .prestige-panel > *:first-child::before,
+#rebirth-tab .prestige-panel > *:first-child::after {
+  content: none;
+}
+
+/* Título REBIRTH estilo pergaminho */
+#title-rebirth {
+  background: linear-gradient(
+    135deg,
+    rgba(180, 140, 255, 0.9),
+    rgba(100, 60, 200, 0.9),
+    rgba(180, 140, 255, 0.9)
+  ) !important;
+  border: 3px solid #6e2ac8 !important;
+  box-shadow:
+    0 0 0 1px #6b4c1e,
+    0 0 20px rgba(168, 85, 247, 0.6),
+    inset 0 0 15px rgba(255, 255, 255, 0.2) !important;
+  border-radius: 8px !important;
+  font-size: 1.8rem !important;
+  letter-spacing: 4px !important;
+  text-shadow:
+    2px 2px 0px #2a0060,
+    0 0 15px rgba(255, 255, 255, 0.8) !important;
+  padding: 10px 35px !important;
+  position: relative;
+}
+
+/* Cristais decorativos nos lados do título */
+#title-rebirth::before,
+#title-rebirth::after {
+  content: "🔷";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+#title-rebirth::before {
+  left: -20px;
+}
+#title-rebirth::after {
+  right: -20px;
+}
+
+/* Card de stats (multiplier/RP) */
+.rebirth-card {
+  background: rgba(15, 8, 35, 0.8) !important;
+  border: 2px solid #391e6b !important;
+  box-shadow:
+    0 0 0 1px #c8952a40,
+    inset 0 0 15px rgba(80, 40, 120, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 15px 20px !important;
+  font-size: 1rem !important;
+  color: #e8d5ff !important;
+  letter-spacing: 1px;
+}
+
+/* Botão RP */
+#btn-rebirth {
+  background: linear-gradient(
+    135deg,
+    rgba(80, 100, 220, 0.6),
+    rgba(100, 120, 255, 0.4)
+  ) !important;
+  border: 2px solid #5577ff !important;
+  box-shadow:
+    0 0 15px rgba(80, 100, 220, 0.4),
+    inset 0 0 10px rgba(150, 170, 255, 0.2) !important;
+  border-radius: 6px !important;
+  letter-spacing: 2px !important;
+}
+#btn-rebirth:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(80, 100, 220, 0.9),
+    rgba(100, 120, 255, 0.7)
+  ) !important;
+  box-shadow: 0 0 25px rgba(80, 100, 220, 0.8) !important;
+}
+
+/* Sub-título "Rebirth Upgrades" */
+.sub-title {
+  background: linear-gradient(90deg, #1a0f35, #2d1f5e, #1a0f35) !important;
+  border: 2px solid #6531a8 !important;
+  box-shadow: 0 0 0 1px #c8952a40 !important;
+  border-radius: 6px !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 2px !important;
+  padding: 8px 20px !important;
+  color: #d4b8ff !important;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.6) !important;
+  position: relative;
+}
+.sub-title::before,
+.sub-title::after {
+  content: "◆";
+  color: #c8952a;
+  margin: 0 8px;
+  font-size: 0.7rem;
+}
+
+/* Container dos upgrades */
+#rebirth-shop-container {
+  background: rgba(10, 5, 25, 0.85) !important;
+  border: 2px solid #3f1e6b !important;
+  box-shadow:
+    0 0 0 1px #c8952a40,
+    inset 0 0 20px rgba(40, 20, 80, 0.5) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+}
+
+/* Card individual de upgrade */
+.rebirth-item {
+  background: rgba(20, 10, 45, 0.9) !important;
+  border: 2px solid #4a3580 !important;
+  border-radius: 8px !important;
+  padding: 12px 15px !important;
+  margin-bottom: 10px !important;
+  box-shadow: inset 0 0 10px rgba(100, 60, 180, 0.2) !important;
+  transition: all 0.2s;
+}
+.rebirth-item:hover {
+  border-color: #7855cc !important;
+  box-shadow:
+    inset 0 0 15px rgba(100, 60, 180, 0.4),
+    0 0 10px rgba(120, 85, 204, 0.3) !important;
+}
+
+.rebirth-item h3 {
+  color: #e8d5ff !important;
+  font-size: 0.9rem !important;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.5) !important;
+  margin-bottom: 4px !important;
+}
+
+.rebirth-item p {
+  color: #a090c0 !important;
+  font-size: 0.75rem !important;
+  margin-bottom: 10px !important;
+}
+
+/* Botão de upgrade dentro do item */
+.rebirth-item .prestige-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(60, 80, 200, 0.5),
+    rgba(80, 100, 220, 0.3)
+  ) !important;
+  border: 2px solid #5577ee !important;
+  box-shadow: 0 0 10px rgba(80, 100, 220, 0.3) !important;
+  font-size: 0.75rem !important;
+  padding: 8px 15px !important;
+  letter-spacing: 1px !important;
+  border-radius: 6px !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+}
+.rebirth-item .prestige-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    rgba(60, 80, 200, 0.8),
+    rgba(80, 100, 220, 0.6)
+  ) !important;
+  box-shadow: 0 0 20px rgba(80, 100, 220, 0.6) !important;
+  border-color: #88aaff !important;
+}
+
+.rebirth-item.maxed {
+  border-color: #c8952a !important;
+  background: rgba(40, 25, 5, 0.8) !important;
+  box-shadow: inset 0 0 10px rgba(200, 149, 42, 0.1) !important;
+}
+.rebirth-item.maxed h3 {
+  color: #c8952a !important;
+  text-shadow: 0 0 8px rgba(200, 149, 42, 0.5) !important;
+}
+.rebirth-item.maxed button {
+  background: rgba(200, 149, 42, 0.1) !important;
+  border-color: #c8952a !important;
+  color: #c8952a !important;
+}
+
+/* Scrollbar do rebirth */
+#rebirth-shop-container::-webkit-scrollbar {
+  width: 6px;
+}
+#rebirth-shop-container::-webkit-scrollbar-track {
+  background: rgba(10, 5, 25, 0.8);
+  border-radius: 10px;
+}
+#rebirth-shop-container::-webkit-scrollbar-thumb {
+  background: #4a3580;
+  border-radius: 10px;
+}
+#rebirth-shop-container::-webkit-scrollbar-thumb:hover {
+  background: #7855cc;
+}
+
+/* Highlight do valor */
+.rebirth-card .highlight {
+  color: #a78bfa !important;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.7) !important;
+  font-size: 1.1em;
 }
 
 #ranking-tab .stats-panel {
@@ -91,11 +349,50 @@ body {
 }
 
 #login-title {
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   margin-bottom: 20px;
-  text-shadow: var(--text-shadow);
-  background: linear-gradient(to right, #bb80dd, rgb(76, 33, 126));
-  border-radius: 10px;
+  padding: 12px 25px;
+  display: inline-block;
+  border-radius: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+
+  /* Gradiente roxo rico */
+  background: linear-gradient(135deg, #4a0080, #7b2ff7, #a855f7);
+
+  /* Borda brilhante */
+  border: 2px solid rgba(255, 255, 255, 0.3);
+
+  /* Glow neon */
+  box-shadow:
+    0 0 20px rgba(168, 85, 247, 0.6),
+    0 0 40px rgba(120, 40, 200, 0.3),
+    inset 0 0 15px rgba(255, 255, 255, 0.1);
+
+  /* Texto brilhante */
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(168, 85, 247, 0.6);
+
+  /* Animação sutil */
+  animation: titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(168, 85, 247, 0.6),
+      0 0 40px rgba(120, 40, 200, 0.3),
+      inset 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(168, 85, 247, 0.9),
+      0 0 60px rgba(120, 40, 200, 0.5),
+      inset 0 0 20px rgba(255, 255, 255, 0.2);
+  }
 }
 
 #login-btn,
@@ -166,6 +463,20 @@ body {
   top: -20px;
   font-size: 0.8rem;
   color: #ffffff;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.auth-buttons .prestige-btn {
+  margin-top: 0 !important;
+  flex: 1;
+  padding: 10px 15px !important;
+  font-size: 0.85rem !important;
 }
 
 /* 3. ESTRUTURA DE ABAS */
@@ -634,6 +945,12 @@ h2 {
   color: #fff !important;
   border: 2px solid #ffffff;
   border-radius: 8px !important;
+  font-size: 1.1rem !important; /* reduz fonte */
+  padding: 8px 15px !important; /* reduz padding */
+  word-break: break-word; /* quebra palavra se necessário */
+  max-width: 240px; /* limita largura dentro do card */
+  white-space: normal; /* permite quebrar linha */
+  letter-spacing: 1px !important; /* reduz espaçamento */
 }
 
 .store-item {
@@ -815,6 +1132,7 @@ h2 {
 
 .achievement-card {
   background: rgba(255, 255, 255, 0.05);
+  position: relative;
   border: 2px solid #444;
   padding: 15px;
   border-radius: 10px;
@@ -825,6 +1143,36 @@ h2 {
   background: rgba(255, 204, 0, 0.1);
   border-color: var(--gold);
   box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+}
+
+.ach-reward-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.45rem;
+  font-family: "Monocraft", monospace;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.ach-reward-badge.ready {
+  background: rgba(168, 85, 247, 0.3);
+  border: 1px solid #a855f7;
+  color: #fff;
+  animation: rewardPulse 1.5s ease-in-out infinite;
+}
+
+.ach-reward-badge.claimed {
+  background: rgba(0, 230, 118, 0.2);
+  border: 1px solid #00e676;
+  color: #00e676;
+}
+
+.achievement-card.reward-claimed {
+  border-color: #00e676 !important;
+  background: rgba(0, 230, 118, 0.05) !important;
 }
 
 /* Section Titles */
@@ -1739,6 +2087,502 @@ h2 {
   background: rgba(255, 215, 0, 0.2) !important;
   border-color: #ffd700 !important;
   color: #ffd700 !important;
+}
+
+/* ============================
+   TREES SYSTEM
+   ============================ */
+.trees-wrapper {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+.trees-forest-panel {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
+    url("assets/gifs/modes.gif");
+  background-size: cover;
+  background-position: center;
+  overflow-y: auto;
+  border-right: 3px solid #4caf50;
+}
+
+.trees-upgrades-panel {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-left: 2px solid #4caf50;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wood-display {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #8b4513;
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-family: "Monocraft", monospace;
+  font-size: 1.1rem;
+  color: #704f0c;
+  -webkit-text-stroke: #d1530a 0.2px;
+  text-shadow: 0 0 8px #5e4422;
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px rgba(139, 195, 74, 0.3);
+}
+
+#wood-count {
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 10px #dc9539;
+  -webkit-text-stroke: #00000000 2px !important;
+}
+
+/* Área da árvore */
+#tree-area {
+  width: 90%;
+  height: 220px;
+  background: linear-gradient(180deg, #0a1f0a 0%, #0d3b0d 50%, #1a5c1a 100%);
+  border-radius: 15px;
+  border: 3px solid #4caf50;
+  box-shadow:
+    0 0 20px rgba(76, 175, 80, 0.4),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s;
+}
+#tree-area:hover {
+  box-shadow:
+    0 0 35px rgba(76, 175, 80, 0.7),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.tree-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    rgba(76, 175, 80, 0.15) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+#tree-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 10px rgba(76, 175, 80, 0.5));
+  transition: transform 0.1s;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+#tree-img.tree-chopping {
+  animation: treeChop 0.15s ease-out;
+}
+
+@keyframes treeChop {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  30% {
+    transform: rotate(-8deg) scale(0.95);
+  }
+  60% {
+    transform: rotate(5deg) scale(0.97);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+#tree-status {
+  position: absolute;
+  bottom: 12px;
+  width: 100%;
+  text-align: center;
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.wood-info-box {
+  display: flex;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.75rem;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+.wood-info-box b {
+  color: #8bc34a;
+}
+
+/* Partículas de folhas */
+.leaf-particle {
+  position: fixed;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 99;
+  animation: leafExplode 0.8s forwards;
+}
+@keyframes leafExplode {
+  100% {
+    transform: translate(var(--x), var(--y)) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Botão de upgrade das trees */
+.trees-upg-btn {
+  background: rgba(76, 175, 80, 0.2) !important;
+  border: 1px solid #4caf50 !important;
+  color: #4caf50 !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.trees-upg-btn:hover:not(:disabled) {
+  background: rgba(76, 175, 80, 0.4) !important;
+  box-shadow: 0 0 10px #4caf50;
+}
+.trees-upg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.trees-upg-btn.maxed {
+  background: rgba(255, 215, 0, 0.2) !important;
+  border-color: #ffd700 !important;
+  color: #ffd700 !important;
+}
+
+/* Mobile trees */
+@media (max-width: 768px) and (orientation: portrait) {
+  .trees-wrapper {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+  }
+  .trees-forest-panel {
+    border-right: none;
+    border-bottom: 3px solid #4caf50;
+  }
+  .trees-upgrades-panel {
+    border-left: none;
+  }
+}
+
+/* ============================
+   MOBS SYSTEM
+   ============================ */
+.mobs-wrapper {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
+.mobs-arena-panel {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+    url("assets/gifs/modes.gif");
+  background-size: cover;
+  background-position: center;
+  overflow-y: auto;
+  border-right: 3px solid #ff4444;
+}
+
+.mobs-upgrades-panel {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border-left: 2px solid #ff4444;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flesh-display {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #8b0000;
+  border-radius: 12px;
+  padding: 8px 20px;
+  font-family: "Monocraft", monospace;
+  font-size: 1.1rem;
+  color: #ff6b6b;
+  text-shadow: 0 0 8px #ff4444;
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+  display: flex;
+  align-items: center;
+}
+
+/* Arena do mob */
+#mob-area {
+  width: 90%;
+  height: 220px;
+  background: linear-gradient(180deg, #1a0000 0%, #3b0000 50%, #5c0000 100%);
+  border-radius: 15px;
+  border: 3px solid #ff4444;
+  box-shadow:
+    0 0 20px rgba(255, 68, 68, 0.4),
+    inset 0 0 30px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s;
+}
+#mob-area:hover {
+  box-shadow:
+    0 0 35px rgba(255, 68, 68, 0.7),
+    inset 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+.arena-bg-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    rgba(255, 68, 68, 0.1) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+#mob-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+#mob-img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 10px rgba(255, 68, 68, 0.6));
+  transition:
+    transform 0.1s,
+    filter 0.1s;
+  cursor: pointer;
+}
+
+#mob-img.mob-hit {
+  animation: mobHitAnim 0.2s ease-out;
+  filter: drop-shadow(0 0 15px #ff4444) brightness(2);
+}
+
+@keyframes mobHitAnim {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+  25% {
+    transform: translateX(-8px) scale(0.95);
+  }
+  75% {
+    transform: translateX(8px) scale(0.95);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+#mob-img.mob-dying {
+  animation: mobDyingAnim 0.5s ease-out forwards;
+}
+
+@keyframes mobDyingAnim {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3) rotate(15deg);
+    opacity: 0.7;
+    filter: brightness(3) hue-rotate(30deg);
+  }
+  100% {
+    transform: scale(0) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+/* HP Bar */
+.mob-hp-bar-container {
+  width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.mob-hp-bar-bg {
+  width: 100%;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.mob-hp-bar-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #00e676, #4caf50);
+  border-radius: 5px;
+  transition:
+    width 0.2s ease,
+    background 0.3s ease;
+}
+
+.mob-hp-text {
+  font-family: "Monocraft", monospace;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 1px 1px #000;
+}
+
+#mob-status {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.mob-info-box {
+  display: flex;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 10px;
+  padding: 8px 15px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.7rem;
+  color: #aaa;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.mob-info-box b {
+  color: #ff6b6b;
+}
+
+/* Partículas de morte */
+.flesh-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99;
+  animation: pExplode 0.8s forwards;
+}
+
+/* Botão de upgrade dos mobs */
+.mobs-upg-btn {
+  background: rgba(255, 68, 68, 0.2) !important;
+  border: 1px solid #ff4444 !important;
+  color: #ff6b6b !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+.mobs-upg-btn:hover:not(:disabled) {
+  background: rgba(255, 68, 68, 0.4) !important;
+  box-shadow: 0 0 10px #ff4444;
+}
+.mobs-upg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.mobs-upg-btn.maxed {
+  background: rgba(255, 215, 0, 0.2) !important;
+  border-color: #ffd700 !important;
+  color: #ffd700 !important;
+}
+
+/* Mobile mobs */
+@media (max-width: 768px) and (orientation: portrait) {
+  .mobs-wrapper {
+    flex-direction: column;
+    overflow-y: auto;
+    height: auto;
+  }
+  .mobs-arena-panel {
+    border-right: none;
+    border-bottom: 3px solid #ff4444;
+  }
+  .mobs-upgrades-panel {
+    border-left: none;
+  }
+}
+
+#enter-trees {
+  background: rgba(76, 175, 80, 0.3) !important;
+  border: 2px solid #4caf50 !important;
+  color: #ffffff !important;
+}
+#enter-trees:hover {
+  background: rgba(76, 175, 80, 0.6) !important;
+  box-shadow: 0 0 15px #4caf50 !important;
+}
+
+#enter-mobs {
+  background: rgba(255, 68, 68, 0.3) !important;
+  border: 2px solid #ff4444 !important;
+  color: #ffffff !important;
+}
+#enter-mobs:hover {
+  background: rgba(255, 68, 68, 0.6) !important;
+  box-shadow: 0 0 15px #ff4444 !important;
 }
 
 /* ============================
@@ -2762,5 +3606,587 @@ h2 {
   }
   .tutorial-text {
     font-size: 0.65rem;
+  }
+}
+
+/* ============================
+   RUNE SYSTEM
+   ============================ */
+
+#runes-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)),
+    url("assets/gifs/rebirthcave.gif");
+  background-size: cover;
+  background-position: center;
+  overflow-y: auto;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 10px 80px 10px;
+  height: calc(100vh - 70px);
+}
+
+.runes-panel {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.rune-categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+/* Card de categoria */
+.rune-category-card {
+  background: rgba(5, 0, 15, 0.85);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  border-radius: 12px;
+  padding: 12px;
+  transition: border-color 0.3s;
+}
+.rune-category-card:hover {
+  border-color: rgba(168, 85, 247, 0.7);
+}
+
+.rune-cat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.rune-cat-icon {
+  font-size: 1.5rem;
+}
+.rune-cat-name {
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  color: #fff;
+  font-weight: bold;
+}
+.rune-cat-cost {
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+  color: #a855f7;
+}
+
+.rune-roll-btn {
+  margin-left: auto;
+  background: rgba(168, 85, 247, 0.2);
+  border: 2px solid #a855f7;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+}
+.rune-roll-btn:hover {
+  background: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+  transform: translateY(-1px);
+}
+.rune-roll-btn.advanced {
+  border-color: #00f2fe;
+  background: rgba(0, 242, 254, 0.2);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+}
+.rune-roll-btn.advanced:hover {
+  background: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+}
+.rune-roll-btn.ancient {
+  border-color: #ff9800;
+  background: rgba(255, 152, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+}
+.rune-roll-btn.ancient:hover {
+  background: rgba(255, 152, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 152, 0, 0.6);
+}
+.rune-roll-btn.celestial {
+  border-color: #ffd700;
+  background: rgba(255, 215, 0, 0.2);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+.rune-roll-btn.celestial:hover {
+  background: rgba(255, 215, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+/* Chances */
+.rune-chances {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 10px;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+.rune-chance {
+  font-family: "Monocraft", monospace;
+  font-size: 0.55rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.rune-secret {
+  color: #333 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Coleção de runas */
+.rune-collection {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.rune-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 6px 3px;
+  text-align: center;
+  transition: all 0.2s;
+  cursor: default;
+}
+.rune-card.owned {
+  background: rgba(var(--rune-color), 0.1);
+  border-color: var(--rune-color);
+  box-shadow: 0 0 8px var(--rune-color) 40;
+}
+.rune-card.secret {
+  filter: brightness(0.3);
+}
+.rune-card-icon {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+.rune-card-name {
+  font-family: "Monocraft", monospace;
+  font-size: 0.45rem;
+  margin-top: 2px;
+  line-height: 1.2;
+}
+.rune-card-count {
+  font-family: "Monocraft", monospace;
+  font-size: 0.6rem;
+  font-weight: bold;
+}
+
+/* Painel de bônus */
+.rune-bonuses-panel {
+  width: 100%;
+  background: rgba(5, 0, 15, 0.85);
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  border-radius: 12px;
+  padding: 15px;
+  backdrop-filter: blur(8px);
+}
+.rune-bonuses-title {
+  font-family: "Monocraft", monospace;
+  font-size: 0.9rem;
+  color: #fff;
+  margin-bottom: 12px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+.bonus-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  margin-bottom: 5px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.7rem;
+  color: #aaa;
+}
+
+/* Modal de resultado */
+.rune-result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.rune-result-overlay.show {
+  opacity: 1;
+}
+
+.rune-result-card {
+  background: rgba(5, 0, 20, 0.97);
+  border: 3px solid;
+  border-radius: 20px;
+  padding: 35px 40px;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  position: relative;
+  overflow: hidden;
+  animation: offlineCardIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.rune-result-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.rune-result-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  animation: floatIcon 2s ease-in-out infinite;
+}
+.rune-result-name {
+  font-family: "Monocraft", monospace;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+}
+.rune-result-count {
+  font-family: "Monocraft", monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 15px;
+}
+.rune-result-bonuses {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.7rem;
+}
+.rune-result-close {
+  background: rgba(168, 85, 247, 0.2);
+  border: 2px solid #a855f7;
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+.rune-result-close:hover {
+  background: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+}
+
+/* Mobile runes */
+@media (max-width: 768px) and (orientation: portrait) {
+  .rune-categories {
+    grid-template-columns: 1fr;
+  }
+  .rune-collection {
+    grid-template-columns: repeat(7, 1fr);
+  }
+  .rune-card-name {
+    font-size: 0.4rem;
+  }
+}
+
+#enter-trees-btn {
+  background: rgba(76, 175, 80, 0.3) !important;
+  border: 2px solid #4caf50 !important;
+  color: #4caf50 !important;
+}
+#enter-trees-btn:hover {
+  background: rgba(76, 175, 80, 0.6) !important;
+  box-shadow: 0 0 15px #4caf50 !important;
+}
+
+#enter-mobs-btn {
+  background: rgba(255, 68, 68, 0.3) !important;
+  border: 2px solid #ff4444 !important;
+  color: #ff4444 !important;
+}
+#enter-mobs:hover {
+  background: rgba(255, 68, 68, 0.6) !important;
+  box-shadow: 0 0 15px #ff4444 !important;
+}
+
+/* ============================================================
+   Adicionar no final do style.css
+   ============================================================ */
+
+/* === NAV NOVO ESTILO COOKIE CLICKER === */
+#bottom-menu {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  border-top: 3px solid rgba(168, 85, 247, 0.6);
+  box-shadow: 0 -4px 25px rgba(128, 0, 255, 0.35);
+  z-index: 1000;
+}
+
+.nav-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-top: 3px solid transparent;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  font-size: 0.5rem;
+  font-family: "Monocraft", monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  padding: 6px 2px 4px 2px;
+}
+
+.nav-btn + .nav-btn {
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.nav-icon-img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+  filter: grayscale(0.4);
+  image-rendering: pixelated;
+}
+
+.nav-label {
+  font-size: 0.48rem;
+  letter-spacing: 0.5px;
+}
+
+.nav-btn:hover .nav-icon-img {
+  opacity: 0.8;
+  filter: grayscale(0) drop-shadow(0 0 4px rgba(168, 85, 247, 0.6));
+  transform: translateY(-2px);
+}
+
+.nav-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-btn.active {
+  color: #fff;
+  background: rgba(168, 85, 247, 0.12);
+  border-top: 3px solid #a855f7;
+}
+
+.nav-btn.active .nav-icon-img {
+  opacity: 1;
+  filter: grayscale(0) drop-shadow(0 0 6px #a855f7)
+    drop-shadow(0 0 12px rgba(168, 85, 247, 0.5));
+  transform: translateY(-3px) scale(1.08);
+}
+
+.nav-btn.active .nav-label {
+  text-shadow:
+    0 0 8px #a855f7,
+    0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.nav-btn.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #a855f7,
+    #00f2fe,
+    #a855f7,
+    transparent
+  );
+  animation: navGlow 2s linear infinite;
+}
+
+#title-runes {
+  background: linear-gradient(
+    135deg,
+    rgba(118, 55, 217, 0.5),
+    rgba(0, 122, 214, 0.5)
+  ) !important;
+  border: 2px solid #0050fe !important;
+  box-shadow:
+    inset 0 0 15px rgba(0, 242, 254, 0.3),
+    0 0 20px rgba(168, 85, 247, 0.4) !important;
+}
+
+#title-misc-stats {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 85, 247, 0.5),
+    rgba(255, 68, 68, 0.5)
+  ) !important;
+  border: 2px solid #a855f7 !important;
+  box-shadow:
+    inset 0 0 15px rgba(168, 85, 247, 0.3),
+    0 0 20px rgba(255, 68, 68, 0.4) !important;
+  text-align: center !important;
+}
+
+/* === MISC TAB === */
+#misc-tab {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.7)),
+    url("assets/gifs/achievements.gif");
+  background-size: cover;
+  background-position: center;
+  overflow-y: auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 15px 90px 15px;
+  gap: 15px;
+}
+
+.misc-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 650px;
+  gap: 15px;
+}
+
+/* Stats panel */
+.misc-stats-panel {
+  width: 100%;
+  background: rgba(5, 0, 20, 0.85);
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.misc-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: "Monocraft", monospace;
+  font-size: 0.65rem;
+}
+
+.misc-stat-label {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#misc-stats-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important; /* 2 colunas lado a lado */
+  gap: 6px !important;
+  width: 100% !important;
+}
+
+/* Cada row dentro do grid ocupa 100% da célula */
+#misc-stats-grid > div {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.misc-stat-value {
+  color: #fff;
+  font-weight: bold;
+  text-align: right;
+  text-shadow: 0 0 6px rgba(168, 85, 247, 0.5);
+  flex-shrink: 0; /* impede que o valor encolha */
+  margin-left: 8px; /* espaço mínimo entre label e valor */
+}
+
+/* Links panel */
+.misc-links-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.misc-link-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(5, 0, 20, 0.85);
+  border: 2px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-family: "Monocraft", monospace;
+  text-align: left;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.misc-link-btn:hover {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.12);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.misc-link-btn:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.misc-link-title {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.misc-link-desc {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.6rem;
+}
+
+/* Mobile misc */
+@media (max-width: 768px) and (orientation: portrait) {
+  .misc-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .nav-icon-img {
+    width: 26px;
+    height: 26px;
+  }
+  .nav-label {
+    font-size: 0.42rem;
   }
 }
